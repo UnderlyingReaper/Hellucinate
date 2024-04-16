@@ -1,0 +1,116 @@
+using System;
+using DG.Tweening;
+using TMPro;
+using UnityEditor.Callbacks;
+using UnityEngine;
+using UnityEngine.Assertions.Comparers;
+using UnityEngine.UI;
+
+public class MoveableCrate : MonoBehaviour
+{
+    [Header("General")]
+    public bool isGrabbed;
+    public float range = 2;
+    public float increaseSpeed = 1;
+    public float decreaseSpeed = 2;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+
+    [Header("UI")]
+    public CanvasGroup canvas;
+    public Slider slider;
+
+
+    Transform _player;
+    Rigidbody2D _rb, _playerRb;
+    Player_Movement _playerMovement;
+    float _playerOrgSpeed;
+    float _timeHeld;
+
+
+
+    void Start()
+    {
+        _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _playerRb = _player.GetComponent<Rigidbody2D>();
+        _playerMovement = _player.GetComponent<Player_Movement>();
+        _playerOrgSpeed = _playerMovement.speed;
+
+
+        _rb = GetComponent<Rigidbody2D>();
+        audioSource.volume = 0;
+        canvas.alpha = 0;
+    }
+
+    void Update()
+    {
+        getInputFromPlayer();
+
+        DragObject();
+
+        // Clamp the value of the time held between 0sec - 1sec
+        _timeHeld = Mathf.Clamp(_timeHeld, 0, 1);
+
+        // Set the slider value to show how long the player has held it
+        slider.value = _timeHeld;
+
+        if(isGrabbed && _rb.velocity.magnitude > 0.1f)
+            DOVirtual.Float(audioSource.volume, 1, 0.25f, value => { audioSource.volume = value; });
+        else
+            DOVirtual.Float(audioSource.volume, 0, 0.25f, value => { audioSource.volume = value; });
+    }
+
+    public void getInputFromPlayer()
+    {
+        float distance = Vector2.Distance(_player.position, transform.position);
+
+        // Check if player is in range
+        if(distance <= range)
+        {
+            canvas.DOFade(1, 1);
+
+            // If player is in range, get input from the button to see if he wants to grab or not
+            if(Input.GetKey(KeyCode.E)) _timeHeld += Time.deltaTime * increaseSpeed;
+            else  _timeHeld -= Time.deltaTime * decreaseSpeed;
+            
+            // If player has held the button for 1sec, he will start grabbing it, else not
+            if(_timeHeld >= 1) isGrabbed = true;
+            else isGrabbed = false;
+            
+        }
+        else
+        {
+            // player is out of range, set the counter back to 0sec
+            canvas.DOFade(0, 1);
+            _timeHeld -= Time.deltaTime * decreaseSpeed;
+        }
+    }
+
+    public void DragObject()
+    {
+        // If player has grabbed the crate then move it in the direction he wants
+        if(isGrabbed)
+        {
+            // Make the crate moveable
+            _rb.constraints = RigidbodyConstraints2D.None;
+
+            float mp = 0;
+            if(_player.position.x < transform.position.x) mp = -1;
+            else mp = 1;
+
+            if(_player.localScale == new Vector3(1*mp, 1, 1))
+            {
+                _playerMovement.speed = 1.07f;
+                _rb.velocity = _playerRb.velocity + new Vector2(mp*0.05f, 0);
+            }
+            else _playerMovement.speed = _playerOrgSpeed;
+        }
+        else
+        {
+            // Make the crate immovable
+            _rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            _playerMovement.speed = _playerOrgSpeed;
+        }
+    }
+}
