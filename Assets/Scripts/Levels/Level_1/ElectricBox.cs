@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -7,8 +8,15 @@ public class ElectricBox : MonoBehaviour
     public bool isOpen;
     public float range;
 
+    [Header("Camera")]
+    public CanvasGroup fade;
+    public GameObject inspectCamera;
+    public GameObject gameplayCamera;
+
+    [Header("Puzzles")]
     public bool isPuzzleOneComplete;
-    public RectTransform puzzleOne;
+    public GameObject puzzleOne;
+    public PuzzleOneController puzzleOneController;
 
 
     Transform _player;
@@ -19,8 +27,6 @@ public class ElectricBox : MonoBehaviour
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _canvas = GetComponentInChildren<CanvasGroup>();
-        
-        puzzleOne.anchoredPosition = new Vector2(0, -1000);
     }
 
     void Update()
@@ -35,13 +41,13 @@ public class ElectricBox : MonoBehaviour
             {
                 isOpen = true;
 
-                if(!isPuzzleOneComplete) puzzleOne.DOAnchorPos(new Vector2(0, 0), 2).SetEase(Ease.InOutSine);
+                if(!isPuzzleOneComplete) HandlePuzzleOne();
             }
             else if(Input.GetKeyDown(KeyCode.E) && isOpen)
             {
                 isOpen = false;
 
-                puzzleOne.DOAnchorPos(new Vector2(0, -1000), 2).SetEase(Ease.InOutSine);
+                if(!isPuzzleOneComplete) HandlePuzzleOne();
             }
         }
         else
@@ -50,9 +56,58 @@ public class ElectricBox : MonoBehaviour
         }
     }
 
+    void HandlePuzzleOne()
+    {
+        bool doesPlayerHaveWires = _player.GetComponent<Inventory_System>().CheckForItem("Wires");
+
+        if(doesPlayerHaveWires)
+        {
+            _player.GetComponent<Inventory_System>().RemoveItem("Wires");
+            puzzleOneController.enabled = true;
+        }
+
+        if(isOpen)
+        {
+            StartCoroutine(FocusOnPuzzle(puzzleOne.transform));
+            StopCoroutine(ExitPuzzle());
+        }
+        else if(!isOpen)
+        {
+            StartCoroutine(ExitPuzzle());
+            StopCoroutine(FocusOnPuzzle(puzzleOne.transform));
+        }
+    }
 
 
 
+
+    IEnumerator FocusOnPuzzle(Transform objectToFocusOn)
+    {
+        fade.DOFade(1, 1);
+
+        yield return new WaitForSeconds(1);
+
+        inspectCamera.SetActive(true);
+        gameplayCamera.SetActive(false);
+
+        inspectCamera.transform.position = objectToFocusOn.position - new Vector3(0, 0, 8);
+
+        fade.DOFade(0, 1);
+    }
+    IEnumerator ExitPuzzle()
+    {
+        fade.DOFade(1, 1);
+
+        yield return new WaitForSeconds(1);
+
+        inspectCamera.SetActive(false);
+        gameplayCamera.SetActive(true);
+
+        inspectCamera.transform.position = gameplayCamera.transform.position;
+
+        fade.DOFade(0, 1);
+    }
+    
     void OnDrawGizmos()
     {
         Gizmos.color = Color.green;

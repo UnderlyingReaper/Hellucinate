@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 48c042f668200da4caa8a9e8ddc8e3f8
+guid: 7f7fdfb1eed871e46b92dcb3ca9f7266
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -17,9 +17,6 @@ TextureImporter:
   - first:
       213: 2415620832272509067
     second: FuseBox_Puzzle_1 1_4
-  - first:
-      213: 4339647359538328968
-    second: FuseBox_Puzzle_1 1_5
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
@@ -125,7 +122,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FuseBox_Puzzle_1_0
+      name: FuseBox_Puzzle_1 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -133,20 +130,20 @@ TextureImporter:
         width: 128
         height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 2d053e9c922150b478b6dbd40c537092
-      internalID: -1276209952
+      spriteID: 1d5dad97b7a087520800000000000000
+      internalID: 2699919502050252241
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FuseBox_Puzzle_1_1
+      name: FuseBox_Puzzle_1 1_1
       rect:
         serializedVersion: 2
         x: 128
@@ -154,20 +151,20 @@ TextureImporter:
         width: 128
         height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 051a85fad64cca6438fefc366335294b
-      internalID: -1070121052
+      spriteID: 490d257b9caef1150800000000000000
+      internalID: 5845648993435177108
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FuseBox_Puzzle_1_2
+      name: FuseBox_Puzzle_1 1_2
       rect:
         serializedVersion: 2
         x: 256
@@ -175,20 +172,20 @@ TextureImporter:
         width: 128
         height: 128
       alignment: 9
-      pivot: {x: 0.6017122, y: 0.5109879}
+      pivot: {x: 0.6019814, y: 0.51237273}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 8cef6fc7cf807994fb14643bae3f152c
-      internalID: 1654985813
+      spriteID: 3ca72447f552010e0800000000000000
+      internalID: -2301298317683688765
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FuseBox_Puzzle_1_3
+      name: FuseBox_Puzzle_1 1_3
       rect:
         serializedVersion: 2
         x: 384
@@ -196,56 +193,14 @@ TextureImporter:
         width: 128
         height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 04df739a96506274ab5cc617ff336ef6
-      internalID: -2041641444
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FuseBox_Puzzle_1_4
-      rect:
-        serializedVersion: 2
-        x: 512
-        y: 0
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 54b14acd130714844800a0a58c5a07ff
-      internalID: -1505156180
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FuseBox_Puzzle_1_5
-      rect:
-        serializedVersion: 2
-        x: 640
-        y: 0
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5dbeb5f29ea48594493b5cddfbc1a97c
-      internalID: 865946595
+      spriteID: f89c64cbeac279030800000000000000
+      internalID: 3501316364298537359
       vertices: []
       indices: 
       edges: []
@@ -253,7 +208,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: f61fca5e83a7d654ebafc2b9df0a6390
+    spriteID: 568566b10ec1ee04c876b302670426e5
     internalID: 0
     vertices: []
     indices: 
@@ -261,12 +216,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      FuseBox_Puzzle_1_0: -1276209952
-      FuseBox_Puzzle_1_1: -1070121052
-      FuseBox_Puzzle_1_2: 1654985813
-      FuseBox_Puzzle_1_3: -2041641444
-      FuseBox_Puzzle_1_4: -1505156180
-      FuseBox_Puzzle_1_5: 865946595
+      FuseBox_Puzzle_1 1_0: 2699919502050252241
+      FuseBox_Puzzle_1 1_1: 5845648993435177108
+      FuseBox_Puzzle_1 1_2: -2301298317683688765
+      FuseBox_Puzzle_1 1_3: 3501316364298537359
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

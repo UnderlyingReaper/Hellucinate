@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Player_Movement : MonoBehaviour
 {
+    public bool allow = true;
     public Rigidbody2D rb;
     public Animator anim;
     public float speed;
@@ -13,6 +14,8 @@ public class Player_Movement : MonoBehaviour
 
     void Update()
     {
+        if(!allow) return;
+
         _horizontal = Input.GetAxisRaw("Horizontal");
 
         HandleAnimations();
@@ -21,6 +24,8 @@ public class Player_Movement : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if(!allow) return;
+
         rb.velocity = new Vector2(_horizontal * speed, rb.velocity.y);
     }
 
