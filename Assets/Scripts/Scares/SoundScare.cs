@@ -5,6 +5,7 @@ public class SoundScare : MonoBehaviour
 {
     public AudioClip audioClip;
     public float sanityLoseAmount = 1;
+    public event EventHandler OnScare;
 
     AudioSource _audioSource;
     bool _allowTrigger;
@@ -25,6 +26,8 @@ public class SoundScare : MonoBehaviour
 
             other.GetComponent<Sanity>().RemoveSanity(sanityLoseAmount);
             _allowTrigger = false;
+
+            OnScare?.Invoke(this, EventArgs.Empty);
 
             Destroy(gameObject, 2);
         }

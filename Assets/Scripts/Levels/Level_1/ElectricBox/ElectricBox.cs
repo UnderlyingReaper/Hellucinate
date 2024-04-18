@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
@@ -7,6 +8,10 @@ public class ElectricBox : MonoBehaviour
     [Header("General")]
     public bool isOpen;
     public float range;
+    public EventHandler<ElectricBoxPuzzleCompleteArgs> OnElectricBoxPuzzleComplete;
+    public class ElectricBoxPuzzleCompleteArgs : EventArgs {
+        public string puzzleName;
+    }
 
     [Header("Camera")]
     public CanvasGroup fade;
@@ -27,6 +32,8 @@ public class ElectricBox : MonoBehaviour
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _canvas = GetComponentInChildren<CanvasGroup>();
+
+        puzzleOneController.OnPuzzleComplete += OnPuzzleOneSignalReceive;
     }
 
     void Update()
@@ -41,13 +48,13 @@ public class ElectricBox : MonoBehaviour
             {
                 isOpen = true;
 
-                if(!isPuzzleOneComplete) HandlePuzzleOne();
+                HandlePuzzleOne();
             }
             else if(Input.GetKeyDown(KeyCode.E) && isOpen)
             {
                 isOpen = false;
 
-                if(!isPuzzleOneComplete) HandlePuzzleOne();
+                HandlePuzzleOne();
             }
         }
         else
@@ -106,8 +113,15 @@ public class ElectricBox : MonoBehaviour
         inspectCamera.transform.position = gameplayCamera.transform.position;
 
         fade.DOFade(0, 1);
+
+        if(isPuzzleOneComplete) OnElectricBoxPuzzleComplete?.Invoke(this, new ElectricBoxPuzzleCompleteArgs { puzzleName = "ElectricBox" });
     }
     
+    public void OnPuzzleOneSignalReceive(object sender, EventArgs e)
+    {
+        isPuzzleOneComplete = true;
+    }
+
     void OnDrawGizmos()
     {
         Gizmos.color = Color.green;

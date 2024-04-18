@@ -11,7 +11,7 @@ public class Inventory_System : MonoBehaviour
     public List<GameObject> slots;
     public List<string> itemIDs; 
 
-    public void AddItem(string desiredItemID, Sprite itemesSprite)
+    public void AddItem(string desiredItemID, Sprite itemesSprite, Color color)
     {
         for(int i = 0; i < itemIDs.Count; i++)
         {
@@ -21,6 +21,7 @@ public class Inventory_System : MonoBehaviour
             {
                 itemIDs[i] = desiredItemID;
                 slots[i].GetComponent<Image>().sprite = itemesSprite;
+                slots[i].GetComponent<Image>().color = color;
                 slots[i].GetComponent<CanvasGroup>().DOFade(1, 1);
                 Debug.Log(desiredItemID + " Item Added");
                 break;
@@ -35,8 +36,9 @@ public class Inventory_System : MonoBehaviour
             if(itemIDs[i] == desiredItemID)
             {
                 itemIDs[i] = "";
+                slots[i].GetComponent<CanvasGroup>().DOFade(0, 0.3f);
                 slots[i].GetComponent<Image>().sprite = null;
-                slots[i].GetComponent<CanvasGroup>().DOFade(0, 1);
+                slots[i].GetComponent<Image>().color = Color.black;
                 Debug.Log(desiredItemID + " Item Removed");
                 break;
             }
