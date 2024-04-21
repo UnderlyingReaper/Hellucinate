@@ -8,6 +8,9 @@ using UnityEngine;
 public class Telephone : MonoBehaviour
 {
     [Header("General")]
+    public MonoBehaviour mainPuzzle;
+    public string eventName;
+    public bool playMansVoice = true;
     public bool allowInteraction = false;
     public bool isUsing;
     public float range;
@@ -48,9 +51,14 @@ public class Telephone : MonoBehaviour
         EventHandler handler = new EventHandler(RingTelephoneEvent);
         eventInfo.AddEventHandler(objectToSubscribe, handler);
 
+        EventInfo eventInfo2 = mainPuzzle.GetType().GetEvent(eventName);
+        EventHandler handler2 = new EventHandler(OnPuzzleComplete);
+        eventInfo2.AddEventHandler(mainPuzzle, handler2);
+
         canvas.alpha = 0;
         staticSource.volume = 0;
         ringSource.volume = 0;
+        playMansVoice = true;
     }
 
     void Update()
@@ -73,7 +81,7 @@ public class Telephone : MonoBehaviour
                 if(noOfInteraction == 2) GenerateCode(); // generate another code when player interacts the second time
                 PlaySound(pickUp_Clip);
                 
-                StartCoroutine(PlayMansVoice());
+                if(playMansVoice) StartCoroutine(PlayMansVoice());
             }
             else if(Input.GetKeyDown(KeyCode.E) && isUsing)
             {
@@ -82,7 +90,7 @@ public class Telephone : MonoBehaviour
                 staticSource.volume = 0;
                 PlaySound(putDown_Clip);
 
-                StopCoroutine(PlayMansVoice());
+                if(playMansVoice) StopCoroutine(PlayMansVoice());
             }
         }
         else canvas.DOFade(0, 2);
@@ -146,5 +154,10 @@ public class Telephone : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         ringSource.volume = 1;
+    }
+
+    public void OnPuzzleComplete(object sender, EventArgs e)
+    {
+        playMansVoice = false;
     }
 }

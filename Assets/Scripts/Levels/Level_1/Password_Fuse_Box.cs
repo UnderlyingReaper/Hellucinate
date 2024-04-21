@@ -1,15 +1,16 @@
 using System;
 using System.Collections;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class ElectricBox : MonoBehaviour
+public class Password_Fuse_Box : MonoBehaviour
 {
     [Header("General")]
     public bool isOpen;
     public float range;
-    public EventHandler<ElectricBoxPuzzleCompleteArgs> OnElectricBoxPuzzleComplete;
-    public class ElectricBoxPuzzleCompleteArgs : EventArgs {
+    public EventHandler<PasswordFuseBoxArgs> OnPuzzleComplete;
+    public class PasswordFuseBoxArgs : EventArgs {
         public string puzzleName;
     }
 
@@ -19,10 +20,10 @@ public class ElectricBox : MonoBehaviour
     public GameObject gameplayCamera;
 
     [Header("Puzzles")]
-    public bool isPuzzleOneComplete;
-    public GameObject puzzleOne;
-    public PuzzleOneController puzzleOneController;
-
+    public GameObject puzzleOne, puzzleTwo;
+    public bool puzzle1Complete, puzzle2Complete;
+    public Lvl1_FuseCode puzzleOneController;
+    public Lvl1_FuseSwitching puzzleTwoController;
 
     Transform _player;
     CanvasGroup _canvas;
@@ -32,11 +33,13 @@ public class ElectricBox : MonoBehaviour
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _canvas = GetComponentInChildren<CanvasGroup>();
+
         _canvas.alpha = 0;
 
-        puzzleOneController.OnPuzzleComplete += OnPuzzleOneSignalReceive;
+        puzzleOneController.OnPuzzle1Complete += OnPuzzle1Complete;
     }
 
+    
     void Update()
     {
         float distance = Vector3.Distance(_player.position, transform.position);
@@ -49,13 +52,14 @@ public class ElectricBox : MonoBehaviour
             {
                 isOpen = true;
 
-                HandlePuzzleOne();
+                if(!puzzle1Complete) HandlePuzzleOne();
             }
             else if(Input.GetKeyDown(KeyCode.E) && isOpen)
             {
                 isOpen = false;
 
-                HandlePuzzleOne();
+                StartCoroutine(ExitPuzzle());
+                StopCoroutine(FocusOnPuzzle(puzzle1Complete? puzzleTwo.transform : puzzleOne.transform ));
             }
         }
         else
@@ -66,28 +70,9 @@ public class ElectricBox : MonoBehaviour
 
     void HandlePuzzleOne()
     {
-        bool doesPlayerHaveWires = _player.GetComponent<Inventory_System>().CheckForItem("Wires");
-
-        if(doesPlayerHaveWires)
-        {
-            _player.GetComponent<Inventory_System>().RemoveItem("Wires");
-            puzzleOneController.enabled = true;
-        }
-
-        if(isOpen)
-        {
-            StartCoroutine(FocusOnPuzzle(puzzleOne.transform));
-            StopCoroutine(ExitPuzzle());
-        }
-        else if(!isOpen)
-        {
-            StartCoroutine(ExitPuzzle());
-            StopCoroutine(FocusOnPuzzle(puzzleOne.transform));
-        }
+        StartCoroutine(FocusOnPuzzle(puzzleOne.transform));
+        StopCoroutine(ExitPuzzle());
     }
-
-
-
 
     IEnumerator FocusOnPuzzle(Transform objectToFocusOn)
     {
@@ -114,13 +99,11 @@ public class ElectricBox : MonoBehaviour
         inspectCamera.transform.position = gameplayCamera.transform.position;
 
         fade.DOFade(0, 1);
-
-        if(isPuzzleOneComplete) OnElectricBoxPuzzleComplete?.Invoke(this, new ElectricBoxPuzzleCompleteArgs { puzzleName = "ElectricBox" });
     }
-    
-    public void OnPuzzleOneSignalReceive(object sender, EventArgs e)
+
+    public void OnPuzzle1Complete(object sender, EventArgs e)
     {
-        isPuzzleOneComplete = true;
+        puzzle1Complete = true;
     }
 
     void OnDrawGizmos()
