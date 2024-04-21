@@ -6,6 +6,7 @@ using UnityEngine.Rendering.Universal;
 public class Door : MonoBehaviour
 {
     [Header("General")]
+    public Vector3 centerOffset;
     public AudioClip openDoorClip;
     public AudioClip closeDoorClip;
     public float range = 1;
@@ -53,7 +54,7 @@ public class Door : MonoBehaviour
 
     void Update()
     {
-        float distance = Vector3.Distance(_player.position, transform.position);
+        float distance = Vector3.Distance(_player.position, transform.position + centerOffset);
 
         if(isLocked && Input.GetKeyDown(KeyCode.E) && distance <= range)
         {
@@ -125,5 +126,11 @@ public class Door : MonoBehaviour
         if(_shadowCaster) _shadowCaster.enabled = true;
         _sprite.enabled = false;
         _collider.enabled = true;
+    }
+    
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position + centerOffset, range);
     }
 }

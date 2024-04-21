@@ -323,9 +323,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e26e59070cb834c93d1efc78bf9c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  centerOffset: {x: 0, y: 1, z: 0}
   openDoorClip: {fileID: 8300000, guid: f27b4489aa9acb640a8c25503cd86032, type: 3}
   closeDoorClip: {fileID: 8300000, guid: 338e3c10c1f367e4fa9e4150db4f0f9e, type: 3}
-  range: 2
+  range: 0.7
   openUI: {fileID: 4482446628696910594}
   isOpen: 0
   duration: 1

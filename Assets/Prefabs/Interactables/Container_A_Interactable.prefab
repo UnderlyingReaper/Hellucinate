@@ -228,9 +228,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e26e59070cb834c93d1efc78bf9c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  centerOffset: {x: 0, y: -0.5, z: 0}
   openDoorClip: {fileID: 8300000, guid: f935d2731f8288840a3dd7a68ec99fe5, type: 3}
   closeDoorClip: {fileID: 8300000, guid: 24e9bc0bad99f314494ddf1a697dba1e, type: 3}
-  range: 2
+  range: 1
   openUI: {fileID: 0}
   isOpen: 0
   duration: 1
@@ -792,9 +793,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e26e59070cb834c93d1efc78bf9c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  centerOffset: {x: 0, y: -0.5, z: 0}
   openDoorClip: {fileID: 8300000, guid: f935d2731f8288840a3dd7a68ec99fe5, type: 3}
   closeDoorClip: {fileID: 8300000, guid: 24e9bc0bad99f314494ddf1a697dba1e, type: 3}
-  range: 2
+  range: 1
   openUI: {fileID: 0}
   isOpen: 0
   duration: 1

@@ -51,4 +51,10 @@ public class Inspect : MonoBehaviour
             if(canvas != null) canvas.DOFade(0, 1);
         }
     }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, range);
+    }
 }
