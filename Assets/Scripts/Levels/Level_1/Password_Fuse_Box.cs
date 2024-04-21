@@ -1,16 +1,17 @@
 using System;
 using System.Collections;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class Password_Fuse_Box : MonoBehaviour
 {
     [Header("General")]
+    public Light2D lightSource;
     public bool isOpen;
     public float range;
-    public EventHandler<PasswordFuseBoxArgs> OnPuzzleComplete;
-    public class PasswordFuseBoxArgs : EventArgs {
+    public EventHandler<PuzzleArgs> OnPuzzleComplete;
+    public class PuzzleArgs : EventArgs {
         public string puzzleName;
     }
 
@@ -23,7 +24,7 @@ public class Password_Fuse_Box : MonoBehaviour
     public GameObject puzzleOne, puzzleTwo;
     public bool puzzle1Complete, puzzle2Complete;
     public Lvl1_FuseCode puzzleOneController;
-    public Lvl1_FuseSwitching puzzleTwoController;
+    public Lvl1_fusesSwitching puzzleTwoController;
 
     Transform _player;
     CanvasGroup _canvas;
@@ -37,6 +38,7 @@ public class Password_Fuse_Box : MonoBehaviour
         _canvas.alpha = 0;
 
         puzzleOneController.OnPuzzle1Complete += OnPuzzle1Complete;
+        puzzleTwoController.OnPuzzle2Complete += OnPuzzle2Complete;
     }
 
     
@@ -53,6 +55,7 @@ public class Password_Fuse_Box : MonoBehaviour
                 isOpen = true;
 
                 if(!puzzle1Complete) HandlePuzzleOne();
+                HandlePuzzleTwo();
             }
             else if(Input.GetKeyDown(KeyCode.E) && isOpen)
             {
@@ -71,6 +74,11 @@ public class Password_Fuse_Box : MonoBehaviour
     void HandlePuzzleOne()
     {
         StartCoroutine(FocusOnPuzzle(puzzleOne.transform));
+        StopCoroutine(ExitPuzzle());
+    }
+    void HandlePuzzleTwo()
+    {
+        StartCoroutine(FocusOnPuzzle(puzzleTwo.transform));
         StopCoroutine(ExitPuzzle());
     }
 
@@ -104,6 +112,14 @@ public class Password_Fuse_Box : MonoBehaviour
     public void OnPuzzle1Complete(object sender, EventArgs e)
     {
         puzzle1Complete = true;
+    }
+    public void OnPuzzle2Complete(object sender, EventArgs e)
+    {
+        puzzle2Complete = true;
+
+        DOVirtual.Float(lightSource.intensity, 0.2f, 1, value => { lightSource.intensity = value; });
+
+        OnPuzzleComplete?.Invoke(this, new PuzzleArgs { puzzleName = "fuseSwitchesPuzzle" });
     }
 
     void OnDrawGizmos()

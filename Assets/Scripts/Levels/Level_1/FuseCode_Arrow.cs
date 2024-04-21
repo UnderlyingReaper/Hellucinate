@@ -15,6 +15,14 @@ public class FuseCode_Arrow : MonoBehaviour
         DecreaseValue = -1
     }
 
+    AudioSource _source;
+
+    void Start()
+    {
+        _source = GetComponent<AudioSource>();
+    }
+
+
     void OnMouseDown()
     {
         int currNumber = int.Parse(txt.text);
@@ -24,7 +32,16 @@ public class FuseCode_Arrow : MonoBehaviour
         else if(currNumber == -1) currNumber = 9;
 
         txt.text = currNumber.ToString();
+        PlaySound();
         
         OnValyeChange?.Invoke(this, EventArgs.Empty);
+    }
+
+    void PlaySound()
+    {
+        _source.volume = UnityEngine.Random.Range(0.8f, 1.2f);
+        _source.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+
+        _source.PlayOneShot(_source.clip);
     }
 }
