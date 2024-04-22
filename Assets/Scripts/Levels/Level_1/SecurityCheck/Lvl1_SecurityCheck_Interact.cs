@@ -22,11 +22,12 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
     public bool isPuzzleOneComplete;
     public GameObject puzzleOne;
     public SecurityCheck puzzleOneController;
+    public Lvl1_UserInput customeInputField;
 
 
     Transform _player;
     CanvasGroup _canvas;
-    int count = 0;
+    public int count = 0;
 
 
     void Start()
@@ -36,6 +37,8 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
         _canvas.alpha = 0;
 
         puzzleOneController.OnPuzzleComplete += OnPuzzleOneSignalReceive;
+
+        customeInputField.enabled = false;
     }
 
     void Update()
@@ -71,14 +74,15 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
         if(isOpen)
         {
             StartCoroutine(FocusOnPuzzle(puzzleOne.transform));
-            if(count == 1) StartCoroutine(puzzleOneController.StartupConsole());
-            else StartCoroutine(puzzleOneController.ScanHand());
+            StartCoroutine(puzzleOneController.StartupConsole());
+            customeInputField.enabled = true;
             StopCoroutine(ExitPuzzle());
         }
         else if(!isOpen)
         {
             StartCoroutine(ExitPuzzle());
             StopCoroutine(FocusOnPuzzle(puzzleOne.transform));
+            customeInputField.enabled = false;
         }
     }
 
