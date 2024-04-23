@@ -6,6 +6,7 @@ using UnityEngine;
 public class Lvl1_SecurityCheck_Interact : MonoBehaviour
 {
     [Header("General")]
+    public Player_Movement player;
     public bool isOpen;
     public float range;
     public EventHandler<SecurityPuzzleCompleteArgs> OnSecurityPuzzleComplete;
@@ -49,6 +50,8 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
         {
             _canvas.DOFade(1, 1);
 
+            if(customeInputField.allowuserInput) return;
+
             if(Input.GetKeyDown(KeyCode.E) && !isOpen)
             {
                 isOpen = true;
@@ -74,15 +77,17 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
         if(isOpen)
         {
             StartCoroutine(FocusOnPuzzle(puzzleOne.transform));
-            StartCoroutine(puzzleOneController.StartupConsole());
+            if(!puzzleOneController.isbyPassed) StartCoroutine(puzzleOneController.StartupConsole());
             customeInputField.enabled = true;
             StopCoroutine(ExitPuzzle());
+            player.allow = false;
         }
         else if(!isOpen)
         {
             StartCoroutine(ExitPuzzle());
             StopCoroutine(FocusOnPuzzle(puzzleOne.transform));
             customeInputField.enabled = false;
+            player.allow = true;
         }
     }
 
@@ -121,6 +126,7 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
     public void OnPuzzleOneSignalReceive(object sender, EventArgs e)
     {
         isPuzzleOneComplete = true;
+        OnSecurityPuzzleComplete?.Invoke(this, new SecurityPuzzleCompleteArgs { puzzleName = "bypass Security" });
     }
 
     void OnDrawGizmos()

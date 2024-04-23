@@ -88,12 +88,7 @@ public class Door : MonoBehaviour
         // If door does not teleport, than run this code;
         if(distance <= range && Input.GetKeyDown(KeyCode.E) && !isLocked && !isOpen) // Open door
         {
-            isOpen = true;
-            if(_shadowCaster) _shadowCaster.enabled = false;
-            transform.DOScale(Vector3.one, duration);
-            _collider.enabled = false;
-            _sprite.enabled = true;
-            _audioSource.PlayOneShot(openDoorClip);
+            OpenDoor();
         }
         else if(distance <= range && Input.GetKeyDown(KeyCode.E) && !isLocked && isOpen) // Close door
         {
@@ -112,6 +107,16 @@ public class Door : MonoBehaviour
 
         _audioSource.PlayOneShot(closeDoorClip);
         fadeImg.DOFade(0, 1f);
+    }
+
+    public void OpenDoor()
+    {
+        isOpen = true;
+        if(_shadowCaster) _shadowCaster.enabled = false;
+        transform.DOScale(Vector3.one, duration);
+        _collider.enabled = false;
+        _sprite.enabled = true;
+        _audioSource.PlayOneShot(openDoorClip);
     }
 
     IEnumerator CloseDoor()

@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class SecurityCheck : MonoBehaviour
 {
+    public Door door;
     public bool isHackingConsole = false;
     public GameObject hand;
     public bool isHandOn;
@@ -23,15 +24,18 @@ public class SecurityCheck : MonoBehaviour
     [Header("Puzzle")]
     public bool isAdmin;
     public bool isVerified;
+    public bool isbyPassed = true;
 
 
     Inventory_System inv;
+    AudioSource _source;
 
 
     void Start()
     {
         inv = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory_System>();
         customeInputField.SendText += OnUserInputEnter;
+        _source = GetComponent<AudioSource>();
     }
 
     // Main stuff
@@ -89,20 +93,58 @@ public class SecurityCheck : MonoBehaviour
 
     public void OnUserInputEnter(object sender, Lvl1_UserInput.TextArgs e)
     {
-        if(e.textWritten.Contains("%") || e.textWritten.Contains("$")) FindFakeFunction(e.textWritten);
+        if(isbyPassed) StartCoroutine(ShowErrorMessage("%cE 'System down.'", Color.red));
+        else if(e.textWritten.Contains("%") || e.textWritten.Contains("$")) FindFakeFunction(e.textWritten);
         else StartCoroutine(ShowErrorMessage("Not valid!", Color.red));
     }
 
     private void FindFakeFunction(string text)
     {
-        if(isOnFunctionPage[3] && !text.Contains("%")) // 3- admin page
+        if(isOnFunctionPage[3] && text.Contains("$")) // 3- admin page
         {
             if(consoleText.text != functionDisplay[3] && text == commandNames[0]) consoleText.text = functionDisplay[3]; // 0- $forceRequest@
             else if(consoleText.text == functionDisplay[3] && text == commandNames[3]) // 3- $forceSkip@
             {
                 isAdmin = true;
-                consoleText.text = "%cE 'Admin access granted!'";
+                consoleText.text = "%cL 'Admin access granted!'";
             } 
+            else StartCoroutine(ShowErrorMessage("%cE 'Cannot run command", Color.red));
+            return;
+        }
+        else if(isOnFunctionPage[2] && text.Contains("$")) // 2- verification page
+        {
+            if(consoleText.text != functionDisplay[2] && text == commandNames[0]) consoleText.text = functionDisplay[2]; // 0- $forceReq@
+
+            else if(consoleText.text == functionDisplay[2] && text == commandNames[1]) consoleText.text = "%cL 'Please enter your admin ID.'"; // 1- $yes
+            else if(text == commandNames[2]) consoleText.text = "%cL 'Process cancelled. Please return back or restart.'"; // 1- $no
+
+            else if(consoleText.text == "%cL 'Please enter your admin ID.'" && text == commandNames[3]) // 3- $forceSkip@
+            {
+                consoleText.text = "%cL 'Admin has been veiried for 1 hour only for security purpose's.'";
+                isVerified = true;
+            }
+
+            else StartCoroutine(ShowErrorMessage("%cE 'Cannot run command", Color.red));
+
+
+            return;
+        }
+        else if(isOnFunctionPage[1] && text.Contains("$")) // 1- bypass page
+        {
+            if(consoleText.text != functionDisplay[1] && text == commandNames[1]) consoleText.text = functionDisplay[1]; // 1- $yes
+            else if(text == commandNames[2]) consoleText.text = "%cL 'Process cancelled.'"; // 2- $no
+
+            else if(consoleText.text == functionDisplay[1] && text == commandNames[0]) consoleText.text = "%cL 'Force Request Sent.' \n%cL 'Please enter you name for verification.'"; // 0- $forceRequest@
+            else if(consoleText.text == "%cL 'Force Request Sent.' \n%cL 'Please enter you name for verification.'" && text == commandNames[3]) // 3- $forceSkip@
+            {
+                consoleText.text = "%cL 'System Bypassed.' \n %cE 'System files corrupted, shutting down.'";
+                OnPuzzleComplete?.Invoke(this, EventArgs.Empty);
+                isbyPassed = true;
+
+                door.OpenDoor();
+                door.isLocked = true;
+            }
+            
             else StartCoroutine(ShowErrorMessage("%cE 'Cannot run command", Color.red));
             return;
         }
@@ -118,30 +160,49 @@ public class SecurityCheck : MonoBehaviour
         {
             if(!isAdmin || !isVerified)
             {
-                StartCoroutine(ShowErrorMessage("%cE 'Not verified'", Color.red));
+                StartCoroutine(ShowErrorMessage("%cE 'Not authorised.'", Color.red));
                 return;
+            }
+            else
+            {
+                consoleText.text = "%c: 'Are you sure you would like to bypass the current securit question? This could break the entire database.'";
+                i = 1;
             }
         }
         else if(text == functionNames[2]) // 3- %vF
         {
             if(!isAdmin)
             {
-                StartCoroutine(ShowErrorMessage("%cE 'Not an authorised admin", Color.red));
+                StartCoroutine(ShowErrorMessage("%cE 'Not an authorised admin.", Color.red));
                 return;
+            }
+            else if(isVerified)
+            {
+                StartCoroutine(ShowErrorMessage("%cL 'You are verified for 1 hour.", consoleText.color));
+                return;
+            }
+            else
+            {
+                consoleText.text = "%cL 'Missing authorised Admin, Cannot send normal verification request.'";
+                i = 2;
             }
         }
         else if(text == functionNames[3]) // 4- %gA
         {
             if(!isAdmin)
             {
-                consoleText.text = "%cE 'Admin Access not allowed'";
+                consoleText.text = "%cL 'Cannot send admin access request normally.'";
                 i = 3;
             }
-            else StartCoroutine(ShowErrorMessage("%cL 'Already Admin", consoleText.color));
+            else
+            {
+                StartCoroutine(ShowErrorMessage("%cL 'Already Admin.", consoleText.color));
+                return;
+            }
         }
         else
         {
-            StartCoroutine(ShowErrorMessage("%cE 'Could not find command/function'", Color.red));
+            StartCoroutine(ShowErrorMessage("%cE 'Could not run command/function.'", Color.red));
             return;
         }
 
@@ -151,18 +212,22 @@ public class SecurityCheck : MonoBehaviour
 
     public IEnumerator ShowErrorMessage(string text, Color color)
     {
-        string _placeHolder = "";
-        Color _pladeHolderColor = Color.white;
-
-        _placeHolder = consoleText.text;
-        _pladeHolderColor = consoleText.color;
+        string _placeHolder = consoleText.text;
+        Color _pladeHolderColor = consoleText.color;
 
         consoleText.text = text;
         consoleText.color = color;
+        PlaySound();
         yield return new WaitForSeconds(3);
 
         consoleText.text = _placeHolder;
         consoleText.color = _pladeHolderColor;
-        
+    }
+
+    void PlaySound()
+    {
+        _source.volume = UnityEngine.Random.Range(0.8f, 1.2f);
+        _source.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+        _source.PlayOneShot(_source.clip);
     }
 }

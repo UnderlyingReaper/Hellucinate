@@ -18,14 +18,19 @@ public class Lvl1_UserInput : MonoBehaviour
     public float deleteDelay = 0.5f; // Delay before continuous deletion starts
     float _deleteTimer = 0f; // Timer for continuous deletion
 
+    AudioSource _audioSource;
+
+
+    void Start() => _audioSource = GetComponent<AudioSource>();
 
     void Update()
     {
-        if(_inputString != "" && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
+        if(allowuserInput &&_inputString != "" && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
         {
             SendText?.Invoke(this, new TextArgs { textWritten = userText.text });
             _inputString = "";
             userText.text = "";
+            allowuserInput = false;
             return;
         } 
         
@@ -47,6 +52,7 @@ public class Lvl1_UserInput : MonoBehaviour
                 }
 
                 userText.text = _inputString;
+                PlaySound();
             }
 
             if (Input.GetKey(KeyCode.Backspace))
@@ -74,5 +80,22 @@ public class Lvl1_UserInput : MonoBehaviour
             }
             else _isBackspaceHeld = false; // Reset the flag and timer if backspace is released
         }
+    }
+
+    void OnMouseOver()
+    {
+        allowuserInput = true;
+    }
+    void OnMouseExit()
+    {
+        allowuserInput = false;
+    }
+
+    void PlaySound()
+    {
+        _audioSource.volume = UnityEngine.Random.Range(0.1f, 0.5f);
+        _audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+
+        _audioSource.PlayOneShot(_audioSource.clip);
     }
 }
