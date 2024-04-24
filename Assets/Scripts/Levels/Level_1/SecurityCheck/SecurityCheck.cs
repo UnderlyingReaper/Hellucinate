@@ -226,7 +226,7 @@ public class SecurityCheck : MonoBehaviour
 
     void PlaySound()
     {
-        _source.volume = UnityEngine.Random.Range(0.8f, 1.2f);
+        _source.volume = UnityEngine.Random.Range(0.1f, 0.5f);
         _source.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
         _source.PlayOneShot(_source.clip);
     }

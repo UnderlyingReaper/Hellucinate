@@ -9,6 +9,7 @@ public class Door : MonoBehaviour
     public Vector3 centerOffset;
     public AudioClip openDoorClip;
     public AudioClip closeDoorClip;
+    public AudioClip unlockDoorClip, doorLockedClip;
     public float range = 1;
     public CanvasGroup openUI;
 
@@ -64,7 +65,12 @@ public class Door : MonoBehaviour
             {
                 isLocked = false;
                 invSystem.RemoveItem(keyID);
+                _audioSource.PlayOneShot(unlockDoorClip);
                 Debug.Log("Item Used");
+            }
+            else
+            {
+                _audioSource.PlayOneShot(doorLockedClip);
             }
         }
 
