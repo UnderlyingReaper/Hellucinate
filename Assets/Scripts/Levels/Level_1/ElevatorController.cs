@@ -16,7 +16,8 @@ public class ElevatorController : MonoBehaviour
     public Transform doorR;
     public Transform doorL;
     public Transform teleportLocation;
-    public Transform cameraHolder;
+    public Camera_Follow camera_Follow;
+    public Animator animController;
 
     CanvasGroup _canvas;
     Transform _player;
@@ -66,10 +67,12 @@ public class ElevatorController : MonoBehaviour
         yield return new WaitForSeconds(2);
         _player.position = teleportLocation.position;
         _player.SetParent(teleportLocation);
+        camera_Follow.smoothTime = 0.1f;
         yield return new WaitForSeconds(2);
-        _player.GetComponent<Player_Movement>().allow = true;
 
+        _player.GetComponent<Player_Movement>().allow = true;
         fade.DOFade(0, 2);
+        animController.SetTrigger("Start");
     }
 
     void OpenDoor()
