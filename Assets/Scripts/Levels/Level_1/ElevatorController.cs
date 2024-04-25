@@ -67,7 +67,8 @@ public class ElevatorController : MonoBehaviour
         yield return new WaitForSeconds(2);
         _player.position = teleportLocation.position;
         _player.SetParent(teleportLocation);
-        camera_Follow.smoothTime = 0.1f;
+        camera_Follow.smoothTime = 0.08f;
+        camera_Follow.offset.y = 0.5f;
         yield return new WaitForSeconds(2);
 
         _player.GetComponent<Player_Movement>().allow = true;
