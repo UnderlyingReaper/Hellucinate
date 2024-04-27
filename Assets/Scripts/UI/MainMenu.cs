@@ -27,6 +27,7 @@ public class MainMenu : MonoBehaviour
 
     public void OpenSettings()
     {
+        settingsMenu.gameObject.SetActive(true);
         settingsMenu.OpenSettingsMenu();
         gameObject.SetActive(false);
     }

@@ -1,11 +1,14 @@
 using CameraShake;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Lvl1_ElevatorScene : MonoBehaviour
 {
+    public Animator animController;
     public AudioSource sfxSource;
     public AudioSource ambienceSource;
+    public AudioSource gearSource;
     public PerlinShake.Params shakeParams;
 
     public float minAmp = 0.1f, maxAmp = 1;
@@ -30,6 +33,10 @@ public class Lvl1_ElevatorScene : MonoBehaviour
     {
         DOVirtual.Float(ambienceSource.volume, 0, 2, value => { ambienceSource.volume = value; });
     }
+    public void DisableGearNoise()
+    {
+        DOVirtual.Float(gearSource.volume, 0, 2, value => { gearSource.volume = value; });
+    }
     public void StartShake(int mp)
     {
         float result = 0;
@@ -41,5 +48,14 @@ public class Lvl1_ElevatorScene : MonoBehaviour
         }
 
         DOVirtual.Float(_amp, result, 1, value => { _amp = value; });
+    }
+
+    public void PlayCredits()
+    {
+        animController.SetTrigger("ShowCredits");
+    }
+    public void TeleportToNextLvl()
+    {
+        SceneManager.LoadScene("MainMenu"); // for now teleport back to main menu
     }
 }
