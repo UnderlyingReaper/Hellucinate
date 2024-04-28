@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -23,10 +24,11 @@ public class Handle_Barricade : MonoBehaviour
     public float soundDelay = 0;
     [Space(20)]
 
-    public GameObject itemBehind;
     public List<Rigidbody2D> activePlanks;
     public CanvasGroup canvas;
     public Slider slider;
+
+    public event EventHandler OnBarricadesRemoved;UnityEngine.
 
 
     Transform _player;
@@ -40,7 +42,6 @@ public class Handle_Barricade : MonoBehaviour
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        itemBehind.SetActive(false);
         slider.maxValue = timeToRemoveOne;
 
         for(int i = 0; i < activePlanks.Count; i++) activePlanks[i].gravityScale = 0;
@@ -53,10 +54,9 @@ public class Handle_Barricade : MonoBehaviour
         if(activePlanks.Count == 0)
         {   
             if(doesRemoveItem) _player.GetComponent<Inventory_System>().RemoveItem(itemID);
-            itemBehind.SetActive(true);
             canvas.DOFade(0, 1);
             Destroy(gameObject, 1.01f);
-
+            OnBarricadesRemoved?.Invoke(this, EventArgs.Empty);
             return;
         }
 
@@ -118,8 +118,8 @@ public class Handle_Barricade : MonoBehaviour
 
     public void PlaySound(AudioClip clip)
     {
-        audioSource.volume = Random.Range(0.8f, 1.2f);
-        audioSource.pitch = Random.Range(0.8f, 1.2f);
+        audioSource.volume = UnityEngine.Random.Range(0.8f, 1.2f);
+        audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
 
         audioSource.PlayOneShot(clip);
     }

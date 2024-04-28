@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -7,6 +8,7 @@ public class ElevatorController : MonoBehaviour
 {
     [Header("General")]
     public bool allowInteraction;
+    public Handle_Barricade barricade;
     public float range;
     public CanvasGroup fade;
     public AudioSource audioSource;
@@ -22,6 +24,8 @@ public class ElevatorController : MonoBehaviour
     CanvasGroup _canvas;
     Transform _player;
 
+    bool _isPowerOn, _isBarricadeRemoved = false;
+
 
     void Start()
     {
@@ -31,6 +35,7 @@ public class ElevatorController : MonoBehaviour
         allowInteraction = false;
 
         electricBox.OnElectricBoxPuzzleComplete += OnWiresConnected;
+        barricade.OnBarricadesRemoved += OnBarricadesRemoved;
     }
     void Update()
     {
@@ -57,8 +62,20 @@ public class ElevatorController : MonoBehaviour
 
     public void OnWiresConnected(object sender, ElectricBox.ElectricBoxPuzzleCompleteArgs e)
     {
-        allowInteraction = true;
+        _isPowerOn = true;
+        CheckForRequirements();
     }
+    public void OnBarricadesRemoved(object sender, EventArgs e)
+    {
+        _isBarricadeRemoved = true;
+        CheckForRequirements();
+    }
+    void CheckForRequirements()
+    {
+        if(_isBarricadeRemoved && _isPowerOn) allowInteraction = true;
+    }
+
+
     IEnumerator TeleportPlayer()
     {
         fade.DOFade(1, 2);
