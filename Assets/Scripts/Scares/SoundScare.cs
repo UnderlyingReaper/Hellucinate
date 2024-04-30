@@ -24,7 +24,7 @@ public class SoundScare : MonoBehaviour
             _audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
             _audioSource.PlayOneShot(audioClip);
 
-            other.GetComponent<Sanity>().RemoveSanity(sanityLoseAmount);
+            other.GetComponent<Sanity>().LoseSanity(sanityLoseAmount, 1);
             _allowTrigger = false;
 
             OnScare?.Invoke(this, EventArgs.Empty);
