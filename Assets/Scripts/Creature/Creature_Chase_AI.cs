@@ -7,6 +7,7 @@ using UnityEngine;
 public class Creature_Chase_AI : MonoBehaviour
 {
     public float speed;
+    public string deathTxt;
     public Animator anim;
     public AudioSource audioSource;
     public AudioClip growlClip;
@@ -17,13 +18,13 @@ public class Creature_Chase_AI : MonoBehaviour
     public event EventHandler<SearchEndResultArgs> SearchEndResult;
     public class SearchEndResultArgs: EventArgs {
         public bool didCatchPlayer;
+        public string deathTxt;
     }
 
 
     [Header("Shake")]
     public PerlinShake.Params perlinShake;
-    public float minAmpltidue = 0.1f, maxAmpltidue = 0.5f, amplitude;
-    public float maxDistance = 25;
+    public AnimationCurve amplitudeDistanceCurve;
 
     Vector3 _targetDestination;
     Transform _player;
@@ -39,21 +40,23 @@ public class Creature_Chase_AI : MonoBehaviour
 
     void Update()
     {
+        float distance = Vector2.Distance(transform.position, _player.position);
+
         // changes the amplitude of the shake, The Shorter the distance the greater the amplitude & vice versa
-        amplitude = maxAmpltidue - ((maxAmpltidue - minAmpltidue)/maxDistance) * Vector2.Distance(transform.position, _player.position);
+        float amplitude = amplitudeDistanceCurve.Evaluate(distance);
         CameraShaker.Shake(new PerlinShake(perlinShake, amplitude));
 
         if(_chaseEnd) return;
 
         // Check if the player is in light when the creature gets close, kill the player if player is in light
-        if(Vector2.Distance(transform.position, _player.position) <= 2)
+        if(distance <= 2)
         {
             DetectLight playerLightDetection = _player.GetComponent<DetectLight>();
 
             if(playerLightDetection.isInLight)
             {
                 DOTween.Kill(transform);
-                SearchEndResult?.Invoke(this, new SearchEndResultArgs { didCatchPlayer = true });
+                SearchEndResult?.Invoke(this, new SearchEndResultArgs { didCatchPlayer = true, deathTxt = deathTxt });
                 PlayRoar();
                 anim.SetBool("isMoving", false);
                 anim.SetTrigger("PlayerCaught");
@@ -64,7 +67,7 @@ public class Creature_Chase_AI : MonoBehaviour
 
     public void DoSearch()
     {
-        transform.DOMove(_targetDestination, speed).SetEase(Ease.Linear).OnComplete(SearchEnd);
+        transform.DOMove(_targetDestination, speed).SetEase(Ease.InOutSine).OnComplete(SearchEnd);
         anim.SetBool("isMoving", true);
     }
 
@@ -105,7 +108,7 @@ public class Creature_Chase_AI : MonoBehaviour
 
     public void RandomizeAudioSettings()
     {
-        audioSource.volume = UnityEngine.Random.Range(0.8f, 1.2f);
+        audioSource.volume = UnityEngine.Random.Range(0.5f, 0.9f);
         audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
     }
     public void PlayGrowl()

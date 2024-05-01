@@ -79,18 +79,6 @@ public class DetectLight : MonoBehaviour
                     isInLight = true;
                     return;
                 }
-                else
-                {
-                    foundValidLightSource = false;
-                    isInLight = false;
-                    continue;
-                }
-            }
-            else
-            {
-                foundValidLightSource = false;
-                isInLight = false;
-                continue;
             }
         }
 

@@ -129,7 +129,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -4923589699470810051, guid: 87f6dc6a6b4d41a4cabbf9f92af728c3, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.75
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -430,6 +430,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+  deathTxt: Unshielded from darkness, your presence was revealed. Stay low and within
+    the light to evade detection.
   anim: {fileID: 8957032874349738149}
   audioSource: {fileID: 3992787545225069823}
   growlClip: {fileID: 8300000, guid: 060de8b76d89e57409dc2c6f2484238b, type: 3}
@@ -452,10 +454,30 @@ MonoBehaviour:
       falloffScale: 50
       falloffDegree: 1
       axesMultiplier: {x: 1, y: 1, z: 1}
-  minAmpltidue: 0.1
-  maxAmpltidue: 0.6
-  amplitude: 0
-  maxDistance: 25
+  amplitudeDistanceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.6
+      inSlope: -0.02
+      outSlope: -0.02
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 25
+      value: 0.1
+      inSlope: -0.02
+      outSlope: -0.02
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!95 &8957032874349738149
 Animator:
   serializedVersion: 7

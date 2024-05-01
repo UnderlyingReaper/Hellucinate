@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerCaught : MonoBehaviour
 {
+    public Player_Movement pm;
     public List<GameObject> spawners;
     public CanvasGroup cg;
+    public TextMeshProUGUI deathTxt;
 
 
     void Start()
@@ -33,6 +36,8 @@ public class PlayerCaught : MonoBehaviour
         if(e.didCatchPlayer)
         {
             Debug.Log("Player is Dead");
+            pm.allow = false;
+            deathTxt.text = e.deathTxt;
             StartCoroutine(PlayDeathAnimation());
         }
         else Debug.Log("Player is alive");
@@ -47,7 +52,15 @@ public class PlayerCaught : MonoBehaviour
 
         cg.DOFade(1, 0.5f);
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
+
+        deathTxt.DOFade(1, 2);
+
+        yield return new WaitForSeconds(5);
+
+        deathTxt.DOFade(0, 2);
+
+        yield return new WaitForSeconds(2.5f);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

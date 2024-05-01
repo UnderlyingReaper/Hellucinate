@@ -46,7 +46,6 @@ public class Sanity : MonoBehaviour
     Vignette _vignette;
     DepthOfField _dof;
     FilmGrain _filmGrain;
-    CanvasGroup _deathTxtCanvasGroup;
 
 
 
@@ -57,7 +56,6 @@ public class Sanity : MonoBehaviour
         postProcessingVolume.profile.TryGet(out _dof);
 
         _pm = GetComponent<Player_Movement>();
-        _deathTxtCanvasGroup = deathTxt.GetComponent<CanvasGroup>();
 
         StartCoroutine(SanityHeartBeatEffect());
 
@@ -155,11 +153,11 @@ public class Sanity : MonoBehaviour
 
         yield return new WaitForSeconds(3);
 
-        _deathTxtCanvasGroup.DOFade(1, 2);
+        deathTxt.DOFade(1, 2);
 
         yield return new WaitForSeconds(5);
 
-        _deathTxtCanvasGroup.DOFade(0, 2);
+        deathTxt.DOFade(0, 2);
 
         yield return new WaitForSeconds(2.5f);
 

@@ -102,7 +102,7 @@ public class MoveableCrate : MonoBehaviour
             if(_player.localScale == new Vector3(1*mp, 1, 1))
             {
                 _playerMovement.speed = 1.07f;
-                _rb.velocity = _playerRb.velocity + new Vector2(mp*0.05f, 0);
+                _rb.velocity = _playerRb.velocity; // + new Vector2(mp*0.01f, 0)
             }
             else _playerMovement.speed = _playerOrgSpeed;
         }

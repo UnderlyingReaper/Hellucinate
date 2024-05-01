@@ -13,7 +13,6 @@ public class PauseGame : MonoBehaviour
 
     public RectTransform pauseMenuButtonsHolder;
     public RectTransform pauseText;
-    public RectTransform objectivesHolder;
 
 
     void Start()
@@ -52,7 +51,6 @@ public class PauseGame : MonoBehaviour
 
         pauseMenuButtonsHolder.DOAnchorPos(new Vector2(-180, -100), duration).SetUpdate(true);
         pauseText.DOAnchorPos(new Vector2(0, 75), duration).SetUpdate(true);
-        objectivesHolder.DOAnchorPos(new Vector2(200, -100), duration).SetUpdate(true);
 
         pauseMenuCanvas.DOFade(0, duration).SetUpdate(true).OnComplete(() => pauseMenuCanvas.gameObject.SetActive(false));
 
@@ -65,7 +63,6 @@ public class PauseGame : MonoBehaviour
 
         pauseMenuButtonsHolder.DOAnchorPos(new Vector3(180, -100, 0), duration).SetUpdate(true);
         pauseText.DOAnchorPos(new Vector2(0, -75), duration).SetUpdate(true);
-        objectivesHolder.DOAnchorPos(new Vector2(-200, -100), duration).SetUpdate(true);
 
         isOpen = true;
         Time.timeScale = 0;

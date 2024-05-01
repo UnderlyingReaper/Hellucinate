@@ -2,16 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Creature_Spawner : MonoBehaviour
 {
+    public MonoBehaviour objectToSubscribe;
+
     public GameObject creaturePrefab;
     public float speedMp = 1;
     public List<Transform> cameraCornerPoints;
-    public List<GameObject> warningSigns;
     public bool doDestroyOnEnd;
 
     public event EventHandler<OnSpawnEnemyArgs> OnSpawnCreature;
@@ -19,7 +18,7 @@ public class Creature_Spawner : MonoBehaviour
         public GameObject creature;
     }
 
-    public int minDelay, maxDelay;
+    public float minDelay, maxDelay;
 
 
     Creature_Chase_AI _creatureAi;
@@ -31,56 +30,29 @@ public class Creature_Spawner : MonoBehaviour
         _generalFade = GameObject.FindGameObjectWithTag("GameplayFade").GetComponent<CanvasGroup>();
     }
 
-    public IEnumerator StartSearch()
+    public IEnumerator StartSearch(float initialDelay)
     {
+        yield return new WaitForSeconds(initialDelay);
+
         float randomDelay = UnityEngine.Random.Range(minDelay, maxDelay);
         yield return new WaitForSeconds(randomDelay);
 
         GameObject creature = Instantiate(creaturePrefab, transform.position, Quaternion.Euler(Vector3.zero));
         _creatureAi = creature.GetComponent<Creature_Chase_AI>();
 
-        _creatureAi.speed *= speedMp;
+        _creatureAi.speed /= speedMp;
         _creatureAi.SearchEndResult += CurrentChaseEnd;
 
         _creatureAi.PlayGrowl();
         _creatureAi.CalculateDestination(cameraCornerPoints);
         OnSpawnCreature?.Invoke(this, new OnSpawnEnemyArgs { creature = creature });
 
-        StartCoroutine(WarningSymbolsAnimation(_creatureAi.IsFacingRight()));
+        StartCoroutine(ShowWarning());
     }
 
-    IEnumerator WarningSymbolsAnimation(bool isFacingRight)
+    IEnumerator ShowWarning()
     {
         _generalFade.DOFade(0.75f, 1);
-
-        if(isFacingRight) warningSigns[1].SetActive(true);
-        else warningSigns[0].SetActive(true);
-
-        yield return new WaitForSeconds(0.3f);
-
-        if(isFacingRight) warningSigns[1].SetActive(false);
-        else warningSigns[0].SetActive(false);
-
-        yield return new WaitForSeconds(0.3f);
-
-        if(isFacingRight) warningSigns[1].SetActive(true);
-        else warningSigns[0].SetActive(true);
-
-        yield return new WaitForSeconds(0.3f);
-
-        if(isFacingRight) warningSigns[1].SetActive(false);
-        else warningSigns[0].SetActive(false);
-
-        yield return new WaitForSeconds(0.3f);
-
-        
-        if(isFacingRight) warningSigns[1].SetActive(true);
-        else warningSigns[0].SetActive(true);
-
-        yield return new WaitForSeconds(0.3f);
-
-        warningSigns[1].SetActive(false);
-        warningSigns[0].SetActive(false);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -91,7 +63,11 @@ public class Creature_Spawner : MonoBehaviour
     {
         _generalFade.DOFade(0, 1);
 
-        if(doDestroyOnEnd) Destroy(gameObject);
+        if(doDestroyOnEnd)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
     }
 
     public IEnumerator UnFade()
@@ -102,6 +78,6 @@ public class Creature_Spawner : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Player") StartCoroutine(StartSearch());
+        if(other.tag == "Player") StartCoroutine(StartSearch(0));
     }
 }

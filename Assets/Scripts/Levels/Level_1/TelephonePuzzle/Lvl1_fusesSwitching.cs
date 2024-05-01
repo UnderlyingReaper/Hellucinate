@@ -10,11 +10,14 @@ public class Lvl1_fusesSwitching : MonoBehaviour
     public Locker lockerToOpen;
     public event EventHandler OnPuzzle2Complete;
 
+    EnableSpawner _enableSpawner;
+
 
 
     void Start()
     {
         isPuzzleComplete = false;
+        _enableSpawner = GetComponent<EnableSpawner>();
 
         foreach(FuseSwitch fuse in fuseSwitches) 
         {
@@ -47,9 +50,13 @@ public class Lvl1_fusesSwitching : MonoBehaviour
         }
 
         Debug.Log(rAllActive);
-        isPuzzleComplete = false;
+
+        isPuzzleComplete = true;
         lockerToOpen.isLocked = false;
+
         OnPuzzle2Complete?.Invoke(this, EventArgs.Empty);
+        if(_enableSpawner != null) _enableSpawner.EnableDesiredSpawner();
+
         DOVirtual.Float(buzzingSource.volume, 0.5f, 1, value => { buzzingSource.volume = value; });
         lockerUnlock.PlayOneShot(lockerUnlock.clip);
 
