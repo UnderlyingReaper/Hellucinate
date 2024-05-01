@@ -17,10 +17,27 @@ public class Sanity : MonoBehaviour
 
     [Header("Sanity Effects")]
     public Volume postProcessingVolume;
+    public AnimationCurve playerWalkSpeedCurve;
+
+    [Space(20)]
+
+    public AnimationCurve heartBeatCurve;
+    public AnimationCurve delayToUseCurve;
+
+    [Space(20)]
+
+    public AnimationCurve breathVolCurve;
+    public AnimationCurve focusDistanceCurve;
+    public AnimationCurve vignetteCurve;
+    public AnimationCurve filmGrainCurve;
+
+    [Space(20)]
+
     public AudioSource heartBeat_Source;
     public AudioSource breathing_Source;
 
     [Header("Kill Player")]
+    public bool killPlayer;
     public CanvasGroup fade;
     public TextMeshProUGUI deathTxt;
     Player_Movement _pm;
@@ -29,6 +46,7 @@ public class Sanity : MonoBehaviour
     Vignette _vignette;
     DepthOfField _dof;
     FilmGrain _filmGrain;
+    CanvasGroup _deathTxtCanvasGroup;
 
 
 
@@ -39,6 +57,7 @@ public class Sanity : MonoBehaviour
         postProcessingVolume.profile.TryGet(out _dof);
 
         _pm = GetComponent<Player_Movement>();
+        _deathTxtCanvasGroup = deathTxt.GetComponent<CanvasGroup>();
 
         StartCoroutine(SanityHeartBeatEffect());
 
@@ -47,12 +66,14 @@ public class Sanity : MonoBehaviour
 
     void Update()
     {
-        SanityEffects();
+        if(!killPlayer) SanityEffects();
 
         if(sanity == 0)
         {
-            StopCoroutine(SanityHeartBeatEffect());
-            //StartCoroutine(KillPlayer());
+            killPlayer = true;
+            DOVirtual.Float(breathing_Source.volume, 0, 2, value => { breathing_Source.volume = value; });
+            DOVirtual.Float(heartBeat_Source.volume, 0, 2, value => { heartBeat_Source.volume = value; });
+            StartCoroutine(KillPlayer());
         }
     }
 
@@ -81,16 +102,19 @@ public class Sanity : MonoBehaviour
     {
         while(true)
         {
-            float delayToUse = 1 + ((1 - 0.5f)*(sanity))/100;
+            float delayToUse = delayToUseCurve.Evaluate(sanity);
 
             yield return new WaitForSeconds(delayToUse);
 
             // Heartbeat
-            float volToUse = 0.08f + (0.4f - 0.08f) * (1 - (sanity/100));
+            if(!killPlayer)
+            {
+                float volToUse = heartBeatCurve.Evaluate(sanity);
 
-            heartBeat_Source.volume = UnityEngine.Random.Range(volToUse - 0.1f, volToUse + 0.1f);
-            if(heartBeat_Source.volume <= 0) heartBeat_Source.volume = 0.08f;
-            heartBeat_Source.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+                heartBeat_Source.volume = UnityEngine.Random.Range(volToUse - 0.2f, volToUse + 0.2f);
+                if(heartBeat_Source.volume <= 0) heartBeat_Source.volume = 0.08f;
+                heartBeat_Source.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+            }
 
             heartBeat_Source.PlayOneShot(heartBeat_Source.clip);
             // Heartbeat
@@ -99,36 +123,45 @@ public class Sanity : MonoBehaviour
     void SanityEffects()
     {
         // Breathing
-        if(sanity <= 50) breathing_Source.volume = 0.1f + (0.8f - 0.1f)*(1 - (sanity - 50/100));
-        else DOVirtual.Float(breathing_Source.volume, 0, 0.2f, value => { breathing_Source.volume = value; });
+        DOVirtual.Float(breathing_Source.volume, breathVolCurve.Evaluate(sanity), 0.2f, value => { breathing_Source.volume = value; });
         // Breathing
 
         // Depth of field
-        if(sanity <= 25) _dof.focusDistance.value = 5 - (4 *(50 - sanity)/50);
-        else DOVirtual.Float(_dof.focusDistance.value, 5, 2, value => { _dof.focusDistance.value = value; });
+        DOVirtual.Float(_dof.focusDistance.value, focusDistanceCurve.Evaluate(sanity), 0.2f, value => { _dof.focusDistance.value = value; }); 
         // Depth of field
 
+        // Player walk speed
+        _pm.ManipulatePlayerSpeed(playerWalkSpeedCurve.Evaluate(sanity));
+        // Player walk speed
+
         // Vignette
-        float desiredVignetteIntensity = 0.3f + (1f - 0.3f) * (1 - (sanity/100));
-        DOVirtual.Float(_vignette.intensity.value, desiredVignetteIntensity, 0.1f, value => { _vignette.intensity.value = value; });
+        DOVirtual.Float(_vignette.intensity.value, vignetteCurve.Evaluate(sanity), 0.2f, value => { _vignette.intensity.value = value; }); 
         // Vignette
 
         // FilmGrain
-        float desiredFilmGrainIntensity = 0.1f + (0.3f - 0.1f) * (1 - (sanity/100));
-        DOVirtual.Float(_filmGrain.intensity.value, desiredFilmGrainIntensity, 0.1f, value => { _filmGrain.intensity.value = value; });
+        DOVirtual.Float(_filmGrain.intensity.value, filmGrainCurve.Evaluate(sanity), 0.2f, value => { _filmGrain.intensity.value = value; });
         // FilmGrain
     }
 
     IEnumerator KillPlayer() // Its better to have a seperate script to handle players death.
     {
-        _pm.enabled = false;
-        DOVirtual.Float(_dof.focusDistance.value, 0, 1, value => { _dof.focusDistance.value = value; });
+        _pm.allow = false;
+        DOVirtual.Float(_dof.focusDistance.value, 0, 2, value => { _dof.focusDistance.value = value; });
         deathTxt.text = "Beware the shadows, for they feed upon your mind. Stay bathed in light to safeguard your sanity.";
-        fade.DOFade(1, 1);
 
         yield return new WaitForSeconds(3);
 
-        deathTxt.GetComponent<CanvasGroup>().DOFade(0, 1);
+        fade.DOFade(1, 2);
+
+        yield return new WaitForSeconds(3);
+
+        _deathTxtCanvasGroup.DOFade(1, 2);
+
+        yield return new WaitForSeconds(5);
+
+        _deathTxtCanvasGroup.DOFade(0, 2);
+
+        yield return new WaitForSeconds(2.5f);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

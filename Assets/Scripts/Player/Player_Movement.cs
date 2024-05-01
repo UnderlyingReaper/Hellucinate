@@ -10,11 +10,22 @@ public class Player_Movement : MonoBehaviour
 
 
     float _horizontal;
+    float _speedToUse;
 
 
+
+    void Start()
+    {
+        _speedToUse = speed;
+    }
+    
     void Update()
     {
-        if(!allow) return;
+        if(!allow)
+        {
+            anim.SetBool("isWalking", false);
+            return;
+        }
 
         _horizontal = Input.GetAxisRaw("Horizontal");
 
@@ -26,7 +37,7 @@ public class Player_Movement : MonoBehaviour
     {
         if(!allow) return;
 
-        rb.velocity = new Vector2(_horizontal * speed, rb.velocity.y);
+        rb.velocity = new Vector2(_horizontal * _speedToUse, rb.velocity.y);
     }
 
     void HandleAnimations()
@@ -47,5 +58,10 @@ public class Player_Movement : MonoBehaviour
             localScale.x *= -1;
             transform.localScale = localScale;
         }
+    }
+
+    public void ManipulatePlayerSpeed(float multiplier)
+    {
+        _speedToUse = speed * multiplier;
     }
 }
