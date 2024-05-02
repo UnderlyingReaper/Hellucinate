@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Dissolve
+  m_Name: Dissolve_Battery
   m_Shader: {fileID: -6465566751694194690, guid: d403ba2b31bf06b4594c7d1e9cbbefd5, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -56,7 +56,7 @@ Material:
     - _BorderThickness: 0.1
     - _EnableExternalAlpha: 0
     - _Fade: 1
-    - _Scale: 30
+    - _Scale: 5
     m_Colors:
     - _BorderColor: {r: 23.96863, g: 7.654903, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
