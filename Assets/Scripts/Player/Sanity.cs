@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 public class Sanity : MonoBehaviour
 {
     [Header("Sanity")]
+    public bool pauseSanity = false;
     public DetectLight detectLight;
     public float sanity;
     public float sanityGainSpeedMp;
@@ -40,7 +41,10 @@ public class Sanity : MonoBehaviour
     public bool killPlayer;
     public CanvasGroup fade;
     public TextMeshProUGUI deathTxt;
+
+
     Player_Movement _pm;
+    Animator _anim;
 
     
     Vignette _vignette;
@@ -56,6 +60,7 @@ public class Sanity : MonoBehaviour
         postProcessingVolume.profile.TryGet(out _dof);
 
         _pm = GetComponent<Player_Movement>();
+        _anim = GetComponent<Animator>();
 
         StartCoroutine(SanityHeartBeatEffect());
 
@@ -64,6 +69,8 @@ public class Sanity : MonoBehaviour
 
     void Update()
     {
+        if(pauseSanity) return;
+
         if(!killPlayer) SanityEffects();
 
         if(sanity == 0)
@@ -144,6 +151,7 @@ public class Sanity : MonoBehaviour
     IEnumerator KillPlayer() // Its better to have a seperate script to handle players death.
     {
         _pm.allow = false;
+        _anim.SetTrigger("FallOnKnees");
         DOVirtual.Float(_dof.focusDistance.value, 0, 2, value => { _dof.focusDistance.value = value; });
         deathTxt.text = "Beware the shadows, for they feed upon your mind. Stay bathed in light to safeguard your sanity.";
 
