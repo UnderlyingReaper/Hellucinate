@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Telephone : MonoBehaviour
 {
@@ -38,14 +39,19 @@ public class Telephone : MonoBehaviour
     }
 
 
+    float _distance;
     CanvasGroup canvas;
     Transform _player;
+    PlayerInputManager _pInputManager;
+
 
 
     void Start()
     {
         canvas = GetComponentInChildren<CanvasGroup>();
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _pInputManager = _player.GetComponent<PlayerInputManager>();
+        _pInputManager.playerInput.Player.Interact.performed += tryInteract;
 
         EventInfo eventInfo = objectToSubscribe.GetType().GetEvent("OnScare");
         EventHandler handler = new EventHandler(RingTelephoneEvent);
@@ -65,35 +71,38 @@ public class Telephone : MonoBehaviour
     {
         if(!allowInteraction) return;
 
-        float distance = Vector2.Distance(_player.position, transform.position);
+        _distance = Vector2.Distance(_player.position, transform.position);
 
-        if(distance <= range)
-        {
-            canvas.DOFade(1, 1);
-            
-            if(Input.GetKeyDown(KeyCode.E) && !isUsing)
-            {
-                isUsing = true;
-                noOfInteraction++;
-
-                ringSource.volume = 0;
-                staticSource.volume = 1;
-                if(noOfInteraction == 2) GenerateCode(); // generate another code when player interacts the second time
-                PlaySound(pickUp_Clip);
-                
-                if(playMansVoice) StartCoroutine(PlayMansVoice());
-            }
-            else if(Input.GetKeyDown(KeyCode.E) && isUsing)
-            {
-                isUsing = false;
-
-                staticSource.volume = 0;
-                PlaySound(putDown_Clip);
-
-                if(playMansVoice) StopCoroutine(PlayMansVoice());
-            }
-        }
+        if(_distance <= range) canvas.DOFade(1, 1);
         else canvas.DOFade(0, 2);
+    }
+
+    public void tryInteract(InputAction.CallbackContext context)
+    {
+        if(!allowInteraction) return;
+        if(_distance > range) return;
+
+        if(!isUsing)
+        {
+            isUsing = true;
+            noOfInteraction++;
+
+            ringSource.volume = 0;
+            staticSource.volume = 1;
+            if(noOfInteraction == 2) GenerateCode(); // generate another code when player interacts the second time
+            PlaySound(pickUp_Clip);
+                
+            if(playMansVoice) StartCoroutine(PlayMansVoice());
+        }
+        else if(isUsing)
+        {
+            isUsing = false;
+
+            staticSource.volume = 0;
+            PlaySound(putDown_Clip);
+
+            if(playMansVoice) StopCoroutine(PlayMansVoice());
+        }
     }
 
     IEnumerator PlayMansVoice()

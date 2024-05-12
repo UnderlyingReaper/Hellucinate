@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Lvl1_SecurityCheck_Interact : MonoBehaviour
 {
@@ -27,13 +28,17 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
 
 
     Transform _player;
+    PlayerInputManager _pInputmanager;
     CanvasGroup _canvas;
     public int count = 0;
+    float _distance;
 
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _pInputmanager = _player.GetComponent<PlayerInputManager>();
+        _pInputmanager.playerInput.Player.Interact.performed += TryInteract;
         _canvas = GetComponentInChildren<CanvasGroup>();
         _canvas.alpha = 0;
 
@@ -44,31 +49,38 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
 
     void Update()
     {
-        float distance = Vector3.Distance(_player.position, transform.position);
+        _distance = Vector3.Distance(_player.position, transform.position);
 
-        if(distance <= range)
+        if(_distance <= range)
         {
             _canvas.DOFade(1, 1);
 
             if(customeInputField.allowuserInput) return;
 
-            if(Input.GetKeyDown(KeyCode.E) && !isOpen)
-            {
-                isOpen = true;
-                count++;
-
-                HandlePuzzleOne();
-            }
-            else if(Input.GetKeyDown(KeyCode.E) && isOpen)
-            {
-                isOpen = false;
-
-                HandlePuzzleOne();
-            }
+            
         }
         else
         {
             _canvas.DOFade(0, 1);
+        }
+    }
+
+    public void TryInteract(InputAction.CallbackContext context)
+    {
+        if(_distance > range) return;
+
+        if(!isOpen)
+        {
+            isOpen = true;
+            count++;
+
+            HandlePuzzleOne();
+        }
+        else if(isOpen)
+        {
+            isOpen = false;
+
+            HandlePuzzleOne();
         }
     }
 

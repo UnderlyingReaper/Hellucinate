@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ElevatorController : MonoBehaviour
 {
@@ -21,10 +22,14 @@ public class ElevatorController : MonoBehaviour
     public Camera_Follow camera_Follow;
     public Animator animController;
 
+
     CanvasGroup _canvas;
     Transform _player;
+    PlayerInputManager _pInputManager;
 
     bool _isPowerOn, _isBarricadeRemoved = false;
+    float _distance;
+
 
 
     void Start()
@@ -32,6 +37,8 @@ public class ElevatorController : MonoBehaviour
         _canvas = GetComponentInChildren<CanvasGroup>();
         _canvas.alpha = 0;
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _pInputManager = _player.GetComponent<PlayerInputManager>();
+        _pInputManager.playerInput.Player.Interact.performed += tryInteract;
         allowInteraction = false;
 
         electricBox.OnElectricBoxPuzzleComplete += OnWiresConnected;
@@ -41,22 +48,28 @@ public class ElevatorController : MonoBehaviour
     {
         if(!allowInteraction) return;
 
-        float distance = Vector2.Distance(_player.position, transform.position);
+        _distance = Vector2.Distance(_player.position, transform.position);
 
-        if(distance <= range)
+        if(_distance <= range)
         {
             _canvas.DOFade(1, 1);
             OpenDoor();
-
-            if(Input.GetKeyDown(KeyCode.E))
-            {
-                StartCoroutine(TeleportPlayer());
-            }
         }
         else
         {
             _canvas.DOFade(0, 1);
             CloseDoor();
+        }
+    }
+
+    public void tryInteract(InputAction.CallbackContext context)
+    {
+        if(_distance > range) return;
+        if(!allowInteraction) return;
+
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            StartCoroutine(TeleportPlayer());
         }
     }
 

@@ -1,16 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Ledge_Detection : MonoBehaviour
 {
     [Header("General")]
     public bool ledgeDetected;
     public LayerMask groundLayerMask;
-
-    public Transform player;
+    
     public Vector3 offset;
     public Animator playerAnim;
     public bool _canDetect;
@@ -19,10 +16,18 @@ public class Ledge_Detection : MonoBehaviour
     public float radius;
     public Vector3 boxOffset;
     public Vector2 boxSize;
+
+    Transform _player;
+    PlayerInputManager _playerInputManager;
     
 
 
-
+    void Start()
+    {
+        _player = transform.parent;
+        _playerInputManager = _player.GetComponent<PlayerInputManager>();
+        _playerInputManager.playerInput.Player.LedgeClimb.performed += ClimbLedge;
+    }
 
     void Update()
     {
@@ -31,20 +36,20 @@ public class Ledge_Detection : MonoBehaviour
         if(_canDetect)
             ledgeDetected = Physics2D.OverlapCircle(transform.position, radius, groundLayerMask);
         if(!_canDetect) ledgeDetected = false;
-
-        if(ledgeDetected && Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(ClimbLedge());
-        }
     }
 
-    IEnumerator ClimbLedge()
+    public void ClimbLedge(InputAction.CallbackContext context)
+    {
+        if(ledgeDetected) StartCoroutine(StartClimbLedge());
+    }
+
+    IEnumerator StartClimbLedge()
     {
         playerAnim.SetBool("climbLedge", true);
         yield return new WaitForSeconds(playerAnim.GetCurrentAnimatorClipInfo(0).Length);
         playerAnim.SetBool("climbLedge", false);
 
-        player.transform.position = transform.position + offset;
+        _player.transform.position = transform.position + offset;
     }
 
     void OnDrawGizmos()

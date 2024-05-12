@@ -1,8 +1,7 @@
 using System.Collections;
 using DG.Tweening;
-using JetBrains.Annotations;
-using Unity.VisualScripting.FullSerializer.Internal;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
 public class FlashLight : MonoBehaviour
@@ -27,22 +26,26 @@ public class FlashLight : MonoBehaviour
 
     float _timePassedPerBatter;
     bool _isFlickering;
+    PlayerInputManager _playerInputManager;
 
 
 
     void Start()
     {
         StartCoroutine(unsatbleLightAnim());
+
+        _playerInputManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInputManager>();
+        _playerInputManager.playerInput.Player.Flashlight.performed += PerformAction;
     }
 
-    void Update()
+    public void PerformAction(InputAction.CallbackContext context)
     {
-        if(Input.GetKeyDown(KeyCode.F) && !isEnabled && currBatteries > 0) // Turn on
+        if(!isEnabled && currBatteries > 0) // Turn on
         {
             ChangeIntensityOfLight(maxIntensity, true);
             PlayPressSound();
         }
-        else if(Input.GetKeyDown(KeyCode.F) && isEnabled) // Turn off
+        else if(isEnabled) // Turn off
         {
             ChangeIntensityOfLight(minIntensity, false);
             PlayPressSound();
@@ -53,6 +56,7 @@ public class FlashLight : MonoBehaviour
 
         if(isEnabled) ReduceBattery(); // reduce battery if light is on
     }
+
 
     public IEnumerator unsatbleLightAnim()
     {
@@ -125,7 +129,6 @@ public class FlashLight : MonoBehaviour
         }
         _isFlickering = false;
     }
-
 
     void PlayPressSound()
     {

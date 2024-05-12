@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Assertions.Comparers;
+using UnityEngine.InputSystem;
 
 public class LadderClimbing : MonoBehaviour
 {
-    public Transform player;
-
     [Header("General")]
     public AudioSource audioSource;
     public AudioClip audioClip;
@@ -36,7 +33,8 @@ public class LadderClimbing : MonoBehaviour
     public Vector3 topDetectBoxOffset;
     public Vector2 topDetectBoxSize;
 
-
+    public Transform _player;
+    PlayerInputManager _playerInputManager;
     Player_Movement _playerMovement;
     Rigidbody2D _rb;
     Ladder _ladder;
@@ -44,15 +42,21 @@ public class LadderClimbing : MonoBehaviour
 
     void Start()
     {
-        _playerMovement = player.GetComponent<Player_Movement>();
-        _rb = player.GetComponent<Rigidbody2D>();
+        _player = transform.parent;
+
+        _playerMovement = _player.GetComponent<Player_Movement>();
+        _rb = _player.GetComponent<Rigidbody2D>();
+
+        _playerInputManager = _player.GetComponent<PlayerInputManager>();
+        _playerInputManager.playerInput.Player.Interact.performed += GetOnOffLadder;
     }
+
     void Update()
     {
         // Check for ladder
         isLadderInReach = Physics2D.OverlapBox(transform.position + ladderDetectBoxPos, ladderDetectBoxSize, 0, ladderLayer);
         // Ground check should be done below the player
-        isGroundInReach = Physics2D.OverlapBox(player.position + groundDetectBoxOffset, groundDetectBoxSize, 0, groundLayer);
+        isGroundInReach = Physics2D.OverlapBox(_player.position + groundDetectBoxOffset, groundDetectBoxSize, 0, groundLayer);
         //Check for any ladder on top
         isLadderOnTop = Physics2D.OverlapBox(transform.position + topDetectBoxOffset, topDetectBoxSize, 0, ladderLayer);
 
@@ -69,15 +73,12 @@ public class LadderClimbing : MonoBehaviour
             _ladder = null;
             isLadderEndNear = false;
         }
-        
-
-        GetOnOffLadder();
     }
 
-    void GetOnOffLadder()
+    void GetOnOffLadder(InputAction.CallbackContext context)
     {
         // Run if ladder is in reach & the player is not on the ladder neither on the end
-        if(isLadderInReach && Input.GetKeyDown(KeyCode.E) && !isOnladder && !isLadderEndNear) // Get on ladderfrom the bottom
+        if(isLadderInReach && !isOnladder && !isLadderEndNear) // Get on ladderfrom the bottom
         {
             isOnladder = true;
             _playerMovement.enabled = false;
@@ -86,30 +87,30 @@ public class LadderClimbing : MonoBehaviour
             StartCoroutine(ClimbLadder());
         }
         // Run if ground is in reach & the player is on the ladder but not near the end
-        else if(isGroundInReach && Input.GetKeyDown(KeyCode.E) && isOnladder && !isLadderEndNear) // Get off ladder on the bottom
+        else if(isGroundInReach && isOnladder && !isLadderEndNear) // Get off ladder on the bottom
         {
             isOnladder = false;
             _playerMovement.enabled = true;
             _rb.gravityScale = 4;
         }
         // Run if the player is near the end point & is on the ladder
-        else if(Input.GetKeyDown(KeyCode.E) && isLadderEndNear && isOnladder) // Get off ladder on the top
+        else if(isLadderEndNear && isOnladder) // Get off ladder on the top
         {
-            player.position = new Vector3(_ladder.endPoint.position.x, _ladder.endPoint.position.y + 0.3f, _ladder.endPoint.position.z);
+            _player.position = new Vector3(_ladder.endPoint.position.x, _ladder.endPoint.position.y + 0.3f, _ladder.endPoint.position.z);
             isOnladder = false;
             _playerMovement.enabled = true;
             _rb.gravityScale = 4;
         }
         // Run if the player is not on the ladder but is in reach & is on the top
-        else if(Input.GetKeyDown(KeyCode.E) && isLadderEndNear && !isOnladder && isLadderInReach) // Get on the ladder from the top
+        else if(isLadderEndNear && !isOnladder && isLadderInReach) // Get on the ladder from the top
         {
-            player.position = _ladder.climbingPos.position;
+            _player.position = _ladder.climbingPos.position;
             isOnladder = true;
             _playerMovement.enabled = false;
             _rb.gravityScale = 0;
 
             // Flip the player since ur supposed to be facing the ladder
-            player.localScale = new Vector3(-player.localScale.x, 1, 1);
+            _player.localScale = new Vector3(-_player.localScale.x, 1, 1);
             _playerMovement.isFacingRight = !_playerMovement.isFacingRight;
 
             StartCoroutine(ClimbLadder());
@@ -121,15 +122,15 @@ public class LadderClimbing : MonoBehaviour
         while(isOnladder)
         {
             // get input from player and calculate the next steps positon
-            float verticalInput = Input.GetAxis("Vertical");
-            float nextStepPos = verticalInput * climbAmt;
+            Vector2 input = _playerInputManager.playerInput.Player.Movement.ReadValue<Vector2>();
+            float nextStepPos = input.y * climbAmt;
 
             // dont let player move down/up if there is any obstruction(or no ladder to step on to) in his way
-            if(verticalInput < 0 && isGroundInReach) Debug.Log("Cant move down");
-            else if(verticalInput > 0 && !isLadderOnTop) Debug.Log("Cant move up");
-            else if (verticalInput != 0)
+            if(input.y < 0 && isGroundInReach) Debug.Log("Cant move down");
+            else if(input.y > 0 && !isLadderOnTop) Debug.Log("Cant move up");
+            else if (input.y != 0)
             {
-                player.DOMoveY(player.position.y + nextStepPos, stepDelay);
+                _player.DOMoveY(_player.position.y + nextStepPos, stepDelay);
                 PlayAudio();
             }
 
@@ -156,7 +157,7 @@ public class LadderClimbing : MonoBehaviour
 
         // Ground check gizmo
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(player.position + groundDetectBoxOffset, groundDetectBoxSize);
+        Gizmos.DrawWireCube(_player.position + groundDetectBoxOffset, groundDetectBoxSize);
 
         // Ladder on top check gizmo
         Gizmos.color = Color.yellow;

@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
 public class Door : MonoBehaviour
@@ -28,10 +29,11 @@ public class Door : MonoBehaviour
     public bool isLocked = false;
     public string keyID = "NO_KEY_ID";
 
-
+    float _distance;
     AudioSource _audioSource;
     Inventory_System invSystem;
     Transform _player;
+    PlayerInputManager _pInputManager;
     BoxCollider2D _collider;
     SpriteRenderer _sprite;
     ShadowCaster2D _shadowCaster;
@@ -40,6 +42,9 @@ public class Door : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _pInputManager = _player.GetComponent<PlayerInputManager>();
+        _pInputManager.playerInput.Player.Interact.performed += TryOpenDoor;
+
         invSystem = _player.GetComponent<Inventory_System>();
 
         _collider = GetComponent<BoxCollider2D>();
@@ -55,9 +60,17 @@ public class Door : MonoBehaviour
 
     void Update()
     {
-        float distance = Vector3.Distance(_player.position, transform.position + centerOffset);
+        _distance = Vector3.Distance(_player.position, transform.position + centerOffset);
 
-        if(isLocked && Input.GetKeyDown(KeyCode.E) && distance <= range)
+        if(openUI != null && _distance <= range) openUI.DOFade(1, 1);
+        else if(openUI != null && _distance > range) openUI.DOFade(0, 1);
+    }
+
+    public void TryOpenDoor(InputAction.CallbackContext context)
+    {
+        if(_distance > range) return;
+
+        if(isLocked)
         {
             bool doesHaveKey = invSystem.CheckForItem(keyID);
 
@@ -74,29 +87,22 @@ public class Door : MonoBehaviour
             }
         }
 
-        if(openUI != null && distance <= range) openUI.DOFade(1, 1);
-        else if(openUI != null && distance > range)
-        {
-            openUI.DOFade(0, 1);
-            return;
-        }
-
         // Dont run any code if the door is locked
         if(isLocked) return;
 
         // If door does teleport, than run this code only and return back;
-        if(doesTeleport && distance <= range && Input.GetKeyDown(KeyCode.E) && !isLocked)
+        if(doesTeleport)
         {
             StartCoroutine(TeleportPlayer()); // Teleport player
             return;
         }
 
         // If door does not teleport, than run this code;
-        if(distance <= range && Input.GetKeyDown(KeyCode.E) && !isLocked && !isOpen) // Open door
+        if(!isOpen) // Open door
         {
             OpenDoor();
         }
-        else if(distance <= range && Input.GetKeyDown(KeyCode.E) && !isLocked && isOpen) // Close door
+        else if(isOpen) // Close door
         {
             StartCoroutine(CloseDoor());
         }

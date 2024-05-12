@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.InputSystem;
 
 public class LightSwitch : MonoBehaviour
 {
@@ -12,12 +13,16 @@ public class LightSwitch : MonoBehaviour
     public AudioClip backgroundClip;
 
 
+    float _distance;
     CanvasGroup _canvasGroup;
     Transform _player;
+    PlayerInputManager _pInputManager;
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _pInputManager = _player.GetComponent<PlayerInputManager>();
+        _pInputManager.playerInput.Player.Interact.performed += TryInteract;
         _canvasGroup = GetComponentInChildren<CanvasGroup>();
 
         if(isOn)
@@ -32,32 +37,31 @@ public class LightSwitch : MonoBehaviour
 
     void Update()
     {
-        float distance = Vector3.Distance(_player.position, transform.position);
+        _distance = Vector3.Distance(_player.position, transform.position);
 
-        if(distance <= range)
-        {
-            _canvasGroup.DOFade(1, 1);
-
-            if(Input.GetKeyDown(KeyCode.E) && !isOn)
-            {
-                isOn = true;
-                for(int i = 0; i < lights.Length; i++) lights[i].SetActive(true);
-                PlaySound();
-            }
-            else if(Input.GetKeyDown(KeyCode.E) && isOn)
-            {
-                isOn = false;
-                for(int i = 0; i < lights.Length; i++) lights[i].SetActive(false);
-                PlaySound();
-            }
-        }
-        else
-        {
-            _canvasGroup.DOFade(0, 2);
-        }
+        if(_distance <= range) _canvasGroup.DOFade(1, 1);
+        else _canvasGroup.DOFade(0, 2);
 
         if(isOn && backgroundClip != null) DOVirtual.Float(audioSource.volume, 1, 1, value => { audioSource.volume = value; });
         else if(!isOn && backgroundClip != null) DOVirtual.Float(audioSource.volume, 0, 1, value => { audioSource.volume = value; });
+    }
+
+    public void TryInteract(InputAction.CallbackContext context)
+    {
+        if(_distance > range) return;
+
+        if(!isOn)
+        {
+            isOn = true;
+            for(int i = 0; i < lights.Length; i++) lights[i].SetActive(true);
+            PlaySound();
+        }
+        else if(isOn)
+        {
+            isOn = false;
+            for(int i = 0; i < lights.Length; i++) lights[i].SetActive(false);
+            PlaySound();
+        }
     }
 
     public void PlaySound()

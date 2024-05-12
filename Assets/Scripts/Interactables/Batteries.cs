@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Batteries : MonoBehaviour
 {
@@ -11,9 +12,11 @@ public class Batteries : MonoBehaviour
 
 
     Transform _player;
+    PlayerInputManager _pInputManager;
 
     bool _isDissolving = false;
     Material _material;
+    float _distance;
 
 
 
@@ -22,6 +25,9 @@ public class Batteries : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _material = GetComponent<SpriteRenderer>().material;
 
+        _pInputManager = _player.GetComponent<PlayerInputManager>();
+        _pInputManager.playerInput.Player.Interact.performed += TryPickBattery;
+
         if(canvas != null) canvas.alpha = 0;
     }
 
@@ -29,21 +35,21 @@ public class Batteries : MonoBehaviour
     {
         if(_isDissolving) return;
 
-        float distance = Vector2.Distance(_player.position, transform.position);
+        _distance = Vector2.Distance(_player.position, transform.position);
 
-        if(distance <= range)
+        if(_distance <= range)
         {
             if(canvas != null) canvas.DOFade(1, 1);
-
-            if(Input.GetKeyDown(KeyCode.E))
-            {
-                PickupBattery();
-            }
         }
         else
         {
             if(canvas != null) canvas.DOFade(0, 1);
         }
+    }
+
+    public void TryPickBattery(InputAction.CallbackContext context)
+    {
+        if(_distance <= range) PickupBattery();
     }
 
     public void PickupBattery()

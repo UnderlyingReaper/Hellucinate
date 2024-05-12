@@ -9,14 +9,17 @@ public class Player_Movement : MonoBehaviour
     public bool isFacingRight;
 
 
-    float _horizontal;
+    Vector2 _movement;
     float _speedToUse;
+    PlayerInputManager _playerInputManager;
 
 
 
     void Start()
     {
         _speedToUse = speed;
+
+        _playerInputManager = GetComponent<PlayerInputManager>();
     }
     
     void Update()
@@ -27,7 +30,7 @@ public class Player_Movement : MonoBehaviour
             return;
         }
 
-        _horizontal = Input.GetAxisRaw("Horizontal");
+        _movement = _playerInputManager.playerInput.Player.Movement.ReadValue<Vector2>();
 
         HandleAnimations();
 
@@ -37,12 +40,12 @@ public class Player_Movement : MonoBehaviour
     {
         if(!allow) return;
 
-        rb.velocity = new Vector2(_horizontal * _speedToUse, rb.velocity.y);
+        rb.velocity = new Vector2(_movement.x * _speedToUse, rb.velocity.y);
     }
 
     void HandleAnimations()
     {
-        if(_horizontal > 0 || _horizontal < 0)
+        if(_movement.x > 0 || _movement.x < 0)
             anim.SetBool("isWalking", true);
         
         else
@@ -51,7 +54,7 @@ public class Player_Movement : MonoBehaviour
 
     void Flip ()
     {
-        if(isFacingRight && _horizontal < 0 || !isFacingRight && _horizontal > 0)
+        if(isFacingRight && _movement.x < 0 || !isFacingRight && _movement.x > 0)
         {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;

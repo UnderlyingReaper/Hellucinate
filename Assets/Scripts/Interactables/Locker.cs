@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
 public class Locker : MonoBehaviour
@@ -25,9 +26,11 @@ public class Locker : MonoBehaviour
     public string keyID = "NO_KEY_ID";
 
 
+    float _distance;
     AudioSource _audioSource;
     Inventory_System invSystem;
     Transform _player;
+    PlayerInputManager _pInputManager;
 
 
     void Start()
@@ -37,6 +40,8 @@ public class Locker : MonoBehaviour
         if(!isEnteractable) return;
 
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _pInputManager = _player.GetComponent<PlayerInputManager>();
+        _pInputManager.playerInput.Player.Interact.performed += TryInteract;
         invSystem = _player.GetComponent<Inventory_System>();
 
         _audioSource = GetComponentInChildren<AudioSource>();
@@ -48,9 +53,17 @@ public class Locker : MonoBehaviour
     {
         if(!isEnteractable) return;
 
-        float distance = Vector3.Distance(_player.position, transform.position);
+        _distance = Vector3.Distance(_player.position, transform.position);
 
-        if(isLocked && Input.GetKeyDown(KeyCode.E) && distance <= range)
+        if(_distance <= range) openUI.DOFade(1, 1);
+        else openUI.DOFade(0, 1);
+    }
+
+    public void TryInteract(InputAction.CallbackContext context)
+    {
+        if(_distance > range) return;
+
+        if(isLocked)
         {
             bool doesHaveKey = invSystem.CheckForItem(keyID);
 
@@ -60,28 +73,21 @@ public class Locker : MonoBehaviour
                 invSystem.RemoveItem(keyID);
                 Debug.Log("Item Used");
             }
+            else return;
         }
 
-        if(distance <= range)
+        // open/close locker
+        if(!isOpen) // Open door
         {
-            openUI.DOFade(1, 1);
-
-            if(isLocked) return;
-
-            // open/close locker
-            if(Input.GetKeyDown(KeyCode.E) && !isLocked && !isOpen) // Open door
-            {
-                isOpen = true;
-                door.DOScaleX(doorOpenSize, duration);
-                SetItemsActivateStateTo(true);
-                if(openDoorClip != null) _audioSource.PlayOneShot(openDoorClip);
-            }
-            else if(Input.GetKeyDown(KeyCode.E) && !isLocked && isOpen) // Close door
-            {
-                StartCoroutine(CloseDoor());
-            }
+            isOpen = true;
+            door.DOScaleX(doorOpenSize, duration);
+            SetItemsActivateStateTo(true);
+            if(openDoorClip != null) _audioSource.PlayOneShot(openDoorClip);
         }
-        else openUI.DOFade(0, 1);
+        else if(isOpen) // Close door
+        {
+            StartCoroutine(CloseDoor());
+        }
     }
 
     IEnumerator CloseDoor()

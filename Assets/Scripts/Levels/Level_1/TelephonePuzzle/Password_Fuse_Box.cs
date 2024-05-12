@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
 public class Password_Fuse_Box : MonoBehaviour
@@ -26,13 +27,17 @@ public class Password_Fuse_Box : MonoBehaviour
     public Lvl1_FuseCode puzzleOneController;
     public Lvl1_fusesSwitching puzzleTwoController;
 
+    float _distance;
     Transform _player;
+    PlayerInputManager _pInputManager;
     CanvasGroup _canvas;
 
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _pInputManager = _player.GetComponent<PlayerInputManager>();
+        _pInputManager.playerInput.Player.Interact.performed += TryInteract;
         _canvas = GetComponentInChildren<CanvasGroup>();
 
         _canvas.alpha = 0;
@@ -44,30 +49,29 @@ public class Password_Fuse_Box : MonoBehaviour
     
     void Update()
     {
-        float distance = Vector3.Distance(_player.position, transform.position);
+        _distance = Vector3.Distance(_player.position, transform.position);
 
-        if(distance <= range)
+        if(_distance <= range) _canvas.DOFade(1, 1);
+        else _canvas.DOFade(0, 1);
+    }
+
+    public void TryInteract(InputAction.CallbackContext context)
+    {
+        if(_distance > range) return;
+
+        if(!isOpen)
         {
-            _canvas.DOFade(1, 1);
+            isOpen = true;
 
-            if(Input.GetKeyDown(KeyCode.E) && !isOpen)
-            {
-                isOpen = true;
-
-                if(!puzzle1Complete) HandlePuzzleOne();
-                HandlePuzzleTwo();
-            }
-            else if(Input.GetKeyDown(KeyCode.E) && isOpen)
-            {
-                isOpen = false;
-
-                StartCoroutine(ExitPuzzle());
-                StopCoroutine(FocusOnPuzzle(puzzle1Complete? puzzleTwo.transform : puzzleOne.transform ));
-            }
+            if(!puzzle1Complete) HandlePuzzleOne();
+            HandlePuzzleTwo();
         }
-        else
+        else if(isOpen)
         {
-            _canvas.DOFade(0, 1);
+            isOpen = false;
+
+            StartCoroutine(ExitPuzzle());
+            StopCoroutine(FocusOnPuzzle(puzzle1Complete? puzzleTwo.transform : puzzleOne.transform ));
         }
     }
 

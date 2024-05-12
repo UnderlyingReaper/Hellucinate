@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ElectricBox : MonoBehaviour
 {
@@ -24,13 +25,17 @@ public class ElectricBox : MonoBehaviour
     public PuzzleOneController puzzleOneController;
 
 
+    float _distance;
     Transform _player;
+    PlayerInputManager _pInputManager;
     CanvasGroup _canvas;
 
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _pInputManager = _player.GetComponent<PlayerInputManager>();
+        _pInputManager.playerInput.Player.Interact.performed += TryInteract;
         _canvas = GetComponentInChildren<CanvasGroup>();
         _canvas.alpha = 0;
 
@@ -39,28 +44,27 @@ public class ElectricBox : MonoBehaviour
 
     void Update()
     {
-        float distance = Vector3.Distance(_player.position, transform.position);
+        _distance = Vector3.Distance(_player.position, transform.position);
 
-        if(distance <= range)
+        if(_distance <= range) _canvas.DOFade(1, 1);
+        else _canvas.DOFade(0, 1);
+    }
+
+    public void TryInteract(InputAction.CallbackContext context)
+    {
+        if(_distance > range) return;
+
+        if(!isOpen)
         {
-            _canvas.DOFade(1, 1);
-
-            if(Input.GetKeyDown(KeyCode.E) && !isOpen)
-            {
-                isOpen = true;
-
-                HandlePuzzleOne();
-            }
-            else if(Input.GetKeyDown(KeyCode.E) && isOpen)
-            {
-                isOpen = false;
-
-                HandlePuzzleOne();
-            }
+            isOpen = true;
+            _player.GetComponent<Player_Movement>().allow = false;
+            HandlePuzzleOne();
         }
-        else
+        else if(isOpen)
         {
-            _canvas.DOFade(0, 1);
+            isOpen = false;
+            _player.GetComponent<Player_Movement>().allow = true;
+            HandlePuzzleOne();
         }
     }
 
