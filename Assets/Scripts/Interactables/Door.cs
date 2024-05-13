@@ -69,6 +69,7 @@ public class Door : MonoBehaviour
     public void TryOpenDoor(InputAction.CallbackContext context)
     {
         if(_distance > range) return;
+        Debug.Log("Not Locked");
 
         if(isLocked)
         {

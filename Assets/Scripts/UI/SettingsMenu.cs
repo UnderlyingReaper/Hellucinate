@@ -25,14 +25,11 @@ public class SettingsMenu : MonoBehaviour
     public Slider ambienceSlider;
     
 
-    bool _isMainMenu;
     Bloom _bloom;
     FilmGrain _filmGrain;
 
     void Start()
     {
-        _isMainMenu = previousMenu.GetComponent<MainMenu>();
-
         volume.profile.TryGet(out _bloom);
         volume.profile.TryGet(out _filmGrain);
 
@@ -47,14 +44,7 @@ public class SettingsMenu : MonoBehaviour
         ambienceSlider.onValueChanged.AddListener(ChangeAmbienceVolume);
 
         gameObject.SetActive(false);
-    }
-
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Escape) && _isMainMenu && isOpen)
-        {
-            CloseSettings();
-        }
+        isOpen = false;
     }
 
     void GetSettings()
@@ -98,12 +88,7 @@ public class SettingsMenu : MonoBehaviour
         ambienceSlider.value = math.pow(10, (ambienceVol / 20));
         #endregion
     }
-
-    public void OpenSettingsMenu()
-    {
-        isOpen = true;
-        gameObject.SetActive(true);
-    }
+    
     public void CloseSettings()
     {
         isOpen = false;

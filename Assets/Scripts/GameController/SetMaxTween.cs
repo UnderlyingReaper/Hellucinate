@@ -5,6 +5,6 @@ public class SetMaxTween : MonoBehaviour
 {
     void Start()
     {
-        DOTween.SetTweensCapacity(8000,50);
+        DOTween.SetTweensCapacity(50000,50);
     }
 }

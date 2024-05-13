@@ -2,8 +2,6 @@ using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
-using CameraShake;
-using DG.Tweening.Core.Easing;
 
 public class MainMenu : MonoBehaviour
 {
@@ -28,7 +26,7 @@ public class MainMenu : MonoBehaviour
     public void OpenSettings()
     {
         settingsMenu.gameObject.SetActive(true);
-        settingsMenu.OpenSettingsMenu();
+        settingsMenu.isOpen = true;
         gameObject.SetActive(false);
     }
 

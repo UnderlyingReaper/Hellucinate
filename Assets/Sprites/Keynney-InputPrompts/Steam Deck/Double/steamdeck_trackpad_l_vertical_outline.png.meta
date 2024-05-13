@@ -106,6 +106,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -224,7 +236,12 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      steamdeck_trackpad_l_vertical_outline_0: 4674214290761988364
+      steamdeck_trackpad_l_vertical_outline_1: 116077127077602636
+      steamdeck_trackpad_l_vertical_outline_2: 597496883921732904
+      steamdeck_trackpad_l_vertical_outline_3: -7202041801912392497
+      steamdeck_trackpad_l_vertical_outline_4: -6211182820755443686
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -112,6 +112,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -272,7 +284,14 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation_button_analog_outline_0: -686222830253142075
+      playstation_button_analog_outline_1: 7173843290885180826
+      playstation_button_analog_outline_2: 2192490038728099913
+      playstation_button_analog_outline_3: -495538225997718211
+      playstation_button_analog_outline_4: 8773279761000906480
+      playstation_button_analog_outline_5: 6289053643917769200
+      playstation_button_analog_outline_6: -8018134414931231920
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

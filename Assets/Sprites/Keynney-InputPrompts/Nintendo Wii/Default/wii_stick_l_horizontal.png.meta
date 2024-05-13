@@ -106,6 +106,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -224,7 +236,12 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      wii_stick_l_horizontal_0: 6036249445143942066
+      wii_stick_l_horizontal_1: -8305923194075052963
+      wii_stick_l_horizontal_2: -5655226852585578865
+      wii_stick_l_horizontal_3: 4180675572382272726
+      wii_stick_l_horizontal_4: -4597209862801461465
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

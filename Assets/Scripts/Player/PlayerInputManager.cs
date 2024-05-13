@@ -4,7 +4,7 @@ public class PlayerInputManager : MonoBehaviour
 {
     public PlayerInput playerInput;
     
-    void Start()
+    void Awake()
     {
         if(playerInput == null)
         {

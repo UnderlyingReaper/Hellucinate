@@ -156,8 +156,12 @@ public class LadderClimbing : MonoBehaviour
         Gizmos.DrawWireCube(transform.position + ladderDetectBoxPos, ladderDetectBoxSize);
 
         // Ground check gizmo
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(_player.position + groundDetectBoxOffset, groundDetectBoxSize);
+        if(_player != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(_player.position + groundDetectBoxOffset, groundDetectBoxSize);
+        }
+        
 
         // Ladder on top check gizmo
         Gizmos.color = Color.yellow;

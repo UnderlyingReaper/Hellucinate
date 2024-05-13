@@ -1,9 +1,6 @@
-using System;
 using DG.Tweening;
-using TMPro;
-using UnityEditor.Callbacks;
 using UnityEngine;
-using UnityEngine.Assertions.Comparers;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class MoveableCrate : MonoBehaviour
@@ -23,9 +20,11 @@ public class MoveableCrate : MonoBehaviour
 
 
     Transform _player;
+    PlayerInputManager _playerInputManager;
     Rigidbody2D _rb, _playerRb;
-    Player_Movement _playerMovement;
-    float _playerOrgSpeed;
+
+
+    bool isHeldDown;
     float _timeHeld;
 
 
@@ -33,9 +32,11 @@ public class MoveableCrate : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _playerInputManager = _player.GetComponent<PlayerInputManager>();
+        _playerInputManager.playerInput.Player.Interact.started += OnButtonDown;
+        _playerInputManager.playerInput.Player.Interact.canceled += OnButtonUp;
+
         _playerRb = _player.GetComponent<Rigidbody2D>();
-        _playerMovement = _player.GetComponent<Player_Movement>();
-        _playerOrgSpeed = _playerMovement.speed;
 
 
         _rb = GetComponent<Rigidbody2D>();
@@ -61,6 +62,9 @@ public class MoveableCrate : MonoBehaviour
             DOVirtual.Float(audioSource.volume, 0, 0.25f, value => { audioSource.volume = value; });
     }
 
+    public void OnButtonDown(InputAction.CallbackContext context) => isHeldDown = true;
+    public void OnButtonUp(InputAction.CallbackContext context) => isHeldDown = false;
+
     public void getInputFromPlayer()
     {
         float distance = Vector2.Distance(_player.position, transform.position);
@@ -71,7 +75,7 @@ public class MoveableCrate : MonoBehaviour
             canvas.DOFade(1, 1);
 
             // If player is in range, get input from the button to see if he wants to grab or not
-            if(Input.GetKey(KeyCode.E)) _timeHeld += Time.deltaTime * increaseSpeed;
+            if(isHeldDown) _timeHeld += Time.deltaTime * increaseSpeed;
             else  _timeHeld -= Time.deltaTime * decreaseSpeed;
             
             // If player has held the button for 1sec, he will start grabbing it, else not
@@ -101,16 +105,16 @@ public class MoveableCrate : MonoBehaviour
 
             if(_player.localScale == new Vector3(1*mp, 1, 1))
             {
-                _playerMovement.speed = 1.07f;
-                _rb.velocity = _playerRb.velocity; // + new Vector2(mp*0.01f, 0)
+                _playerRb.drag = 50;
+                _rb.velocity = _playerRb.velocity + new Vector2(mp*0.01f, 0);
             }
-            else _playerMovement.speed = _playerOrgSpeed;
+            else _playerRb.drag = 0;
         }
         else
         {
             // Make the crate immovable
             _rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            _playerMovement.speed = _playerOrgSpeed;
+            _playerRb.drag = 0;
         }
     }
 }

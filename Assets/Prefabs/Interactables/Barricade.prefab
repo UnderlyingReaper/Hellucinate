@@ -492,12 +492,11 @@ MonoBehaviour:
   range: 1.5
   timeToRemoveOne: 1
   increaseMp: 0.5
-  decreaseMp: 5
+  decreaseMp: 2
   delayBetweenEachPlank: 0.5
   audioSource: {fileID: 6762712853256406257}
   wooddropClip: {fileID: 8300000, guid: b8ef88e13b099d647a5d8044a11379dc, type: 3}
   soundDelay: 0.5
-  itemBehind: {fileID: 0}
   activePlanks:
   - {fileID: 7880762174822003745}
   - {fileID: 6197696807063372248}

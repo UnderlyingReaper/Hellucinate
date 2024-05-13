@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
@@ -28,12 +29,15 @@ public class Handle_Barricade : MonoBehaviour
     public CanvasGroup canvas;
     public Slider slider;
 
-    public event EventHandler OnBarricadesRemoved;UnityEngine.
+    public event EventHandler OnBarricadesRemoved;
 
 
+    float _distance;
     Transform _player;
+    PlayerInputManager _playerInputManager;
     float _timeHeld;
     bool _allowToBreak = true;
+    bool _isHeldDown;
     
 
 
@@ -41,6 +45,9 @@ public class Handle_Barricade : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _playerInputManager = _player.GetComponent<PlayerInputManager>();
+        _playerInputManager.playerInput.Player.Interact.started += OnButtonDown;
+        _playerInputManager.playerInput.Player.Interact.canceled += OnButtonUp;
 
         slider.maxValue = timeToRemoveOne;
 
@@ -60,9 +67,9 @@ public class Handle_Barricade : MonoBehaviour
             return;
         }
 
-        float distance = Vector3.Distance(_player.position, transform.position);
+        _distance = Vector3.Distance(_player.position, transform.position);
 
-        if(distance <= range)
+        if(_distance <= range)
         {
             canvas.DOFade(1, 1);
 
@@ -71,7 +78,7 @@ public class Handle_Barricade : MonoBehaviour
 
             if(!_allowToBreak) return;
 
-            if(Input.GetKey(KeyCode.E)) _timeHeld += Time.deltaTime * increaseMp;
+            if(_isHeldDown) _timeHeld += Time.deltaTime * increaseMp;
             else _timeHeld -= Time.deltaTime * decreaseMp;
             
             if(_timeHeld >= timeToRemoveOne)
@@ -90,6 +97,9 @@ public class Handle_Barricade : MonoBehaviour
         _timeHeld = Mathf.Clamp(_timeHeld, 0, timeToRemoveOne);
         slider.value = _timeHeld;
     }
+
+    public void OnButtonDown(InputAction.CallbackContext context) => _isHeldDown = true;
+    public void OnButtonUp(InputAction.CallbackContext context) => _isHeldDown = false;
 
     public IEnumerator RemoveOne()
     {

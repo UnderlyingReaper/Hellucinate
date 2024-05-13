@@ -29,7 +29,8 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenSettingsMenu()
     {
-        settingsMenu.OpenSettingsMenu();
+        settingsMenu.gameObject.SetActive(true);
+        settingsMenu.isOpen = true;
         gameObject.SetActive(false);
     }
 }

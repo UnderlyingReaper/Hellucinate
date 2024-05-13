@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PauseGame : MonoBehaviour
 {
@@ -14,29 +15,24 @@ public class PauseGame : MonoBehaviour
     public RectTransform pauseMenuButtonsHolder;
     public RectTransform pauseText;
 
+    PlayerInputManager _playerInputManager;
+
 
     void Start()
     {
         ClosePauseMenu();
+        _playerInputManager = GetComponent<PlayerInputManager>();
+        _playerInputManager.playerInput.Player.Pause.performed += Interact;
 
         pauseMenu.PauseMenuEvent += PauseGameEventHandeler;
     }
 
-    void Update()
+    public void Interact(InputAction.CallbackContext context)
     {
-        if(Input.GetKeyDown(KeyCode.Escape) && !isOpen)
+        if(!isOpen) OpenPauseMenu();
+        else if(isOpen)
         {
-           OpenPauseMenu();
-        }
-        else if(Input.GetKeyDown(KeyCode.Escape) && isOpen)
-        {
-            if(settingsMenu.isOpen)
-            {
-                settingsMenu.CloseSettings();
-                OpenPauseMenu();
-            }
-            else
-                ClosePauseMenu();
+            ClosePauseMenu();
         }
     }
 
@@ -51,6 +47,9 @@ public class PauseGame : MonoBehaviour
 
         pauseMenuButtonsHolder.DOAnchorPos(new Vector2(-180, -100), duration).SetUpdate(true);
         pauseText.DOAnchorPos(new Vector2(0, 75), duration).SetUpdate(true);
+
+        settingsMenu.gameObject.SetActive(false);
+        settingsMenu.isOpen = false;
 
         pauseMenuCanvas.DOFade(0, duration).SetUpdate(true).OnComplete(() => pauseMenuCanvas.gameObject.SetActive(false));
 
