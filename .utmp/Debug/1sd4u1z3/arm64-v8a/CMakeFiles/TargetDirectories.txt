@@ -1,0 +1,5 @@
+E:/UnityProjects/2D-Horror-Game/.utmp/Debug/1sd4u1z3/arm64-v8a/CMakeFiles/edit_cache.dir
+E:/UnityProjects/2D-Horror-Game/.utmp/Debug/1sd4u1z3/arm64-v8a/CMakeFiles/rebuild_cache.dir
+E:/UnityProjects/2D-Horror-Game/.utmp/Debug/1sd4u1z3/arm64-v8a/FramePacing/CMakeFiles/swappywrapper.dir
+E:/UnityProjects/2D-Horror-Game/.utmp/Debug/1sd4u1z3/arm64-v8a/FramePacing/CMakeFiles/edit_cache.dir
+E:/UnityProjects/2D-Horror-Game/.utmp/Debug/1sd4u1z3/arm64-v8a/FramePacing/CMakeFiles/rebuild_cache.dir

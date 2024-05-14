@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
 public class Item : MonoBehaviour
@@ -25,9 +26,11 @@ public class Item : MonoBehaviour
 
     CanvasGroup _canvasGroup;
     bool _isDissolving;
+    float _distance;
     Material _material;
     SpriteRenderer _spriteRenderer;
     Transform _player;
+    PlayerInputManager _pInputManager;
 
 
 
@@ -39,6 +42,8 @@ public class Item : MonoBehaviour
         _canvasGroup.alpha = 0;
 
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _pInputManager = _player.GetComponent<PlayerInputManager>();
+        _pInputManager.playerInput.Player.Interact.performed += Interact;
 
         if(isImportant) StartCoroutine(LightAnimation());
     }
@@ -48,26 +53,26 @@ public class Item : MonoBehaviour
         // If shader is dissolving, it means its being picked up so no need to run the code
         if(_isDissolving) return;
 
-        // Check if player is in range
-        if(Vector3.Distance(_player.position, transform.position) < range)
-        {
-            _canvasGroup.DOFade(1, 1f);
-            
-            // Add Item to inv if the player presses E when in range
-            if(Input.GetKeyDown(KeyCode.E))
-            {
-                Inventory_System inventory_System = _player.GetComponent<Inventory_System>();
+        _distance = Vector3.Distance(_player.position, transform.position);
 
-                // Check if there is a empty slot available and then add item to the slot
-                if(inventory_System.CheckForEmptySlot())
-                {
-                    inventory_System.AddItem(item_ID, customeSprite ? customeSprite : _spriteRenderer.sprite, _spriteRenderer.color );
-                    PickupItem();
-                }
-                else Debug.Log("No space available in inventory");
-            }
-        }
+        // Check if player is in range
+        if(_distance <= range) _canvasGroup.DOFade(1, 1f);
         else _canvasGroup.DOFade(0, 1f);
+    }
+
+    public void Interact(InputAction.CallbackContext context)
+    {
+        if(_distance > range) return;
+
+        Inventory_System inventory_System = _player.GetComponent<Inventory_System>();
+
+        // Check if there is a empty slot available and then add item to the slot
+        if(inventory_System.CheckForEmptySlot())
+        {
+            inventory_System.AddItem(item_ID, customeSprite ? customeSprite : _spriteRenderer.sprite, _spriteRenderer.color );
+            PickupItem();
+        }
+        else Debug.Log("No space available in inventory");
     }
 
     IEnumerator LightAnimation()

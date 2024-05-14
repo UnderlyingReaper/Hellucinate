@@ -15,6 +15,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        transitionCg.DOFade(0, 2).SetUpdate(true);
         loadingBar.DORotate(new Vector3(0, 0, -360), 2, RotateMode.FastBeyond360).SetLoops(-1, LoopType.Restart).SetEase(Ease.Linear);
     }
 
