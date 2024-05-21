@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.InputSystem;
+using System;
 
 public class LightSwitch : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class LightSwitch : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip interactClip;
     public AudioClip backgroundClip;
+
+    public event EventHandler OnLightSwitch;
 
 
     float _distance;
@@ -55,19 +58,21 @@ public class LightSwitch : MonoBehaviour
             isOn = true;
             for(int i = 0; i < lights.Length; i++) lights[i].SetActive(true);
             PlaySound();
+            OnLightSwitch?.Invoke(this, EventArgs.Empty);
         }
         else if(isOn)
         {
             isOn = false;
             for(int i = 0; i < lights.Length; i++) lights[i].SetActive(false);
             PlaySound();
+            OnLightSwitch?.Invoke(this, EventArgs.Empty);
         }
     }
 
     public void PlaySound()
     {
-        audioSource.volume = Random.Range(0.8f, 1.2f);
-        audioSource.pitch = Random.Range(0.8f, 1.2f);
+        audioSource.volume = UnityEngine.Random.Range(0.8f, 1.2f);
+        audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
 
         audioSource.PlayOneShot(interactClip);
     }

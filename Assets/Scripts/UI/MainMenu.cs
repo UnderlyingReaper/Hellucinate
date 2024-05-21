@@ -21,6 +21,7 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
+        transform.GetComponent<CanvasGroup>().blocksRaycasts = false;
         StartCoroutine(StartGame());
     }
 

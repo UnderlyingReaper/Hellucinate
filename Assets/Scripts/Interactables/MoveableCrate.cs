@@ -26,6 +26,7 @@ public class MoveableCrate : MonoBehaviour
 
     bool isHeldDown;
     float _timeHeld;
+    float _distance;
 
 
 
@@ -46,6 +47,9 @@ public class MoveableCrate : MonoBehaviour
 
     void Update()
     {
+        _distance = Vector2.Distance(_player.position, transform.position);
+        if(_distance > range) return;
+
         getInputFromPlayer();
 
         DragObject();
@@ -67,10 +71,8 @@ public class MoveableCrate : MonoBehaviour
 
     public void getInputFromPlayer()
     {
-        float distance = Vector2.Distance(_player.position, transform.position);
-
         // Check if player is in range
-        if(distance <= range)
+        if(_distance <= range)
         {
             canvas.DOFade(1, 1);
 
@@ -99,16 +101,18 @@ public class MoveableCrate : MonoBehaviour
             // Make the crate moveable
             _rb.constraints = RigidbodyConstraints2D.None;
 
-            float mp = 0;
-            if(_player.position.x < transform.position.x) mp = -1;
-            else mp = 1;
-
-            if(_player.localScale == new Vector3(1*mp, 1, 1))
+            if(_player.position.x > transform.position.x)
             {
-                _playerRb.drag = 50;
-                _rb.velocity = _playerRb.velocity + new Vector2(mp*0.01f, 0);
+                if(_player.localScale.x == 1) _playerRb.drag = 50;
+                else _playerRb.drag = 0;
             }
-            else _playerRb.drag = 0;
+            else if(_player.position.x < transform.position.x)
+            {
+                if(_player.localScale.x == -1) _playerRb.drag = 50;
+                else _playerRb.drag = 0;
+            }
+
+            _rb.velocity = _playerRb.velocity;
         }
         else
         {

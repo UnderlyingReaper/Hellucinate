@@ -1,8 +1,12 @@
 using System;
+using System.Reflection;
 using UnityEngine;
 
 public class SoundScare : MonoBehaviour
 {
+    public MonoBehaviour mainScript;
+    public string eventName; 
+
     public AudioClip audioClip;
     public float sanityLoseAmount = 1;
     public event EventHandler OnScare;
@@ -14,22 +18,18 @@ public class SoundScare : MonoBehaviour
     {
         _audioSource = GetComponent<AudioSource>();
         _allowTrigger = true;
+
+        EventInfo eventInfo = mainScript.GetType().GetEvent(eventName);
+        EventHandler handler = new EventHandler(OnLightSwitch);
+        eventInfo.AddEventHandler(mainScript, handler);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnLightSwitch(object sender, EventArgs e)
     {
-        if (other.tag == "Player" && _allowTrigger)
-        {
-            _audioSource.volume = UnityEngine.Random.Range(0.8f, 1.2f);
-            _audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
-            _audioSource.PlayOneShot(audioClip);
-
-            other.GetComponent<Sanity>().LoseSanity(sanityLoseAmount, 1);
-            _allowTrigger = false;
-
-            OnScare?.Invoke(this, EventArgs.Empty);
-
-            Destroy(gameObject, 2);
-        }
+        if(!_allowTrigger) return;
+        
+        _allowTrigger = false;
+        OnScare?.Invoke(this, EventArgs.Empty);
+        _audioSource.PlayOneShot(audioClip);
     }
 }

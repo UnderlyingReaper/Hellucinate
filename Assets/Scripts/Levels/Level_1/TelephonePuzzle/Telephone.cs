@@ -79,8 +79,8 @@ public class Telephone : MonoBehaviour
 
     public void tryInteract(InputAction.CallbackContext context)
     {
-        if(!allowInteraction) return;
         if(_distance > range) return;
+        if(!allowInteraction) return;
 
         if(!isUsing)
         {
@@ -155,9 +155,9 @@ public class Telephone : MonoBehaviour
 
     public void RingTelephoneEvent(object sender, EventArgs e)
     {
-        StartCoroutine(RingTelephone());
         allowInteraction = true;
         GenerateCode();
+        StartCoroutine(RingTelephone());
     }
     IEnumerator RingTelephone()
     {

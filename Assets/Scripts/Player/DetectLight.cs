@@ -43,7 +43,6 @@ public class DetectLight : MonoBehaviour
         // If there is no light in range, decrease Sanity & return
         if(_lightSourcesCollider.Length == 0)
         {
-            Debug.Log("Losing Sanity");
             LightDetectionResult?.Invoke(this, new LightDetectionResultArgs { isInLight = false });
             foundValidLightSource = false;
             isInLight = false;
@@ -84,7 +83,6 @@ public class DetectLight : MonoBehaviour
 
         if(!foundValidLightSource)
         {
-            Debug.Log("Losing Sanity");
             LightDetectionResult?.Invoke(this, new LightDetectionResultArgs { isInLight = false });
         }
     }
