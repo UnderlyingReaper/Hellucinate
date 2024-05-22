@@ -36,13 +36,14 @@ public class Item : MonoBehaviour
 
     void Start()
     {
+        _player = GameObject.FindGameObjectWithTag("Player").transform;
         _canvasGroup = GetComponentInChildren<CanvasGroup>();
         _material = GetComponent<SpriteRenderer>().material;
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _canvasGroup.alpha = 0;
-
-        _player = GameObject.FindGameObjectWithTag("Player").transform;
+        
         _pInputManager = _player.GetComponent<PlayerInputManager>();
+
         _pInputManager.playerInput.Player.Interact.performed += Interact;
 
         if(isImportant) StartCoroutine(LightAnimation());
@@ -69,7 +70,7 @@ public class Item : MonoBehaviour
         // Check if there is a empty slot available and then add item to the slot
         if(inventory_System.CheckForEmptySlot())
         {
-            inventory_System.AddItem(item_ID, customeSprite ? customeSprite : _spriteRenderer.sprite, _spriteRenderer.color );
+            inventory_System.AddItem(item_ID, customeSprite ? customeSprite : _spriteRenderer.sprite, _spriteRenderer.color);
             PickupItem();
         }
         else Debug.Log("No space available in inventory");

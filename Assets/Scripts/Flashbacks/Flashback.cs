@@ -7,6 +7,7 @@ using UnityEngine.Rendering.Universal;
 public class Flashback : MonoBehaviour
 {
     public Volume volume;
+    public float minSat = -100;
     public CanvasGroup flashCanvas;
     public float fadeInTime, fadeOutTime;
     public AnimationCurve FadeInCurve, FadeOutCurve;
@@ -47,7 +48,7 @@ public class Flashback : MonoBehaviour
         yield return new WaitForSeconds(fadeInTime);
 
 
-        _colorAdjustments.saturation.value = -100;
+        _colorAdjustments.saturation.value = minSat;
         _motionBlur.intensity.value = 1;
         _rb.drag = 50;
 

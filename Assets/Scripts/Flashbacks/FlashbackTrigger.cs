@@ -32,7 +32,8 @@ public class FlashbackTrigger : MonoBehaviour
 
     IEnumerator PlayFlashBack()
     {
-        yield return new WaitForSeconds(2*0.25f);
+        yield return new WaitForSeconds(2*1f);
+        yield return new WaitForSeconds(0.25f);
 
         for(int i = 0; i < clips.Length; i++)
         {
@@ -40,12 +41,11 @@ public class FlashbackTrigger : MonoBehaviour
 
             yield return new WaitWhile(() => source.isPlaying);
 
-            if(delayBetweenClips != null) yield return new WaitForSeconds(delayBetweenClips[i]);
+            if(delayBetweenClips.Length != 0) yield return new WaitForSeconds(delayBetweenClips[i]);
             else yield return new WaitForSeconds(defaultDelay);
         }
 
-        yield return new WaitForSeconds(5);
-
         OnFlashTrigger?.Invoke(this, new FlashTriggerInfo{ isStart = false });
+        Destroy(gameObject);
     }
 }
