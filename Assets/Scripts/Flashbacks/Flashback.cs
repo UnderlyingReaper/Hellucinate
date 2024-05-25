@@ -8,6 +8,7 @@ public class Flashback : MonoBehaviour
 {
     public Volume volume;
     public float minSat = -100;
+    public float minLensDistort = -0.4f;
     public CanvasGroup flashCanvas;
     public float fadeInTime, fadeOutTime;
     public AnimationCurve FadeInCurve, FadeOutCurve;
@@ -19,6 +20,8 @@ public class Flashback : MonoBehaviour
     float _satOrgVal;
     ColorAdjustments _colorAdjustments;
     MotionBlur _motionBlur;
+    LensDistortion _lensDistortion;
+    ChromaticAberration _chromaticAberration;
 
 
     void Start()
@@ -27,6 +30,9 @@ public class Flashback : MonoBehaviour
 
         volume.profile.TryGet(out _colorAdjustments);
         volume.profile.TryGet(out _motionBlur);
+        volume.profile.TryGet(out _lensDistortion);
+        volume.profile.TryGet(out _chromaticAberration);
+
         _satOrgVal = _colorAdjustments.saturation.value;
 
         for(int i = 0; i < flashBackTriggers.Length; i++)
@@ -44,11 +50,13 @@ public class Flashback : MonoBehaviour
     IEnumerator StartFlashBack()
     {
         flashCanvas.DOFade(1, fadeInTime).SetEase(FadeInCurve);
-        DOVirtual.Float(Camera.main.fieldOfView, 52, 0.5f, value => { Camera.main.fieldOfView = value; });
+        DOVirtual.Float(Camera.main.fieldOfView, 52, fadeInTime, value => { Camera.main.fieldOfView = value; });
         yield return new WaitForSeconds(fadeInTime);
 
 
         _colorAdjustments.saturation.value = minSat;
+        _lensDistortion.intensity.value = minLensDistort;
+        _chromaticAberration.intensity.value = 1;
         _motionBlur.intensity.value = 1;
         _rb.drag = 50;
 
@@ -59,11 +67,13 @@ public class Flashback : MonoBehaviour
     IEnumerator StopFlashBack()
     {
         flashCanvas.DOFade(1, fadeInTime).SetEase(FadeInCurve);
-        DOVirtual.Float(Camera.main.fieldOfView, 50, 0.5f, value => { Camera.main.fieldOfView = value; });
+        DOVirtual.Float(Camera.main.fieldOfView, 50, fadeInTime, value => { Camera.main.fieldOfView = value; });
         yield return new WaitForSeconds(fadeInTime);
 
 
         _colorAdjustments.saturation.value = _satOrgVal;
+        _lensDistortion.intensity.value = -0.1f;
+        _chromaticAberration.intensity.value = 0;
         _motionBlur.intensity.value = 0;
         _rb.drag = 0;
 
