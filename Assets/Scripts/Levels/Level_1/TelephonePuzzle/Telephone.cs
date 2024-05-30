@@ -51,7 +51,7 @@ public class Telephone : MonoBehaviour
         canvas = GetComponentInChildren<CanvasGroup>();
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _pInputManager = _player.GetComponent<PlayerInputManager>();
-        _pInputManager.playerInput.Player.Interact.performed += tryInteract;
+        _pInputManager.playerInput.Player.Interact.performed += TryInteract;
 
         EventInfo eventInfo = objectToSubscribe.GetType().GetEvent("OnScare");
         EventHandler handler = new EventHandler(RingTelephoneEvent);
@@ -77,10 +77,10 @@ public class Telephone : MonoBehaviour
         else canvas.DOFade(0, 2);
     }
 
-    public void tryInteract(InputAction.CallbackContext context)
+    public void TryInteract(InputAction.CallbackContext context)
     {
-        if(_distance > range) return;
         if(!allowInteraction) return;
+        if(_distance > range) return;
 
         if(!isUsing)
         {
@@ -155,18 +155,24 @@ public class Telephone : MonoBehaviour
 
     public void RingTelephoneEvent(object sender, EventArgs e)
     {
-        allowInteraction = true;
         GenerateCode();
         StartCoroutine(RingTelephone());
     }
     IEnumerator RingTelephone()
     {
         yield return new WaitForSeconds(2);
+        allowInteraction = true;
         ringSource.volume = 1;
     }
 
     public void OnPuzzleComplete(object sender, EventArgs e)
     {
         playMansVoice = false;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, range);
     }
 }

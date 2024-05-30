@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SecurityCheck : MonoBehaviour
@@ -12,9 +11,9 @@ public class SecurityCheck : MonoBehaviour
     public bool isHackingConsole = false;
     public GameObject hand;
     public bool isHandOn;
-    public Lvl1_UserInput customeInputField;
+    public TMP_InputField inputField;
     public event EventHandler OnPuzzleComplete;
-    public TextMeshProUGUI userText, consoleText;
+    public TextMeshProUGUI consoleText;
 
     public List<string> functionNames;
     public List<string> functionDisplay;
@@ -34,8 +33,9 @@ public class SecurityCheck : MonoBehaviour
     void Start()
     {
         inv = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory_System>();
-        customeInputField.SendText += OnUserInputEnter;
         _source = GetComponent<AudioSource>();
+        
+        inputField.onEndEdit.AddListener(OnUserInputEnter);
     }
 
     // Main stuff
@@ -54,14 +54,12 @@ public class SecurityCheck : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         consoleText.text += "\n%dp 100% \n%cl 'Startup Complete'";
-        userText.text = "--YourText--";
-        userText.GetComponent<CanvasGroup>().DOFade(1, 0.5f).SetEase(Ease.InOutSine);
+        inputField.GetComponent<CanvasGroup>().DOFade(1, 0.5f).SetEase(Ease.InOutSine);
 
         yield return new WaitForSeconds(1.5f);
         consoleText.text += "\n%sf clrscr";
         yield return new WaitForSeconds(2f);
         consoleText.text = "";
-        userText.text = "";
 
         yield return new WaitForSeconds(3f);
 
@@ -91,10 +89,11 @@ public class SecurityCheck : MonoBehaviour
     }
     // Main stuff
 
-    public void OnUserInputEnter(object sender, Lvl1_UserInput.TextArgs e)
+    public void OnUserInputEnter(string text)
     {
+        if(text == "") return;
         if(isbyPassed) StartCoroutine(ShowErrorMessage("%cE 'System down.'", Color.red));
-        else if(e.textWritten.Contains("%") || e.textWritten.Contains("$")) FindFakeFunction(e.textWritten);
+        else if(text.Contains("%") || text.Contains("$")) FindFakeFunction(text);
         else StartCoroutine(ShowErrorMessage("Not valid!", Color.red));
     }
 

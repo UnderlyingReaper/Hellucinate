@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,13 +25,13 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
     public bool isPuzzleOneComplete;
     public GameObject puzzleOne;
     public SecurityCheck puzzleOneController;
-    public Lvl1_UserInput customeInputField;
+    public TMP_InputField userInput;
+    public CanvasGroup inputFieldCanvasGroup;
 
 
     Transform _player;
     PlayerInputManager _pInputmanager;
     CanvasGroup _canvas;
-    public int count = 0;
     float _distance;
 
 
@@ -44,42 +45,30 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
 
         puzzleOneController.OnPuzzleComplete += OnPuzzleOneSignalReceive;
 
-        customeInputField.enabled = false;
+        inputFieldCanvasGroup.alpha = 0;
     }
 
     void Update()
     {
         _distance = Vector3.Distance(_player.position, transform.position);
 
-        if(_distance <= range)
-        {
-            _canvas.DOFade(1, 1);
-
-            if(customeInputField.allowuserInput) return;
-
-            
-        }
-        else
-        {
-            _canvas.DOFade(0, 1);
-        }
+        if(_distance <= range) _canvas.DOFade(1, 1);
+        else _canvas.DOFade(0, 1);
     }
 
     public void TryInteract(InputAction.CallbackContext context)
     {
         if(_distance > range) return;
+        if(userInput.isFocused) return;
 
         if(!isOpen)
         {
             isOpen = true;
-            count++;
-
             HandlePuzzleOne();
         }
         else if(isOpen)
         {
             isOpen = false;
-
             HandlePuzzleOne();
         }
     }
@@ -90,20 +79,18 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
         {
             StartCoroutine(FocusOnPuzzle(puzzleOne.transform));
             if(!puzzleOneController.isbyPassed) StartCoroutine(puzzleOneController.StartupConsole());
-            customeInputField.enabled = true;
             StopCoroutine(ExitPuzzle());
+            inputFieldCanvasGroup.DOFade(1, 2);
             player.allow = false;
         }
         else if(!isOpen)
         {
             StartCoroutine(ExitPuzzle());
             StopCoroutine(FocusOnPuzzle(puzzleOne.transform));
-            customeInputField.enabled = false;
+            inputFieldCanvasGroup.DOFade(0, 2);
             player.allow = true;
         }
     }
-
-
 
 
     IEnumerator FocusOnPuzzle(Transform objectToFocusOn)
