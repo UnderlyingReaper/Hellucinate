@@ -65,6 +65,7 @@ public class Batteries : MonoBehaviour
         canvas.DOFade(0, 1f);
         
         // Destroy the item
+        _pInputManager.playerInput.Player.Interact.performed -= TryPickBattery;
         Destroy(gameObject, 2.1f);
     }
 

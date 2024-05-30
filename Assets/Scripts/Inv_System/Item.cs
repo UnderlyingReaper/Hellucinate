@@ -63,6 +63,7 @@ public class Item : MonoBehaviour
 
     public void Interact(InputAction.CallbackContext context)
     {
+        if(_isDissolving) return;
         if(_distance > range) return;
 
         Inventory_System inventory_System = _player.GetComponent<Inventory_System>();
@@ -72,6 +73,7 @@ public class Item : MonoBehaviour
         {
             inventory_System.AddItem(item_ID, customeSprite ? customeSprite : _spriteRenderer.sprite, _spriteRenderer.color);
             PickupItem();
+            _pInputManager.playerInput.Player.Interact.performed -= Interact;
         }
         else Debug.Log("No space available in inventory");
     }

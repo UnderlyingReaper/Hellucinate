@@ -1,5 +1,5 @@
 # ninja log v5
-0	795	7373739198101515	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	c5910158c9de10ae
-810	1131	7373739200728692	E:/UnityProjects/2D-Horror-Game/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/1sd4u1z3/obj/arm64-v8a/libswappywrapper.so	180044746b635154
 23	554	7374607821133660	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	c5910158c9de10ae
 555	3710	7374607852166333	E:/UnityProjects/2D-Horror-Game/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/1sd4u1z3/obj/arm64-v8a/libswappywrapper.so	180044746b635154
+8	1283	7387882375697291	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	c5910158c9de10ae
+1283	10028	7387882462767299	E:/UnityProjects/2D-Horror-Game/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/1sd4u1z3/obj/arm64-v8a/libswappywrapper.so	180044746b635154

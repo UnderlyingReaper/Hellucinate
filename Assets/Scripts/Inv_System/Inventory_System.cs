@@ -9,7 +9,19 @@ public class Inventory_System : MonoBehaviour
 
     [Header("Inventory")]
     public List<GameObject> slots;
-    public List<string> itemIDs; 
+    public List<string> itemIDs;
+
+    void Start()
+    {
+        // Reset inventory in the beginning of the game
+        for(int i = 0; i < itemIDs.Count; i++)
+        {
+            itemIDs[i] = "";
+            slots[i].GetComponent<CanvasGroup>().DOFade(0, 0.3f);
+            slots[i].GetComponent<Image>().sprite = null;
+            slots[i].GetComponent<Image>().color = Color.black;
+        }
+    }
 
     public void AddItem(string desiredItemID, Sprite itemesSprite, Color color)
     {
