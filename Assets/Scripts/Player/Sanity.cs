@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using DG.Tweening;
 using TMPro;
@@ -151,6 +150,7 @@ public class Sanity : MonoBehaviour
     IEnumerator KillPlayer() // Its better to have a seperate script to handle players death.
     {
         _pm.allow = false;
+        _pm.rb.bodyType = RigidbodyType2D.Static;
         _anim.SetTrigger("FallOnKnees");
         DOVirtual.Float(_dof.focusDistance.value, 0, 2, value => { _dof.focusDistance.value = value; });
         deathTxt.text = "Beware the shadows, for they feed upon your mind. Stay bathed in light to safeguard your sanity.";

@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class PlayerCaught : MonoBehaviour
 {
     public Player_Movement pm;
+    public Rigidbody2D playerRb;
     public List<GameObject> spawners;
     public CanvasGroup cg;
     public TextMeshProUGUI deathTxt;
@@ -16,11 +17,11 @@ public class PlayerCaught : MonoBehaviour
     void Start()
     {
         spawners = new List<GameObject>();
-        GameObject[] spawnerObjs = GameObject.FindGameObjectsWithTag("Spawner");
+        GameObject spawnersHolder = GameObject.FindGameObjectWithTag("SpawnersHolder");
 
-        foreach(GameObject spawnerObj in spawnerObjs)
+        foreach(Transform spawnerObj in spawnersHolder.transform)
         {
-            spawners.Add(spawnerObj);
+            spawners.Add(spawnerObj.gameObject);
             spawnerObj.GetComponent<Creature_Spawner>().OnSpawnCreature += OnEnemySpawn;
         }
     }
@@ -37,6 +38,7 @@ public class PlayerCaught : MonoBehaviour
         {
             Debug.Log("Player is Dead");
             pm.allow = false;
+            playerRb.bodyType = RigidbodyType2D.Static;
             deathTxt.text = e.deathTxt;
             StartCoroutine(PlayDeathAnimation());
         }
