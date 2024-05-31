@@ -2,7 +2,6 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.Universal;
 
 public class Locker : MonoBehaviour
 {
@@ -51,6 +50,7 @@ public class Locker : MonoBehaviour
 
     void Update()
     {
+        if(!gameObject.activeSelf) return;
         if(!isEnteractable) return;
 
         _distance = Vector3.Distance(_player.position, transform.position);
@@ -61,6 +61,7 @@ public class Locker : MonoBehaviour
 
     public void TryInteract(InputAction.CallbackContext context)
     {
+        if(!isEnteractable) return;
         if(_distance > range) return;
 
         if(isLocked)

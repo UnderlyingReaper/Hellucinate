@@ -13,7 +13,7 @@ public class Item : MonoBehaviour
 
     [Tooltip("Leave empty if u dont want to use a custome sprite")]
     public Sprite customeSprite;
-
+    public Vector2 customeSize = new Vector2(100, 100);
 
     public event EventHandler OnItemPickedUp;
 
@@ -63,6 +63,7 @@ public class Item : MonoBehaviour
 
     public void Interact(InputAction.CallbackContext context)
     {
+        if(!gameObject.activeSelf) return;
         if(_isDissolving) return;
         if(_distance > range) return;
 
@@ -71,7 +72,7 @@ public class Item : MonoBehaviour
         // Check if there is a empty slot available and then add item to the slot
         if(inventory_System.CheckForEmptySlot())
         {
-            inventory_System.AddItem(item_ID, customeSprite ? customeSprite : _spriteRenderer.sprite, _spriteRenderer.color);
+            inventory_System.AddItem(item_ID, customeSprite ? customeSprite : _spriteRenderer.sprite, _spriteRenderer.color, customeSize);
             PickupItem();
             _pInputManager.playerInput.Player.Interact.performed -= Interact;
         }

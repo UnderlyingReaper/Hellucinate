@@ -67,10 +67,7 @@ public class ElevatorController : MonoBehaviour
         if(_distance > range) return;
         if(!allowInteraction) return;
 
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            StartCoroutine(TeleportPlayer());
-        }
+        StartCoroutine(TeleportPlayer());
     }
 
     public void OnWiresConnected(object sender, ElectricBox.ElectricBoxPuzzleCompleteArgs e)

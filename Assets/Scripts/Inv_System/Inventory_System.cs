@@ -23,7 +23,7 @@ public class Inventory_System : MonoBehaviour
         }
     }
 
-    public void AddItem(string desiredItemID, Sprite itemesSprite, Color color)
+    public void AddItem(string desiredItemID, Sprite itemesSprite, Color color, Vector2 size)
     {
         for(int i = 0; i < itemIDs.Count; i++)
         {
@@ -32,6 +32,7 @@ public class Inventory_System : MonoBehaviour
             if(itemIDs[i] == "")
             {
                 itemIDs[i] = desiredItemID;
+                slots[i].GetComponent<RectTransform>().sizeDelta = size;
                 slots[i].GetComponent<Image>().sprite = itemesSprite;
                 slots[i].GetComponent<Image>().color = color;
                 slots[i].GetComponent<CanvasGroup>().DOFade(1, 1);
@@ -48,6 +49,7 @@ public class Inventory_System : MonoBehaviour
             if(itemIDs[i] == desiredItemID)
             {
                 itemIDs[i] = "";
+                slots[i].GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
                 slots[i].GetComponent<CanvasGroup>().DOFade(0, 0.3f);
                 slots[i].GetComponent<Image>().sprite = null;
                 slots[i].GetComponent<Image>().color = Color.black;
