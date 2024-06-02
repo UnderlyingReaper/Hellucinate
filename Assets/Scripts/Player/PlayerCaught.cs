@@ -26,12 +26,12 @@ public class PlayerCaught : MonoBehaviour
         }
     }
 
+    #region For Creature ONLY
     public void OnEnemySpawn(object sender, Creature_Spawner.OnSpawnEnemyArgs e)
     {
         e.creature.GetComponent<Creature_Chase_AI>().SearchEndResult += CreatureSearchResult;
         Debug.Log("Enemy Spawned");
     }
-
     public void CreatureSearchResult(object sender, Creature_Chase_AI.SearchEndResultArgs e)
     {
         if(e.didCatchPlayer)
@@ -44,6 +44,7 @@ public class PlayerCaught : MonoBehaviour
         }
         else Debug.Log("Player is alive");
     }
+    #endregion
 
     IEnumerator PlayDeathAnimation()
     {

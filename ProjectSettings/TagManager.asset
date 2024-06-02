@@ -8,6 +8,7 @@ TagManager:
   - GameplayFade
   - Ground
   - SpawnersHolder
+  - Spawner
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Foreground
   - NotCollidableWithPlayer
   - Player
-  - 
+  - Player_Light
   - 
   - 
   - 

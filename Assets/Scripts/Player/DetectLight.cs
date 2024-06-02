@@ -13,14 +13,16 @@ public class DetectLight : MonoBehaviour
 
     public class LightDetectionResultArgs: EventArgs {
         public bool isInLight;
+        public LayerMask lightLayer;
     }
 
     Collider2D[] _lightSourcesCollider;
+    LayerMask _currLightsLayer;
 
 
     void Update()
     {
-        if(isInLight) LightDetectionResult?.Invoke(this, new LightDetectionResultArgs { isInLight = true });
+        if(isInLight) LightDetectionResult?.Invoke(this, new LightDetectionResultArgs { isInLight = true, lightLayer = _currLightsLayer });
 
         FindLightSources();
     }
@@ -55,7 +57,7 @@ public class DetectLight : MonoBehaviour
             Light2D lightSource = lightSourceCollider.GetComponent<Light2D>();
 
             // If the light is off, skip this light & move on to the next light in the list
-            if(lightSource.intensity == 0 || !lightSource.gameObject.activeSelf)
+            if(lightSource.intensity == 0 || !lightSource.gameObject.activeInHierarchy)
             {
                 foundValidLightSource = false;
                 isInLight = false;
@@ -76,6 +78,7 @@ public class DetectLight : MonoBehaviour
                 {
                     foundValidLightSource = true;
                     isInLight = true;
+                    _currLightsLayer = lightSource.gameObject.layer;
                     return;
                 }
             }
