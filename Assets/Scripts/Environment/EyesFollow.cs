@@ -4,6 +4,7 @@ using System.Collections;
 
 public class EyesFollow : MonoBehaviour
 {
+    public bool allowBlink = true;
     public GameObject player;
     public float range;
     public Transform centerEye;
@@ -23,7 +24,7 @@ public class EyesFollow : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         _spriteRenderer = GetComponent<SpriteRenderer>();
         
-        StartCoroutine(Blink());
+        if(allowBlink) StartCoroutine(Blink());
     }
 
     void Update()

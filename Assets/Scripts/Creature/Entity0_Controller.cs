@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Entity0_Controller : MonoBehaviour
 {
+    public float maxDelay, minDelay;
+
+    [Space(20)]
     public bool allowEntityToSpawn;
     public Transform player;
     public PlayerJumpscare playerJumpscare;
@@ -27,17 +30,29 @@ public class Entity0_Controller : MonoBehaviour
 
 
     float _currStareTime;
+    float _delay;
+    float _currTime;
 
 
 
     void Start()
     {
-        detectLight.LightDetectionResult += LightDetectionResult;    
+        detectLight.LightDetectionResult += LightDetectionResult;
+        _delay = UnityEngine.Random.Range(minDelay, maxDelay);
     }
 
     void Update()
     {
-        if(!allowEntityToSpawn) return;
+        if(!allowEntityToSpawn)
+        {
+            _currTime += Time.deltaTime;
+            if(_currTime >= _delay)
+            {
+                allowEntityToSpawn = true;
+                _currTime = 0;
+            }
+            return;
+        }
 
         // get distance
         float distance = Vector2.Distance(player.position, transform.position);
@@ -57,6 +72,7 @@ public class Entity0_Controller : MonoBehaviour
         if(allowCountdown)
         {
             _currStareTime += Time.deltaTime;
+            playerJumpscare.sanity.sanity -= Time.deltaTime * (playerJumpscare.sanity.sanityGainSpeedMp + 1);
 
             if(_currStareTime >= maxStareTime)
             {
@@ -67,7 +83,12 @@ public class Entity0_Controller : MonoBehaviour
             }
             
         }
-        else _currStareTime = 0;
+        else if(_currStareTime > 0)
+        {
+            allowEntityToSpawn = false;
+            entitySprite.enabled = false;
+            _currStareTime = 0;
+        }
         Mathf.Clamp(_currStareTime, 0, maxStareTime);
     }
 
@@ -89,7 +110,7 @@ public class Entity0_Controller : MonoBehaviour
             allowCountdown = false;
             StopAllCoroutines();
         }
-        else if(e.isInLight && LayerMask.LayerToName(e.lightLayer) == "Player_Light")
+        else if(entitySprite.enabled && e.isInLight && LayerMask.LayerToName(e.lightLayer) == "Player_Light")
         {
             allowCountdown = true;
             StopAllCoroutines();
