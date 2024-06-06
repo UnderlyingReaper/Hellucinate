@@ -39,6 +39,8 @@ public class Entity0_Controller : MonoBehaviour
     {
         detectLight.LightDetectionResult += LightDetectionResult;
         _delay = UnityEngine.Random.Range(minDelay, maxDelay);
+
+        entitySprite.enabled = false;
     }
 
     void Update()

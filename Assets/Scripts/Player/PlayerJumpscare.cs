@@ -9,9 +9,6 @@ public class PlayerJumpscare : MonoBehaviour
     public AudioSource source;
     public Transform cam;
 
-    public float _shakeAmplitude;
-    float _currAmplitude; 
-
     public void PlayJumpScare(AudioClip screamAudio, float sanitLossAmt)
     {
         animator.SetTrigger("PlayJumpScare");
@@ -34,11 +31,5 @@ public class PlayerJumpscare : MonoBehaviour
 
         cam.DOLocalMoveZ(0, 0.5f);
         cam.DOLocalRotate(new Vector3(0, 0, 0), 0.5f);
-    }
-
-    public void StartEndShake(int option)
-    {
-        if(option == 1) DOVirtual.Float(_currAmplitude, _shakeAmplitude, 0.1f, value => { _currAmplitude = value; });
-        else if(option == 0) DOVirtual.Float(_currAmplitude, 0, 0.1f, value => { _currAmplitude = value; });
     }
 }

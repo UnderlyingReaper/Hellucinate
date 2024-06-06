@@ -231,6 +231,8 @@ MonoBehaviour:
   centerOffset: {x: 0, y: -0.5, z: 0}
   openDoorClip: {fileID: 8300000, guid: f935d2731f8288840a3dd7a68ec99fe5, type: 3}
   closeDoorClip: {fileID: 8300000, guid: 24e9bc0bad99f314494ddf1a697dba1e, type: 3}
+  unlockDoorClip: {fileID: 0}
+  doorLockedClip: {fileID: 0}
   range: 1
   openUI: {fileID: 0}
   isOpen: 0
@@ -294,7 +296,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5726427594186204507}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
   m_Name: 
@@ -796,6 +798,8 @@ MonoBehaviour:
   centerOffset: {x: 0, y: -0.5, z: 0}
   openDoorClip: {fileID: 8300000, guid: f935d2731f8288840a3dd7a68ec99fe5, type: 3}
   closeDoorClip: {fileID: 8300000, guid: 24e9bc0bad99f314494ddf1a697dba1e, type: 3}
+  unlockDoorClip: {fileID: 0}
+  doorLockedClip: {fileID: 0}
   range: 1
   openUI: {fileID: 0}
   isOpen: 0
@@ -859,7 +863,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7485329138120662363}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
   m_Name: 
