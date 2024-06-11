@@ -39,6 +39,7 @@ public class Inspect : MonoBehaviour
 
     public void TryInspect(InputAction.CallbackContext context)
     {
+        if(!gameObject.activeInHierarchy) return;
         if(_distance > range) return;
 
         if(!isOpen)
