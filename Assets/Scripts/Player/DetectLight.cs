@@ -74,7 +74,7 @@ public class DetectLight : MonoBehaviour
                 float angle = Vector2.Angle(Vector2.up, playerPosRelativeToLight);
 
                 // If the player is in the light angle, then he is in light & no need to check for the other light sources in the list
-                if(angle <= lightSource.pointLightOuterAngle/2)
+                if(angle <= (lightSource.pointLightOuterAngle/2 + lightSource.pointLightInnerAngle/2)/2)
                 {
                     foundValidLightSource = true;
                     isInLight = true;
@@ -112,7 +112,7 @@ public class DetectLight : MonoBehaviour
                     // Calculate the angle between the player's position relative to the light source and the forward direction of the light
                     float angle = Vector2.Angle(Vector2.up, playerPosRelativeToLight);
 
-                    if(angle <= lightSource.pointLightOuterAngle/2)
+                    if(angle <= (lightSource.pointLightOuterAngle/2 + lightSource.pointLightInnerAngle/2)/2)
                     {
                         Gizmos.color = Color.green;
                     }

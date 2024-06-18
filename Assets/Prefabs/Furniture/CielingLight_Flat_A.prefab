@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Intensity: 0.2
   m_LightVolumeIntensity: 0.05
   m_LightVolumeEnabled: 1
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 000000007b66d262
   m_LightCookieSprite: {fileID: 603170563478487815, guid: 611005e401df8274fbb50cb3161184ab, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -192,7 +192,7 @@ MonoBehaviour:
   m_Intensity: 0.2
   m_LightVolumeIntensity: 0.05
   m_LightVolumeEnabled: 1
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 000000007b66d262
   m_LightCookieSprite: {fileID: 603170563478487815, guid: 611005e401df8274fbb50cb3161184ab, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -211,7 +211,7 @@ MonoBehaviour:
     m_Center: {x: 0, y: -0.00000011920929, z: 0}
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 60
-  m_PointLightOuterAngle: 167.3913
+  m_PointLightOuterAngle: 110
   m_PointLightInnerRadius: 0
   m_PointLightOuterRadius: 7
   m_ShapeLightParametricSides: 5
@@ -301,7 +301,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2494687510579163908}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 3.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -328,6 +328,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -417,7 +419,7 @@ MonoBehaviour:
   m_Intensity: 0.2
   m_LightVolumeIntensity: 0.05
   m_LightVolumeEnabled: 1
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 000000007b66d262
   m_LightCookieSprite: {fileID: 603170563478487815, guid: 611005e401df8274fbb50cb3161184ab, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0

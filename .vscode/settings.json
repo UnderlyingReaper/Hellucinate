@@ -56,7 +56,7 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "2D-Horror-Game.sln",
+    "dotnet.defaultSolution": "Hellucinate.sln",
     "git.enabled": true,
     "git.ignoreLimitWarning": true
 }

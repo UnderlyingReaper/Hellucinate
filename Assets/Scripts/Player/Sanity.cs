@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Sanity : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Sanity : MonoBehaviour
     public float sanityLossSpeedMp;
 
     [Header("Sanity Effects")]
+    public Slider sanityBar;
     public Volume postProcessingVolume;
     public AnimationCurve playerWalkSpeedCurve;
 
@@ -79,6 +81,19 @@ public class Sanity : MonoBehaviour
             DOVirtual.Float(heartBeat_Source.volume, 0, 2, value => { heartBeat_Source.volume = value; });
             StartCoroutine(KillPlayer());
         }
+
+        if(sanity > 50)
+        {
+            sanityBar.GetComponent<RectTransform>().DOAnchorPosY(-50, 1);
+            sanityBar.GetComponent<CanvasGroup>().DOFade(0, 1);
+        }
+        else if(sanity <= 50)
+        {
+            sanityBar.GetComponent<RectTransform>().DOAnchorPosY(50, 1);
+            sanityBar.GetComponent<CanvasGroup>().DOFade(0.3f, 1);
+        }
+
+        sanityBar.value = sanity;
     }
 
     public void GainSanity(float amount, float mp)
