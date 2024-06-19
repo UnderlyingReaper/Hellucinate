@@ -44,8 +44,8 @@ public class Batteries : MonoBehaviour, IInteractible
 
     public void PlayPickupSound()
     {
-        source.volume = UnityEngine.Random.Range(0.8f, 1.2f);
-        source.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+        source.volume = Random.Range(0.8f, 1.2f);
+        source.pitch = Random.Range(0.8f, 1.2f);
 
         source.PlayOneShot(source.clip);
     }
@@ -63,5 +63,15 @@ public class Batteries : MonoBehaviour, IInteractible
     public void ShowCanvas()
     {
         if(allowInteraction) canvas.DOFade(1, 1);
+    }
+
+    public void OnInteractKeyUp()
+    {
+
+    }
+
+    public void OnInteractKeyDown()
+    {
+
     }
 }

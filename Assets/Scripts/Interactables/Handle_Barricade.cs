@@ -3,18 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Playables;
 using UnityEngine.UI;
 
-public class Handle_Barricade : MonoBehaviour
+public class Handle_Barricade : MonoBehaviour, IInteractible
 {
     public bool isInteractive = true;
     public bool doesRemoveItem = true;
     public string itemID = "Crowbar";
     [Space(20)]
 
-    public float range;
     public float timeToRemoveOne;
     public float increaseMp, decreaseMp;
     public float delayBetweenEachPlank;
@@ -32,9 +29,7 @@ public class Handle_Barricade : MonoBehaviour
     public event EventHandler OnBarricadesRemoved;
 
 
-    float _distance;
     Transform _player;
-    PlayerInputManager _playerInputManager;
     float _timeHeld;
     bool _allowToBreak = true;
     bool _isHeldDown;
@@ -45,11 +40,9 @@ public class Handle_Barricade : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _playerInputManager = _player.GetComponent<PlayerInputManager>();
-        _playerInputManager.playerInput.Player.Interact.started += OnButtonDown;
-        _playerInputManager.playerInput.Player.Interact.canceled += OnButtonUp;
 
         slider.maxValue = timeToRemoveOne;
+        HideCanvas();
 
         for(int i = 0; i < activePlanks.Count; i++) activePlanks[i].gravityScale = 0;
     }
@@ -60,6 +53,7 @@ public class Handle_Barricade : MonoBehaviour
 
         if(activePlanks.Count == 0)
         {   
+            isInteractive = false;
             if(doesRemoveItem) _player.GetComponent<Inventory_System>().RemoveItem(itemID);
             canvas.DOFade(0, 1);
             Destroy(gameObject, 1.01f);
@@ -67,19 +61,14 @@ public class Handle_Barricade : MonoBehaviour
             return;
         }
 
-        _distance = Vector3.Distance(_player.position, transform.position);
-
-        if(_distance <= range)
+        if(_isHeldDown)
         {
-            canvas.DOFade(1, 1);
-
             bool doesHaveItem = _player.GetComponent<Inventory_System>().CheckForItem(itemID);
-            if(!doesHaveItem) return;
 
+            if(!doesHaveItem) return;
             if(!_allowToBreak) return;
 
-            if(_isHeldDown) _timeHeld += Time.deltaTime * increaseMp;
-            else _timeHeld -= Time.deltaTime * decreaseMp;
+            _timeHeld += Time.deltaTime * increaseMp;
             
             if(_timeHeld >= timeToRemoveOne)
             {
@@ -90,16 +79,12 @@ public class Handle_Barricade : MonoBehaviour
         }
         else
         {
-            canvas.DOFade(0, 2);
             _timeHeld -= Time.deltaTime * decreaseMp;
         }
 
         _timeHeld = Mathf.Clamp(_timeHeld, 0, timeToRemoveOne);
         slider.value = _timeHeld;
     }
-
-    public void OnButtonDown(InputAction.CallbackContext context) => _isHeldDown = true;
-    public void OnButtonUp(InputAction.CallbackContext context) => _isHeldDown = false;
 
     public IEnumerator RemoveOne()
     {
@@ -132,5 +117,30 @@ public class Handle_Barricade : MonoBehaviour
         audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
 
         audioSource.PlayOneShot(clip);
+    }
+
+    public void Interact()
+    {
+        
+    }
+
+    public void HideCanvas()
+    {
+        canvas.DOFade(0, 1);
+    }
+
+    public void ShowCanvas()
+    {
+        canvas.DOFade(1, 1);
+    }
+
+    public void OnInteractKeyUp()
+    {
+        _isHeldDown = false;
+    }
+
+    public void OnInteractKeyDown()
+    {
+        _isHeldDown = true;
     }
 }

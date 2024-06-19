@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using DG.Tweening;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +9,7 @@ public class Inventory_System : MonoBehaviour
     [Header("Inventory")]
     public List<GameObject> slots;
     public List<string> itemIDs;
+    public bool godMode = false;
 
     void Start()
     {
@@ -19,7 +19,6 @@ public class Inventory_System : MonoBehaviour
             itemIDs[i] = "";
             slots[i].GetComponent<CanvasGroup>().DOFade(0, 0.3f);
             slots[i].GetComponent<Image>().sprite = null;
-            slots[i].GetComponent<Image>().color = Color.black;
         }
     }
 
@@ -76,6 +75,8 @@ public class Inventory_System : MonoBehaviour
 
     public bool CheckForItem(string itemID)
     {
+        if(godMode) return true;
+        
         bool doesHaveItem = false;
 
         for(int i = 0; i < itemIDs.Count; i++)

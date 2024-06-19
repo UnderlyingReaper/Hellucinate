@@ -1,12 +1,10 @@
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.InputSystem;
 using System;
 
-public class LightSwitch : MonoBehaviour
+public class LightSwitch : MonoBehaviour, IInteractible
 {
     public GameObject[] lights;
-    public float range;
     public bool isOn;
 
     public AudioSource audioSource;
@@ -16,17 +14,14 @@ public class LightSwitch : MonoBehaviour
     public event EventHandler OnLightSwitch;
 
 
-    float _distance;
     CanvasGroup _canvasGroup;
     Transform _player;
-    PlayerInputManager _pInputManager;
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _pInputManager = _player.GetComponent<PlayerInputManager>();
-        _pInputManager.playerInput.Player.Interact.performed += TryInteract;
         _canvasGroup = GetComponentInChildren<CanvasGroup>();
+        HideCanvas();
 
         if(isOn)
         {
@@ -40,19 +35,20 @@ public class LightSwitch : MonoBehaviour
 
     void Update()
     {
-        _distance = Vector3.Distance(_player.position, transform.position);
-
-        if(_distance <= range) _canvasGroup.DOFade(1, 1);
-        else _canvasGroup.DOFade(0, 2);
-
         if(isOn && backgroundClip != null) DOVirtual.Float(audioSource.volume, 1, 1, value => { audioSource.volume = value; });
         else if(!isOn && backgroundClip != null) DOVirtual.Float(audioSource.volume, 0, 1, value => { audioSource.volume = value; });
     }
 
-    public void TryInteract(InputAction.CallbackContext context)
+    public void PlaySound()
     {
-        if(_distance > range) return;
+        audioSource.volume = UnityEngine.Random.Range(0.8f, 1.2f);
+        audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
 
+        audioSource.PlayOneShot(interactClip);
+    }
+
+    public void Interact()
+    {
         if(!isOn)
         {
             isOn = true;
@@ -69,11 +65,23 @@ public class LightSwitch : MonoBehaviour
         }
     }
 
-    public void PlaySound()
+    public void HideCanvas()
     {
-        audioSource.volume = UnityEngine.Random.Range(0.8f, 1.2f);
-        audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+        _canvasGroup.DOFade(0, 1);
+    }
 
-        audioSource.PlayOneShot(interactClip);
+    public void ShowCanvas()
+    {
+        _canvasGroup.DOFade(1, 1);
+    }
+
+    public void OnInteractKeyUp()
+    {
+
+    }
+
+    public void OnInteractKeyDown()
+    {
+
     }
 }

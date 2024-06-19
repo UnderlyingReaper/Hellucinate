@@ -1,9 +1,8 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class Locker : MonoBehaviour
+public class Locker : MonoBehaviour, IInteractible
 {
     [Header("General")]
     public bool isEnteractable = true;
@@ -11,7 +10,6 @@ public class Locker : MonoBehaviour
     public Transform door;
     public AudioClip openDoorClip;
     public AudioClip closeDoorClip;
-    public float range = 1;
     public CanvasGroup openUI;
 
     [Header("Door Settings")]
@@ -25,11 +23,9 @@ public class Locker : MonoBehaviour
     public string keyID = "NO_KEY_ID";
 
 
-    float _distance;
     AudioSource _audioSource;
     Inventory_System invSystem;
     Transform _player;
-    PlayerInputManager _pInputManager;
 
 
     void Start()
@@ -39,30 +35,38 @@ public class Locker : MonoBehaviour
         if(!isEnteractable) return;
 
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _pInputManager = _player.GetComponent<PlayerInputManager>();
-        _pInputManager.playerInput.Player.Interact.performed += TryInteract;
         invSystem = _player.GetComponent<Inventory_System>();
 
         _audioSource = GetComponentInChildren<AudioSource>();
 
         SetItemsActivateStateTo(false);
+        HideCanvas();
     }
 
-    void Update()
+    IEnumerator CloseDoor()
     {
-        if(!gameObject.activeSelf) return;
-        if(!isEnteractable) return;
+        isOpen = false;
+        door.DOScaleX(1, duration); 
 
-        _distance = Vector3.Distance(_player.position, transform.position);
+        yield return new WaitForSeconds(doorCloseSoundOffset);
 
-        if(_distance <= range) openUI.DOFade(1, 1);
-        else openUI.DOFade(0, 1);
+        _audioSource.PlayOneShot(closeDoorClip);
+
+        yield return new WaitForSeconds(duration - doorCloseSoundOffset);
+
+        SetItemsActivateStateTo(false);
     }
 
-    public void TryInteract(InputAction.CallbackContext context)
+    public void SetItemsActivateStateTo(bool doActivate)
+    {
+        if(itemsInside == null) return;
+
+        itemsInside.SetActive(doActivate);
+    }
+
+    public void Interact()
     {
         if(!isEnteractable) return;
-        if(_distance > range) return;
 
         if(isLocked)
         {
@@ -91,24 +95,23 @@ public class Locker : MonoBehaviour
         }
     }
 
-    IEnumerator CloseDoor()
+    public void HideCanvas()
     {
-        isOpen = false;
-        door.DOScaleX(1, duration); 
-
-        yield return new WaitForSeconds(doorCloseSoundOffset);
-
-        _audioSource.PlayOneShot(closeDoorClip);
-
-        yield return new WaitForSeconds(duration - doorCloseSoundOffset);
-
-        SetItemsActivateStateTo(false);
+        openUI.DOFade(0, 1);
     }
 
-    public void SetItemsActivateStateTo(bool doActivate)
+    public void ShowCanvas()
     {
-        if(itemsInside == null) return;
+        openUI.DOFade(1, 1);
+    }
 
-        itemsInside.SetActive(doActivate);
+    public void OnInteractKeyUp()
+    {
+
+    }
+
+    public void OnInteractKeyDown()
+    {
+
     }
 }

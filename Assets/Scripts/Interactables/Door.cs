@@ -1,17 +1,15 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
-public class Door : MonoBehaviour
+public class Door : MonoBehaviour, IInteractible
 {
     [Header("General")]
     public Vector3 centerOffset;
     public AudioClip openDoorClip;
     public AudioClip closeDoorClip;
     public AudioClip unlockDoorClip, doorLockedClip;
-    public float range = 1;
     public CanvasGroup openUI;
 
     [Header("Door Settings")]
@@ -29,12 +27,11 @@ public class Door : MonoBehaviour
     public bool isLocked = false;
     public string keyID = "NO_KEY_ID";
 
-    float _distance;
+
     AudioSource _audioSource;
     Inventory_System invSystem;
     Transform _player;
-    PlayerInputManager _pInputManager;
-    BoxCollider2D _collider;
+    public BoxCollider2D collider;
     SpriteRenderer _sprite;
     ShadowCaster2D _shadowCaster;
 
@@ -42,12 +39,9 @@ public class Door : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _pInputManager = _player.GetComponent<PlayerInputManager>();
-        _pInputManager.playerInput.Player.Interact.performed += TryOpenDoor;
 
         invSystem = _player.GetComponent<Inventory_System>();
 
-        _collider = GetComponent<BoxCollider2D>();
         _sprite = GetComponent<SpriteRenderer>();
         _shadowCaster = GetComponent<ShadowCaster2D>();
 
@@ -56,57 +50,6 @@ public class Door : MonoBehaviour
         if(_sprite != null && !isOpen) _sprite.enabled = false;
         if(openUI != null) openUI.alpha = 0;
         if(_shadowCaster != null) _shadowCaster.enabled = true; 
-    }
-
-    void Update()
-    {
-        _distance = Vector3.Distance(_player.position, transform.position + centerOffset);
-
-        if(openUI != null && _distance <= range) openUI.DOFade(1, 1);
-        else if(openUI != null && _distance > range) openUI.DOFade(0, 1);
-    }
-
-    public void TryOpenDoor(InputAction.CallbackContext context)
-    {
-        if(_distance > range) return;
-        Debug.Log("Not Locked");
-
-        if(isLocked)
-        {
-            bool doesHaveKey = invSystem.CheckForItem(keyID);
-
-            if(doesHaveKey)
-            {
-                isLocked = false;
-                invSystem.RemoveItem(keyID);
-                _audioSource.PlayOneShot(unlockDoorClip);
-                Debug.Log("Item Used");
-            }
-            else
-            {
-                _audioSource.PlayOneShot(doorLockedClip);
-            }
-        }
-
-        // Dont run any code if the door is locked
-        if(isLocked) return;
-
-        // If door does teleport, than run this code only and return back;
-        if(doesTeleport)
-        {
-            StartCoroutine(TeleportPlayer()); // Teleport player
-            return;
-        }
-
-        // If door does not teleport, than run this code;
-        if(!isOpen) // Open door
-        {
-            OpenDoor();
-        }
-        else if(isOpen) // Close door
-        {
-            StartCoroutine(CloseDoor());
-        }
     }
 
     IEnumerator TeleportPlayer()
@@ -127,7 +70,7 @@ public class Door : MonoBehaviour
         isOpen = true;
         if(_shadowCaster) _shadowCaster.enabled = false;
         transform.DOScale(Vector3.one, duration);
-        _collider.enabled = false;
+        collider.enabled = false;
         _sprite.enabled = true;
         _audioSource.PlayOneShot(openDoorClip);
     }
@@ -143,12 +86,64 @@ public class Door : MonoBehaviour
         
         if(_shadowCaster) _shadowCaster.enabled = true;
         _sprite.enabled = false;
-        _collider.enabled = true;
+        collider.enabled = true;
     }
-    
-    void OnDrawGizmos()
+
+    public void Interact()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position + centerOffset, range);
+        if(isLocked)
+        {
+            bool doesHaveKey = invSystem.CheckForItem(keyID);
+
+            if(doesHaveKey)
+            {
+                isLocked = false;
+                invSystem.RemoveItem(keyID);
+                _audioSource.PlayOneShot(unlockDoorClip);
+                Debug.Log("Item Used");
+            }
+            else
+            {
+                _audioSource.PlayOneShot(doorLockedClip);
+                return;
+            }
+        }
+
+        // If door does teleport, than run this code only and return back;
+        if(doesTeleport)
+        {
+            StartCoroutine(TeleportPlayer()); // Teleport player
+            return;
+        }
+
+        // If door does not teleport, than run this code;
+        if(!isOpen) // Open door
+        {
+            OpenDoor();
+        }
+        else if(isOpen) // Close door
+        {
+            StartCoroutine(CloseDoor());
+        }
+    }
+
+    public void HideCanvas()
+    {
+        openUI.DOFade(0, 1);
+    }
+
+    public void ShowCanvas()
+    {
+        openUI.DOFade(1, 1);
+    }
+
+    public void OnInteractKeyUp()
+    {
+        
+    }
+
+    public void OnInteractKeyDown()
+    {
+
     }
 }

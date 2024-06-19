@@ -16,7 +16,8 @@ public class PlayerInteract : MonoBehaviour
     {
         _playerInputManager = GetComponent<PlayerInputManager>();
         _playerInputManager.playerInput.Player.Interact.performed += OnPlayerInteract;
-        _playerInputManager.playerInput.Player.LedgeClimb.performed += OnPlayerInteract;
+        _playerInputManager.playerInput.Player.Interact.canceled += OnPlayerInteractKeyUp;
+        _playerInputManager.playerInput.Player.Interact.started += OnPlayerInteractKeyDown;
     }
 
     void Update()
@@ -24,6 +25,7 @@ public class PlayerInteract : MonoBehaviour
         Collider2D[] collidersArray = Physics2D.OverlapCircleAll(transform.position, range);
         foreach(Collider2D collider in collidersArray)
         {
+            if(!collider.isTrigger) continue;
             if(collider.TryGetComponent(out IInteractible interactible))
             {
                 interactibleObj = interactible;
@@ -45,6 +47,16 @@ public class PlayerInteract : MonoBehaviour
         if(!isItemInRange) return;
         Debug.Log("Interact!");
         interactibleObj.Interact();
+    }
+    private void OnPlayerInteractKeyUp(InputAction.CallbackContext context)
+    {
+        if(!isItemInRange) return;
+        interactibleObj.OnInteractKeyUp();
+    }
+    private void OnPlayerInteractKeyDown(InputAction.CallbackContext context)
+    {
+        if(!isItemInRange) return;
+        interactibleObj.OnInteractKeyDown();
     }
 
 

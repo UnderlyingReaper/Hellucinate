@@ -8,6 +8,7 @@ public class NewLevelDisplay : MonoBehaviour
     public string lvlName;
     public TextMeshProUGUI lvlDisplay;
     public float fadeDuration = 2;
+    bool _allow = true;
 
 
 
@@ -18,9 +19,10 @@ public class NewLevelDisplay : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.transform.tag == "Player")
+        if(other.CompareTag("Player") && _allow)
         {
             StartCoroutine(ShowLevel());
+            _allow = false;
         }
     }
 
@@ -33,8 +35,6 @@ public class NewLevelDisplay : MonoBehaviour
 
         lvlDisplay.GetComponent<CanvasGroup>().DOFade(0, fadeDuration);
 
-        yield return new WaitForSeconds(fadeDuration + 0.01f);
-
-        Destroy(gameObject);
+        Destroy(gameObject, 0.1f);
     }
 }

@@ -1,18 +1,14 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class Inspect : MonoBehaviour
+public class Inspect : MonoBehaviour, IInteractible
 {
     public bool isOpen = false;
-    public float range = 1;
     public GameObject objToInspect;
     public CanvasGroup canvas;
 
-    float _distance;
     Transform _player;
     Player_Movement _pm;
-    PlayerInputManager _pInputManager;
     RectTransform _inspectHolder;
     RectTransform _spawnedObj;
 
@@ -20,27 +16,15 @@ public class Inspect : MonoBehaviour
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _pm = _player.GetComponent<Player_Movement>();
-        _pInputManager = _player.GetComponent<PlayerInputManager>();
-        _pInputManager.playerInput.Player.Interact.performed += TryInspect;
 
         _inspectHolder = GameObject.FindGameObjectWithTag("InspectHolder").GetComponent<RectTransform>();
 
         if(canvas != null) canvas.alpha = 0;
     }
 
-    void Update()
-    {
-        _distance = Vector2.Distance(_player.position, transform.position);
-
-        if(canvas == null) return;
-        if(_distance <= range) canvas.DOFade(1, 1);
-        else canvas.DOFade(0, 1);
-    }
-
-    public void TryInspect(InputAction.CallbackContext context)
+    public void Interact()
     {
         if(!gameObject.activeInHierarchy) return;
-        if(_distance > range) return;
 
         if(!isOpen)
         {
@@ -61,9 +45,23 @@ public class Inspect : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
+    public void HideCanvas()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, range);
+        if(canvas != null) canvas.DOFade(0, 1);
+    }
+
+    public void ShowCanvas()
+    {
+        if(canvas != null) canvas.DOFade(1, 1);
+    }
+
+    public void OnInteractKeyUp()
+    {
+        
+    }
+
+    public void OnInteractKeyDown()
+    {
+        
     }
 }
