@@ -12,11 +12,9 @@ public class AddItemToPlayer : MonoBehaviour
         _item.OnItemPickedUp += EnableItem;
     }
 
-    public void EnableItem(object sender, EventArgs e)
+    public void EnableItem(object sender, Item.ItemPickUpInfo e)
     {
         playerItem.SetActive(true);
-
-        Inventory_System inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory_System>();
-        inventory.RemoveItem(_item.item_ID);
+        e.inventorySystem.RemoveItem(_item.item_ID);
     }
 }

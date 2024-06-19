@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,9 +25,21 @@ public class PlayerInteract : MonoBehaviour
     void Update()
     {
         Collider2D[] collidersArray = Physics2D.OverlapCircleAll(transform.position, range);
-        foreach(Collider2D collider in collidersArray)
+
+        Collider2D[] triggerCollidersArray = collidersArray.Where(collider => collider.isTrigger).ToArray();
+        if(triggerCollidersArray.Length == 0)
         {
-            if(!collider.isTrigger) continue;
+            if(interactibleObj != null)
+            {
+                isItemInRange = false;
+                interactibleObj.HideCanvas();
+                interactibleObj = null;
+            }
+            return;
+        }
+
+        foreach(Collider2D collider in triggerCollidersArray)
+        {
             if(collider.TryGetComponent(out IInteractible interactible))
             {
                 interactibleObj = interactible;
@@ -46,7 +60,7 @@ public class PlayerInteract : MonoBehaviour
     {
         if(!isItemInRange) return;
         Debug.Log("Interact!");
-        interactibleObj.Interact();
+        interactibleObj.Interact(context);
     }
     private void OnPlayerInteractKeyUp(InputAction.CallbackContext context)
     {

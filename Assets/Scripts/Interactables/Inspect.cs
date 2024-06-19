@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Inspect : MonoBehaviour, IInteractible
 {
@@ -22,7 +23,7 @@ public class Inspect : MonoBehaviour, IInteractible
         if(canvas != null) canvas.alpha = 0;
     }
 
-    public void Interact()
+    public void Interact(InputAction.CallbackContext context)
     {
         if(!gameObject.activeInHierarchy) return;
 

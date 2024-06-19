@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Batteries : MonoBehaviour, IInteractible
 {
@@ -50,7 +51,7 @@ public class Batteries : MonoBehaviour, IInteractible
         source.PlayOneShot(source.clip);
     }
 
-    public void Interact()
+    public void Interact(InputAction.CallbackContext context)
     {
         if(allowInteraction) PickupBattery();
     }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using System;
+using UnityEngine.InputSystem;
 
 public class LightSwitch : MonoBehaviour, IInteractible
 {
@@ -47,7 +48,7 @@ public class LightSwitch : MonoBehaviour, IInteractible
         audioSource.PlayOneShot(interactClip);
     }
 
-    public void Interact()
+    public void Interact(InputAction.CallbackContext context)
     {
         if(!isOn)
         {

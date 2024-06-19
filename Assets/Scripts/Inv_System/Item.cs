@@ -5,17 +5,19 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
-public class Item : MonoBehaviour
+public class Item : MonoBehaviour, IInteractible
 {
     public string item_ID;
-    public float range;
     public AudioSource source;
 
     [Tooltip("Leave empty if u dont want to use a custome sprite")]
     public Sprite customeSprite;
     public Vector2 customeSize = new Vector2(100, 100);
 
-    public event EventHandler OnItemPickedUp;
+    public event EventHandler<ItemPickUpInfo> OnItemPickedUp;
+    public class ItemPickUpInfo : EventArgs{
+        public Inventory_System inventorySystem;
+    }
 
     [Header("Importance Of Item")]
     [Tooltip("Everything can be left empty if the item is not important")]
@@ -26,55 +28,34 @@ public class Item : MonoBehaviour
 
     CanvasGroup _canvasGroup;
     bool _isDissolving;
-    float _distance;
     Material _material;
     SpriteRenderer _spriteRenderer;
     Transform _player;
-    PlayerInputManager _pInputManager;
-
+    Inventory_System _inventorySystem;
 
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _inventorySystem = _player.GetComponent<Inventory_System>();
         _canvasGroup = GetComponentInChildren<CanvasGroup>();
         _material = GetComponent<SpriteRenderer>().material;
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _canvasGroup.alpha = 0;
-        
-        _pInputManager = _player.GetComponent<PlayerInputManager>();
-
-        _pInputManager.playerInput.Player.Interact.performed += Interact;
 
         if(isImportant) StartCoroutine(LightAnimation());
-    }
-
-    void Update()
-    {
-        // If shader is dissolving, it means its being picked up so no need to run the code
-        if(_isDissolving) return;
-
-        _distance = Vector3.Distance(_player.position, transform.position);
-
-        // Check if player is in range
-        if(_distance <= range) _canvasGroup.DOFade(1, 1f);
-        else _canvasGroup.DOFade(0, 1f);
     }
 
     public void Interact(InputAction.CallbackContext context)
     {
         if(!gameObject.activeSelf) return;
         if(_isDissolving) return;
-        if(_distance > range) return;
-
-        Inventory_System inventory_System = _player.GetComponent<Inventory_System>();
 
         // Check if there is a empty slot available and then add item to the slot
-        if(inventory_System.CheckForEmptySlot())
+        if(_inventorySystem.CheckForEmptySlot())
         {
-            inventory_System.AddItem(item_ID, customeSprite ? customeSprite : _spriteRenderer.sprite, _spriteRenderer.color, customeSize);
+            _inventorySystem.AddItem(item_ID, customeSprite ? customeSprite : _spriteRenderer.sprite, _spriteRenderer.color, customeSize);
             PickupItem();
-            _pInputManager.playerInput.Player.Interact.performed -= Interact;
         }
         else Debug.Log("No space available in inventory");
     }
@@ -99,7 +80,7 @@ public class Item : MonoBehaviour
     public void PickupItem()
     {
         // Send a Trigger that the item has been picked up
-        OnItemPickedUp?.Invoke(this, EventArgs.Empty);
+        OnItemPickedUp?.Invoke(this, new ItemPickUpInfo { inventorySystem = _inventorySystem});
         PlayPickupSound(); // play sound
         
         // Start desolving the shader
@@ -122,5 +103,25 @@ public class Item : MonoBehaviour
         source.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
 
         source.PlayOneShot(source.clip);
+    }
+
+    public void HideCanvas()
+    {
+        if(!_isDissolving) _canvasGroup.DOFade(0, 1);
+    }
+
+    public void ShowCanvas()
+    {
+        if(!_isDissolving) _canvasGroup.DOFade(1, 1);
+    }
+
+    public void OnInteractKeyUp()
+    {
+
+    }
+
+    public void OnInteractKeyDown()
+    {
+
     }
 }

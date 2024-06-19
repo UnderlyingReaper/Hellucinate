@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Handle_Barricade : MonoBehaviour, IInteractible
@@ -119,7 +120,7 @@ public class Handle_Barricade : MonoBehaviour, IInteractible
         audioSource.PlayOneShot(clip);
     }
 
-    public void Interact()
+    public void Interact(InputAction.CallbackContext context)
     {
         
     }

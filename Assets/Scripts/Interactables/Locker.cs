@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Locker : MonoBehaviour, IInteractible
 {
@@ -64,7 +65,7 @@ public class Locker : MonoBehaviour, IInteractible
         itemsInside.SetActive(doActivate);
     }
 
-    public void Interact()
+    public void Interact(InputAction.CallbackContext context)
     {
         if(!isEnteractable) return;
 

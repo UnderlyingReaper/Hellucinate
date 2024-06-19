@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class MoveableCrate : MonoBehaviour, IInteractible
@@ -107,7 +108,7 @@ public class MoveableCrate : MonoBehaviour, IInteractible
         }
     }
 
-    public void Interact()
+    public void Interact(InputAction.CallbackContext context)
     {
 
     }

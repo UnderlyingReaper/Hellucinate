@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
 public class Door : MonoBehaviour, IInteractible
@@ -89,7 +90,7 @@ public class Door : MonoBehaviour, IInteractible
         collider.enabled = true;
     }
 
-    public void Interact()
+    public void Interact(InputAction.CallbackContext context)
     {
         if(isLocked)
         {

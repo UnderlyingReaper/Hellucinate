@@ -1,27 +1,47 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class TutorialTexts : MonoBehaviour
+public class TutorialTexts : MonoBehaviour, IInteractible
 {
-    public float range;
-    public CanvasGroup canvasGroup;
-
-    Transform _player;
-    float _distance;
+    public bool allow = true;
+    public string actionName;
+    CanvasGroup _canvas;
 
 
-
-    void Update()
+    void Start()
     {
-        _distance = Vector2.Distance(_player.transform.position, transform.position);
+        _canvas = GetComponent<CanvasGroup>();
+        HideCanvas();
+    }
 
-        if(_distance <= range)
+    public void HideCanvas()
+    {
+        if(allow) _canvas.DOFade(0, 1);
+    }
+
+    public void Interact(InputAction.CallbackContext context)
+    {
+        if(context.action.name == actionName)
         {
-            canvasGroup.DOFade(1, 0.3f);
+            allow = false;
+            _canvas.DOFade(0, 1);
+            Destroy(gameObject, 1.1f);
         }
-        else
-        {
-            canvasGroup.DOFade(0, 0.3f);
-        }
+    }
+
+    public void OnInteractKeyDown()
+    {
+
+    }
+
+    public void OnInteractKeyUp()
+    {
+
+    }
+
+    public void ShowCanvas()
+    {
+        if(allow) _canvas.DOFade(1, 1);
     }
 }
