@@ -5,12 +5,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
-public class Password_Fuse_Box : MonoBehaviour
+public class Password_Fuse_Box : MonoBehaviour, IInteractible
 {
     [Header("General")]
     public Light2D lightSource;
     public bool isOpen;
-    public float range;
     public EventHandler<PuzzleArgs> OnPuzzleComplete;
     public class PuzzleArgs : EventArgs {
         public string puzzleName;
@@ -29,15 +28,12 @@ public class Password_Fuse_Box : MonoBehaviour
 
     float _distance;
     Transform _player;
-    PlayerInputManager _pInputManager;
     CanvasGroup _canvas;
 
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _pInputManager = _player.GetComponent<PlayerInputManager>();
-        _pInputManager.playerInput.Player.Interact.performed += TryInteract;
         _canvas = GetComponentInChildren<CanvasGroup>();
 
         _canvas.alpha = 0;
@@ -46,19 +42,8 @@ public class Password_Fuse_Box : MonoBehaviour
         puzzleTwoController.OnPuzzle2Complete += OnPuzzle2Complete;
     }
 
-    
-    void Update()
+    public void Interact(InputAction.CallbackContext context)
     {
-        _distance = Vector3.Distance(_player.position, transform.position);
-
-        if(_distance <= range) _canvas.DOFade(1, 1);
-        else _canvas.DOFade(0, 1);
-    }
-
-    public void TryInteract(InputAction.CallbackContext context)
-    {
-        if(_distance > range) return;
-
         if(!isOpen)
         {
             isOpen = true;
@@ -126,9 +111,23 @@ public class Password_Fuse_Box : MonoBehaviour
         OnPuzzleComplete?.Invoke(this, new PuzzleArgs { puzzleName = "fuseSwitchesPuzzle" });
     }
 
-    void OnDrawGizmos()
+    public void HideCanvas()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, range);
+        _canvas.DOFade(0, 1);
+    }
+
+    public void ShowCanvas()
+    {
+        _canvas.DOFade(1, 1);
+    }
+
+    public void OnInteractKeyUp()
+    {
+
+    }
+
+    public void OnInteractKeyDown()
+    {
+        
     }
 }

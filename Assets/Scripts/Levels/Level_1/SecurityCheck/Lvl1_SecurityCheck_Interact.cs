@@ -5,12 +5,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Lvl1_SecurityCheck_Interact : MonoBehaviour
+public class Lvl1_SecurityCheck_Interact : MonoBehaviour, IInteractible
 {
     [Header("General")]
     public Player_Movement player;
     public bool isOpen;
-    public float range;
     public EventHandler<SecurityPuzzleCompleteArgs> OnSecurityPuzzleComplete;
     public class SecurityPuzzleCompleteArgs : EventArgs {
         public string puzzleName;
@@ -30,16 +29,12 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
 
 
     Transform _player;
-    PlayerInputManager _pInputmanager;
     CanvasGroup _canvas;
-    float _distance;
 
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _pInputmanager = _player.GetComponent<PlayerInputManager>();
-        _pInputmanager.playerInput.Player.Interact.performed += TryInteract;
         _canvas = GetComponentInChildren<CanvasGroup>();
         _canvas.alpha = 0;
 
@@ -48,17 +43,8 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
         inputFieldCanvasGroup.alpha = 0;
     }
 
-    void Update()
+    public void Interact(InputAction.CallbackContext context)
     {
-        _distance = Vector3.Distance(_player.position, transform.position);
-
-        if(_distance <= range) _canvas.DOFade(1, 1);
-        else _canvas.DOFade(0, 1);
-    }
-
-    public void TryInteract(InputAction.CallbackContext context)
-    {
-        if(_distance > range) return;
         if(userInput.isFocused) return;
 
         if(!isOpen)
@@ -128,9 +114,23 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour
         OnSecurityPuzzleComplete?.Invoke(this, new SecurityPuzzleCompleteArgs { puzzleName = "bypass Security" });
     }
 
-    void OnDrawGizmos()
+    public void HideCanvas()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, range);
+        _canvas.DOFade(0, 1);
+    }
+
+    public void ShowCanvas()
+    {
+        _canvas.DOFade(1, 1);
+    }
+
+    public void OnInteractKeyUp()
+    {
+
+    }
+
+    public void OnInteractKeyDown()
+    {
+
     }
 }

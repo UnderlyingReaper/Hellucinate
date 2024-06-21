@@ -1,16 +1,14 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ElevatorController : MonoBehaviour
+public class ElevatorController : MonoBehaviour, IInteractible
 {
     [Header("General")]
     public bool allowInteraction;
     public Handle_Barricade barricade;
-    public float range;
     public CanvasGroup fade;
     public AudioSource audioSource;
     public ElectricBox electricBox;
@@ -25,10 +23,8 @@ public class ElevatorController : MonoBehaviour
 
     CanvasGroup _canvas;
     Transform _player;
-    PlayerInputManager _pInputManager;
 
     bool _isPowerOn, _isBarricadeRemoved = false;
-    float _distance;
 
 
 
@@ -37,34 +33,14 @@ public class ElevatorController : MonoBehaviour
         _canvas = GetComponentInChildren<CanvasGroup>();
         _canvas.alpha = 0;
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _pInputManager = _player.GetComponent<PlayerInputManager>();
-        _pInputManager.playerInput.Player.Interact.performed += tryInteract;
         allowInteraction = false;
 
         electricBox.OnElectricBoxPuzzleComplete += OnWiresConnected;
         barricade.OnBarricadesRemoved += OnBarricadesRemoved;
     }
-    void Update()
+
+    public void Interact(InputAction.CallbackContext context)
     {
-        if(!allowInteraction) return;
-
-        _distance = Vector2.Distance(_player.position, transform.position);
-
-        if(_distance <= range)
-        {
-            _canvas.DOFade(1, 1);
-            OpenDoor();
-        }
-        else
-        {
-            _canvas.DOFade(0, 1);
-            CloseDoor();
-        }
-    }
-
-    public void tryInteract(InputAction.CallbackContext context)
-    {
-        if(_distance > range) return;
         if(!allowInteraction) return;
 
         StartCoroutine(TeleportPlayer());
@@ -114,9 +90,27 @@ public class ElevatorController : MonoBehaviour
         doorR.DOScaleX(1, 2f).SetEase(Ease.Linear);
     }
 
-    void OnDrawGizmos()
+    public void HideCanvas()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, range);
+        if(!allowInteraction) return;
+        _canvas.DOFade(0, 1);
+        CloseDoor();
+    }
+
+    public void ShowCanvas()
+    {
+        if(!allowInteraction) return;
+        _canvas.DOFade(1, 1);
+        OpenDoor();
+    }
+
+    public void OnInteractKeyUp()
+    {
+
+    }
+
+    public void OnInteractKeyDown()
+    {
+
     }
 }

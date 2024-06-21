@@ -6,7 +6,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Telephone : MonoBehaviour
+public class Telephone : MonoBehaviour, IInteractible
 {
     [Header("General")]
     public MonoBehaviour mainPuzzle;
@@ -14,7 +14,6 @@ public class Telephone : MonoBehaviour
     public bool playMansVoice = true;
     public bool allowInteraction = false;
     public bool isUsing;
-    public float range;
 
     [Header("Code")]
     public int code;
@@ -39,10 +38,8 @@ public class Telephone : MonoBehaviour
     }
 
 
-    float _distance;
     CanvasGroup canvas;
     Transform _player;
-    PlayerInputManager _pInputManager;
 
 
 
@@ -50,8 +47,6 @@ public class Telephone : MonoBehaviour
     {
         canvas = GetComponentInChildren<CanvasGroup>();
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _pInputManager = _player.GetComponent<PlayerInputManager>();
-        _pInputManager.playerInput.Player.Interact.performed += TryInteract;
 
         EventInfo eventInfo = objectToSubscribe.GetType().GetEvent("OnScare");
         EventHandler handler = new EventHandler(RingTelephoneEvent);
@@ -65,44 +60,6 @@ public class Telephone : MonoBehaviour
         staticSource.volume = 0;
         ringSource.volume = 0;
         playMansVoice = true;
-    }
-
-    void Update()
-    {
-        if(!allowInteraction) return;
-
-        _distance = Vector2.Distance(_player.position, transform.position);
-
-        if(_distance <= range) canvas.DOFade(1, 1);
-        else canvas.DOFade(0, 2);
-    }
-
-    public void TryInteract(InputAction.CallbackContext context)
-    {
-        if(!allowInteraction) return;
-        if(_distance > range) return;
-
-        if(!isUsing)
-        {
-            isUsing = true;
-            noOfInteraction++;
-
-            ringSource.volume = 0;
-            staticSource.volume = 1;
-            if(noOfInteraction == 2) GenerateCode(); // generate another code when player interacts the second time
-            PlaySound(pickUp_Clip);
-                
-            if(playMansVoice) StartCoroutine(PlayMansVoice());
-        }
-        else if(isUsing)
-        {
-            isUsing = false;
-
-            staticSource.volume = 0;
-            PlaySound(putDown_Clip);
-
-            if(playMansVoice) StopCoroutine(PlayMansVoice());
-        }
     }
 
     IEnumerator PlayMansVoice()
@@ -170,9 +127,50 @@ public class Telephone : MonoBehaviour
         playMansVoice = false;
     }
 
-    void OnDrawGizmos()
+    public void Interact(InputAction.CallbackContext context)
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, range);
+        if(!allowInteraction) return;
+
+        if(!isUsing)
+        {
+            isUsing = true;
+            noOfInteraction++;
+
+            ringSource.volume = 0;
+            staticSource.volume = 1;
+            if(noOfInteraction == 2) GenerateCode(); // generate another code when player interacts the second time
+            PlaySound(pickUp_Clip);
+                
+            if(playMansVoice) StartCoroutine(PlayMansVoice());
+        }
+        else if(isUsing)
+        {
+            isUsing = false;
+
+            staticSource.volume = 0;
+            PlaySound(putDown_Clip);
+
+            if(playMansVoice) StopCoroutine(PlayMansVoice());
+        }
+    }
+
+    public void HideCanvas()
+    {
+        if(allowInteraction) canvas.DOFade(0, 1);
+    }
+
+    public void ShowCanvas()
+    {
+        if(allowInteraction) canvas.DOFade(1, 1);
+    }
+
+    public void OnInteractKeyUp()
+    {
+
+    }
+
+    public void OnInteractKeyDown()
+    {
+
     }
 }

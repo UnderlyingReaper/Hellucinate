@@ -4,11 +4,10 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ElectricBox : MonoBehaviour
+public class ElectricBox : MonoBehaviour, IInteractible
 {
     [Header("General")]
     public bool isOpen;
-    public float range;
     public EventHandler<ElectricBoxPuzzleCompleteArgs> OnElectricBoxPuzzleComplete;
     public class ElectricBoxPuzzleCompleteArgs : EventArgs {
         public string puzzleName;
@@ -25,35 +24,21 @@ public class ElectricBox : MonoBehaviour
     public PuzzleOneController puzzleOneController;
 
 
-    float _distance;
     Transform _player;
-    PlayerInputManager _pInputManager;
     CanvasGroup _canvas;
 
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _pInputManager = _player.GetComponent<PlayerInputManager>();
-        _pInputManager.playerInput.Player.Interact.performed += TryInteract;
         _canvas = GetComponentInChildren<CanvasGroup>();
         _canvas.alpha = 0;
 
         puzzleOneController.OnPuzzleComplete += OnPuzzleOneSignalReceive;
     }
 
-    void Update()
+    public void Interact(InputAction.CallbackContext context)
     {
-        _distance = Vector3.Distance(_player.position, transform.position);
-
-        if(_distance <= range) _canvas.DOFade(1, 1);
-        else _canvas.DOFade(0, 1);
-    }
-
-    public void TryInteract(InputAction.CallbackContext context)
-    {
-        if(_distance > range) return;
-
         if(!isOpen)
         {
             isOpen = true;
@@ -127,9 +112,23 @@ public class ElectricBox : MonoBehaviour
         isPuzzleOneComplete = true;
     }
 
-    void OnDrawGizmos()
+    public void HideCanvas()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, range);
+        _canvas.DOFade(0, 1);
+    }
+
+    public void ShowCanvas()
+    {
+        _canvas.DOFade(1, 1);
+    }
+
+    public void OnInteractKeyUp()
+    {
+
+    }
+
+    public void OnInteractKeyDown()
+    {
+
     }
 }
