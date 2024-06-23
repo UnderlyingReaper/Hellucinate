@@ -19,6 +19,7 @@ public class PlayerCaught : MonoBehaviour
         spawners = new List<GameObject>();
         GameObject spawnersHolder = GameObject.FindGameObjectWithTag("SpawnersHolder");
 
+        if(spawnersHolder == null) return;
         foreach(Transform spawnerObj in spawnersHolder.transform)
         {
             spawners.Add(spawnerObj.gameObject);

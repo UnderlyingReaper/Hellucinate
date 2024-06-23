@@ -35,6 +35,7 @@ public class Flashback : MonoBehaviour
 
         _satOrgVal = _colorAdjustments.saturation.value;
 
+        if(flashBackTriggers.Length == 0) return;
         for(int i = 0; i < flashBackTriggers.Length; i++)
         {
             flashBackTriggers[i].OnFlashTrigger += OnFlashTrigger;
