@@ -4,7 +4,7 @@ public class Player_Movement : MonoBehaviour
 {
     public bool allow = true;
     public Rigidbody2D rb;
-    public Animator anim;
+    public PlayerAnimator anim;
     public float speed;
     public bool isFacingRight;
 
@@ -18,15 +18,19 @@ public class Player_Movement : MonoBehaviour
     void Start()
     {
         _speedToUse = speed;
+        anim = GetComponent<PlayerAnimator>();
 
         _playerInputManager = GetComponent<PlayerInputManager>();
     }
     
     void Update()
     {
+        if(anim.climbingLedge) allow = false;
+        else allow = true;
+
         if(!allow)
         {
-            anim.SetBool("isWalking", false);
+            anim.isWalking = false;
             return;
         }
 
@@ -46,10 +50,10 @@ public class Player_Movement : MonoBehaviour
     void HandleAnimations()
     {
         if(_movement.x > 0 || _movement.x < 0)
-            anim.SetBool("isWalking", true);
+            anim.isWalking = true;
         
         else
-            anim.SetBool("isWalking", false);
+            anim.isWalking = false;
     }
 
     void Flip ()

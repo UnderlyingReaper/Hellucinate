@@ -45,7 +45,7 @@ public class Sanity : MonoBehaviour
 
 
     Player_Movement _pm;
-    Animator _anim;
+    PlayerAnimator _anim;
 
     
     Vignette _vignette;
@@ -61,7 +61,7 @@ public class Sanity : MonoBehaviour
         postProcessingVolume.profile.TryGet(out _dof);
 
         _pm = GetComponent<Player_Movement>();
-        _anim = GetComponent<Animator>();
+        _anim = GetComponent<PlayerAnimator>();
 
         StartCoroutine(SanityHeartBeatEffect());
 
@@ -166,7 +166,7 @@ public class Sanity : MonoBehaviour
     {
         _pm.allow = false;
         _pm.rb.bodyType = RigidbodyType2D.Static;
-        _anim.SetTrigger("FallOnKnees");
+        _anim.fallOnKnees = true;
         DOVirtual.Float(_dof.focusDistance.value, 0, 2, value => { _dof.focusDistance.value = value; });
         deathTxt.text = "Beware the shadows, for they feed upon your mind. Stay bathed in light to safeguard your sanity.";
 

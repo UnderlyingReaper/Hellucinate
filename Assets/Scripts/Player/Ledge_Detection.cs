@@ -9,7 +9,7 @@ public class Ledge_Detection : MonoBehaviour
     public LayerMask groundLayerMask;
     
     public Vector3 offset;
-    public Animator playerAnim;
+    public PlayerAnimator playerAnim;
     public bool _canDetect;
 
     [Header("Colliders")]
@@ -45,9 +45,8 @@ public class Ledge_Detection : MonoBehaviour
 
     IEnumerator StartClimbLedge()
     {
-        playerAnim.SetBool("climbLedge", true);
-        yield return new WaitForSeconds(playerAnim.GetCurrentAnimatorClipInfo(0).Length);
-        playerAnim.SetBool("climbLedge", false);
+        playerAnim.climbingLedge = true;
+        yield return new WaitForSeconds(playerAnim.ledgeClimbDuration);
 
         _player.transform.position = transform.position + offset;
     }
