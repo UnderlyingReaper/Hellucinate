@@ -36,7 +36,7 @@ public class Door : MonoBehaviour, IInteractible
     AudioSource _audioSource;
     Inventory_System invSystem;
     Transform _player;
-    public BoxCollider2D collider;
+    public BoxCollider2D collider1;
     SpriteRenderer _sprite;
     ShadowCaster2D _shadowCaster;
     PlayerTextDisplay _playerTextDisplay;
@@ -77,7 +77,7 @@ public class Door : MonoBehaviour, IInteractible
         isOpen = true;
         if(_shadowCaster) _shadowCaster.enabled = false;
         transform.DOScale(Vector3.one, duration);
-        collider.enabled = false;
+        collider1.enabled = false;
         _sprite.enabled = true;
         _audioSource.PlayOneShot(openDoorClip);
     }
@@ -93,7 +93,7 @@ public class Door : MonoBehaviour, IInteractible
         
         if(_shadowCaster) _shadowCaster.enabled = true;
         _sprite.enabled = false;
-        collider.enabled = true;
+        collider1.enabled = true;
     }
 
     public void Interact(InputAction.CallbackContext context)
@@ -137,12 +137,12 @@ public class Door : MonoBehaviour, IInteractible
 
     public void HideCanvas()
     {
-        openUI.DOFade(0, 1);
+        if(openUI != null) openUI.DOFade(0, 1);
     }
 
     public void ShowCanvas()
     {
-        openUI.DOFade(1, 1);
+        if(openUI != null) openUI.DOFade(1, 1);
     }
 
     public void OnInteractKeyUp()

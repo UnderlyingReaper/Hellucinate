@@ -243,7 +243,7 @@ MonoBehaviour:
   fadeImg: {fileID: 0}
   isLocked: 0
   keyID: Door_A_Key_ID
-  collider: {fileID: 6948509348550758596}
+  collider1: {fileID: 6948509348550758596}
 --- !u!114 &1826546267680941165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,7 +285,7 @@ MonoBehaviour:
     m_TrimEdge: 0.0005
     m_FlipX: 0
     m_FlipY: 0
-    m_InitialTrim: 0.05
+    m_InitialTrim: 0
   m_CastingOption: 1
   m_PreviousTrimEdge: 0.0005
   m_PreviousEdgeProcessing: 1

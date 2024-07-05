@@ -10,7 +10,7 @@ public class ExplosionTrigger : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            FindObjectOfType<Explosion>().Explode();
+            FindAnyObjectByType<Explosion>().Explode();
 
             // Shaking the camera.
             CameraShaker.Presets.ShortShake2D();

@@ -10,7 +10,7 @@ public class HiddenLvl_ChoosingOption : MonoBehaviour
     public bool allowInteract = true;
     public float range;
     public CanvasGroup canvasGroup;
-    public Light2D light;
+    public Light2D light1;
 
     public GameObject targetObj;
     public Transform spawn;
@@ -30,7 +30,7 @@ public class HiddenLvl_ChoosingOption : MonoBehaviour
         _pInputManager.playerInput.Player.Interact.performed += Interact;
 
         canvasGroup.alpha = 0;
-        light.intensity = 0;
+        light1.intensity = 0;
         targetObj.SetActive(false);
     }
 
@@ -47,13 +47,13 @@ public class HiddenLvl_ChoosingOption : MonoBehaviour
 
     IEnumerator EnableCanvas()
     {
-        DOVirtual.Float(light.intensity, 0.2f, 1f, value => { light.intensity = value; });
+        DOVirtual.Float(light1.intensity, 0.2f, 1f, value => { light1.intensity = value; });
         yield return new WaitForSeconds(1f);
         canvasGroup.DOFade(1, 2f);
     }
     void DisableCanvas()
     {
-        DOVirtual.Float(light.intensity, 0, 2f, value => { light.intensity = value; });
+        DOVirtual.Float(light1.intensity, 0, 2f, value => { light1.intensity = value; });
         canvasGroup.DOFade(0, 2f);
     }
 
