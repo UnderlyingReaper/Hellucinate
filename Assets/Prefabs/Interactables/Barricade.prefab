@@ -492,7 +492,8 @@ MonoBehaviour:
   isInteractive: 1
   doesRemoveItem: 1
   itemID: Crowbar
-  range: 1.5
+  txtToDisplay: I need a crowbar for this.
+  delayTime: 2
   timeToRemoveOne: 1
   increaseMp: 0.5
   decreaseMp: 2

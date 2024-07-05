@@ -11,8 +11,13 @@ public class Handle_Barricade : MonoBehaviour, IInteractible
     public bool isInteractive = true;
     public bool doesRemoveItem = true;
     public string itemID = "Crowbar";
-    [Space(20)]
+    
 
+    [Header("Player Items")]
+    public string txtToDisplay;
+    public float delayTime;
+
+    [Space(20)]
     public float timeToRemoveOne;
     public float increaseMp, decreaseMp;
     public float delayBetweenEachPlank;
@@ -31,9 +36,12 @@ public class Handle_Barricade : MonoBehaviour, IInteractible
 
 
     Transform _player;
+    PlayerTextDisplay _playerTextDisplay;
     float _timeHeld;
     bool _allowToBreak = true;
     bool _isHeldDown;
+    bool _doesHaveItem;
+    bool _allowItemCheck;
     
 
 
@@ -41,6 +49,7 @@ public class Handle_Barricade : MonoBehaviour, IInteractible
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _playerTextDisplay = _player.GetComponent<PlayerTextDisplay>();
 
         slider.maxValue = timeToRemoveOne;
         HideCanvas();
@@ -51,6 +60,7 @@ public class Handle_Barricade : MonoBehaviour, IInteractible
     void Update()
     {
         if(!isInteractive) return;
+        if(_allowItemCheck) _doesHaveItem = _player.GetComponent<Inventory_System>().CheckForItem(itemID);
 
         if(activePlanks.Count == 0)
         {   
@@ -64,9 +74,8 @@ public class Handle_Barricade : MonoBehaviour, IInteractible
 
         if(_isHeldDown)
         {
-            bool doesHaveItem = _player.GetComponent<Inventory_System>().CheckForItem(itemID);
 
-            if(!doesHaveItem) return;
+            if(!_doesHaveItem) return;
             if(!_allowToBreak) return;
 
             _timeHeld += Time.deltaTime * increaseMp;
@@ -122,17 +131,19 @@ public class Handle_Barricade : MonoBehaviour, IInteractible
 
     public void Interact(InputAction.CallbackContext context)
     {
-        
+        if(!_doesHaveItem) StartCoroutine(_playerTextDisplay.DisplayPlayerText(txtToDisplay, delayTime));
     }
 
     public void HideCanvas()
     {
         canvas.DOFade(0, 1);
+        _allowItemCheck = false;
     }
 
     public void ShowCanvas()
     {
         canvas.DOFade(1, 1);
+        _allowItemCheck = true;
     }
 
     public void OnInteractKeyUp()

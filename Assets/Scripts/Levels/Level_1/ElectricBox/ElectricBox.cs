@@ -13,6 +13,10 @@ public class ElectricBox : MonoBehaviour, IInteractible
         public string puzzleName;
     }
 
+    [Header("Player Text")]
+    public string textDisplay;
+    public float delay;
+
     [Header("Camera")]
     public CanvasGroup fade;
     public GameObject inspectCamera;
@@ -26,11 +30,14 @@ public class ElectricBox : MonoBehaviour, IInteractible
 
     Transform _player;
     CanvasGroup _canvas;
+    PlayerTextDisplay _playerTextDisplay;
 
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _playerTextDisplay = _player.GetComponent<PlayerTextDisplay>();
+
         _canvas = GetComponentInChildren<CanvasGroup>();
         _canvas.alpha = 0;
 
@@ -61,6 +68,10 @@ public class ElectricBox : MonoBehaviour, IInteractible
         {
             _player.GetComponent<Inventory_System>().RemoveItem("Wires");
             puzzleOneController.enabled = true;
+        }
+        else
+        {
+            StartCoroutine(_playerTextDisplay.DisplayPlayerText(textDisplay, delay));
         }
 
         if(isOpen)

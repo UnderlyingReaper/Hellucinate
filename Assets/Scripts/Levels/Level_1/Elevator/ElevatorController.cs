@@ -13,6 +13,10 @@ public class ElevatorController : MonoBehaviour, IInteractible
     public AudioSource audioSource;
     public ElectricBox electricBox;
 
+    [Header("Player Text")]
+    public string displayTxt;
+    public float displayDuration;
+
     [Header("Elevator")]
     public Transform doorR;
     public Transform doorL;
@@ -23,6 +27,7 @@ public class ElevatorController : MonoBehaviour, IInteractible
 
     CanvasGroup _canvas;
     Transform _player;
+    PlayerTextDisplay _playerTextDisplay;
 
     bool _isPowerOn, _isBarricadeRemoved = false;
 
@@ -33,6 +38,8 @@ public class ElevatorController : MonoBehaviour, IInteractible
         _canvas = GetComponentInChildren<CanvasGroup>();
         _canvas.alpha = 0;
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _playerTextDisplay = _player.GetComponent<PlayerTextDisplay>();
+
         allowInteraction = false;
 
         electricBox.OnElectricBoxPuzzleComplete += OnWiresConnected;
@@ -41,7 +48,11 @@ public class ElevatorController : MonoBehaviour, IInteractible
 
     public void Interact(InputAction.CallbackContext context)
     {
-        if(!allowInteraction) return;
+        if(!allowInteraction)
+        {
+            StartCoroutine(_playerTextDisplay.DisplayPlayerText(displayTxt, displayDuration));
+            return;
+        }
 
         StartCoroutine(TeleportPlayer());
     }
@@ -54,6 +65,7 @@ public class ElevatorController : MonoBehaviour, IInteractible
     public void OnBarricadesRemoved(object sender, EventArgs e)
     {
         _isBarricadeRemoved = true;
+        GetComponent<Collider2D>().enabled = true;
         CheckForRequirements();
     }
     void CheckForRequirements()

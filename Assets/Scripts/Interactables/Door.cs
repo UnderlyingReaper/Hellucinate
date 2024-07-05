@@ -13,6 +13,10 @@ public class Door : MonoBehaviour, IInteractible
     public AudioClip unlockDoorClip, doorLockedClip;
     public CanvasGroup openUI;
 
+    [Header("Player Text Display")]
+    public string playerTxt;
+    public float displayDuration;
+
     [Header("Door Settings")]
     [Tooltip("These settings are not used by the teleport settings")]
     public bool isOpen = false;
@@ -35,11 +39,13 @@ public class Door : MonoBehaviour, IInteractible
     public BoxCollider2D collider;
     SpriteRenderer _sprite;
     ShadowCaster2D _shadowCaster;
+    PlayerTextDisplay _playerTextDisplay;
 
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _playerTextDisplay = _player.GetComponent<PlayerTextDisplay>();
 
         invSystem = _player.GetComponent<Inventory_System>();
 
@@ -106,6 +112,7 @@ public class Door : MonoBehaviour, IInteractible
             else
             {
                 _audioSource.PlayOneShot(doorLockedClip);
+                StartCoroutine(_playerTextDisplay.DisplayPlayerText(playerTxt, displayDuration));
                 return;
             }
         }

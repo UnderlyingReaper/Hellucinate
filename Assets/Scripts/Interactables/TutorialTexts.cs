@@ -27,6 +27,7 @@ public class TutorialTexts : MonoBehaviour, IInteractible
             allow = false;
             _canvas.DOFade(0, 1);
             Destroy(gameObject, 1.1f);
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
 

@@ -28,13 +28,11 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour, IInteractible
     public CanvasGroup inputFieldCanvasGroup;
 
 
-    Transform _player;
     CanvasGroup _canvas;
 
 
     void Start()
     {
-        _player = GameObject.FindGameObjectWithTag("Player").transform;
         _canvas = GetComponentInChildren<CanvasGroup>();
         _canvas.alpha = 0;
 

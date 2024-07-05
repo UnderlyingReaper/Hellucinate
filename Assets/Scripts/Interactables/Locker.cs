@@ -13,6 +13,10 @@ public class Locker : MonoBehaviour, IInteractible
     public AudioClip closeDoorClip;
     public CanvasGroup openUI;
 
+    [Header("Player Text")]
+    public string playerText;
+    public float displayDuration;
+
     [Header("Door Settings")]
     public bool isOpen = false;
     public float duration = 1;
@@ -27,6 +31,7 @@ public class Locker : MonoBehaviour, IInteractible
     AudioSource _audioSource;
     Inventory_System invSystem;
     Transform _player;
+    PlayerTextDisplay _playerTextDisplay;
 
 
     void Start()
@@ -36,6 +41,7 @@ public class Locker : MonoBehaviour, IInteractible
         if(!isEnteractable) return;
 
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _playerTextDisplay = _player.GetComponent<PlayerTextDisplay>();
         invSystem = _player.GetComponent<Inventory_System>();
 
         _audioSource = GetComponentInChildren<AudioSource>();
@@ -79,7 +85,11 @@ public class Locker : MonoBehaviour, IInteractible
                 invSystem.RemoveItem(keyID);
                 Debug.Log("Item Used");
             }
-            else return;
+            else
+            {
+                StartCoroutine(_playerTextDisplay.DisplayPlayerText(playerText, displayDuration));
+                return;
+            }
         }
 
         // open/close locker

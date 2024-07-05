@@ -232,8 +232,9 @@ MonoBehaviour:
   closeDoorClip: {fileID: 8300000, guid: 338e3c10c1f367e4fa9e4150db4f0f9e, type: 3}
   unlockDoorClip: {fileID: 0}
   doorLockedClip: {fileID: 0}
-  range: 1
   openUI: {fileID: 0}
+  playerTxt: This door needs a key.
+  displayDuration: 1.7
   isOpen: 0
   duration: 1
   doorCloseSize: -0.01

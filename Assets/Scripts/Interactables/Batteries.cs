@@ -12,7 +12,6 @@ public class Batteries : MonoBehaviour, IInteractible
 
 
     Transform _player;
-    bool _isDissolving = false;
     Material _material;
 
 
@@ -33,7 +32,6 @@ public class Batteries : MonoBehaviour, IInteractible
         PlayPickupSound(); // play sound
         
         // Start desolving the shader
-        _isDissolving = true;
         if(_material != null) DOVirtual.Float(_material.GetFloat("_Fade"), 0, 2, value => {_material.SetFloat("_Fade", value); });
 
         // Hide canvas

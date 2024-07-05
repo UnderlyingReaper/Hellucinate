@@ -357,6 +357,8 @@ MonoBehaviour:
   openDoorClip: {fileID: 0}
   closeDoorClip: {fileID: 8300000, guid: 24e9bc0bad99f314494ddf1a697dba1e, type: 3}
   openUI: {fileID: 6390734266251283469}
+  playerText: This locker is locked.
+  displayDuration: 2
   isOpen: 0
   duration: 1
   doorCloseSoundOffset: 0.5
