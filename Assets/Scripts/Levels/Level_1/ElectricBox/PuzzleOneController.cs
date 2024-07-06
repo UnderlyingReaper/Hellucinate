@@ -20,8 +20,6 @@ public class PuzzleOneController : MonoBehaviour
     public AudioClip breaker_Clip;
     public AudioSource audioSource;
 
-    PlayerTextDisplay _playerTextDisplay;
-
 
     void Start()
     {

@@ -10,6 +10,7 @@ public class PlayerInteract : MonoBehaviour
 
     PlayerInputManager _playerInputManager;
     IInteractible interactibleObj = null;
+    GameObject _object = null;
 
 
     void Start()
@@ -40,6 +41,7 @@ public class PlayerInteract : MonoBehaviour
         {
             if(collider.TryGetComponent(out IInteractible interactible))
             {
+                _object = collider.gameObject;
                 interactibleObj = interactible;
                 interactibleObj.ShowCanvas();
                 isItemInRange = true;
@@ -50,6 +52,7 @@ public class PlayerInteract : MonoBehaviour
                 isItemInRange = false;
                 interactibleObj.HideCanvas();
                 interactibleObj = null;
+                _object = null;
             }
         }
     }
@@ -57,7 +60,7 @@ public class PlayerInteract : MonoBehaviour
     private void OnPlayerInteract(InputAction.CallbackContext context)
     {
         if(!isItemInRange) return;
-        Debug.Log("Interact!");
+        Debug.Log("Interact with " + _object.name);
         interactibleObj.Interact(context);
     }
     private void OnPlayerInteractKeyUp(InputAction.CallbackContext context)

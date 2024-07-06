@@ -20,12 +20,18 @@ public class SecurityCheck : MonoBehaviour
     public List<bool> isOnFunctionPage;
     public List<string> commandNames;
 
+    [Header("Player Text")]
+    public string displayText;
+    public float displayTime;
+
     [Header("Puzzle")]
     public bool isAdmin;
     public bool isVerified;
     public bool isbyPassed = true;
 
 
+    bool _usedHand = false;
+    PlayerTextDisplay _playerTextDisplay;
     Inventory_System inv;
     AudioSource _source;
 
@@ -33,6 +39,7 @@ public class SecurityCheck : MonoBehaviour
     void Start()
     {
         inv = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory_System>();
+        _playerTextDisplay = inv.GetComponent<PlayerTextDisplay>();
         _source = GetComponent<AudioSource>();
         
         inputField.onEndEdit.AddListener(OnUserInputEnter);
@@ -85,6 +92,11 @@ public class SecurityCheck : MonoBehaviour
             hand.SetActive(true);
             isHandOn = true;
             StartCoroutine(ScanHand());
+            _usedHand = true;
+        }
+        else if(!_usedHand)
+        {
+            StartCoroutine(_playerTextDisplay.DisplayPlayerText(displayText, displayTime));
         }
     }
     // Main stuff

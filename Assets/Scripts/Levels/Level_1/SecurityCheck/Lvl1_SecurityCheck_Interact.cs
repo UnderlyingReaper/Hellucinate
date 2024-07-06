@@ -48,11 +48,13 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour, IInteractible
         if(!isOpen)
         {
             isOpen = true;
+            player.allow = false;
             HandlePuzzleOne();
         }
         else if(isOpen)
         {
             isOpen = false;
+            player.allow = true;
             HandlePuzzleOne();
         }
     }
@@ -65,14 +67,14 @@ public class Lvl1_SecurityCheck_Interact : MonoBehaviour, IInteractible
             if(!puzzleOneController.isbyPassed) StartCoroutine(puzzleOneController.StartupConsole());
             StopCoroutine(ExitPuzzle());
             inputFieldCanvasGroup.DOFade(1, 2);
-            player.allow = false;
+            
         }
         else if(!isOpen)
         {
             StartCoroutine(ExitPuzzle());
             StopCoroutine(FocusOnPuzzle(puzzleOne.transform));
             inputFieldCanvasGroup.DOFade(0, 2);
-            player.allow = true;
+            
         }
     }
 

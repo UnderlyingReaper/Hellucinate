@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
@@ -7,6 +6,7 @@ using UnityEngine.InputSystem;
 public class LadderClimbing : MonoBehaviour
 {
     [Header("General")]
+    public int stepCount;
     public AudioSource audioSource;
     public AudioClip audioClip;
     public float climbAmt;
@@ -34,8 +34,9 @@ public class LadderClimbing : MonoBehaviour
     public Vector2 topDetectBoxSize;
 
     public Transform _player;
-    PlayerInputManager _playerInputManager;
     Player_Movement _playerMovement;
+    PlayerInputManager _playerInputManager;
+    PlayerAnimator _playerAnimator;
     Rigidbody2D _rb;
     Ladder _ladder;
 
@@ -45,9 +46,10 @@ public class LadderClimbing : MonoBehaviour
         _player = transform.parent;
 
         _playerMovement = _player.GetComponent<Player_Movement>();
+        _playerInputManager = _player.GetComponent<PlayerInputManager>();
+        _playerAnimator = _player.GetComponent<PlayerAnimator>();
         _rb = _player.GetComponent<Rigidbody2D>();
 
-        _playerInputManager = _player.GetComponent<PlayerInputManager>();
         _playerInputManager.playerInput.Player.Interact.performed += GetOnOffLadder;
     }
 
@@ -83,6 +85,7 @@ public class LadderClimbing : MonoBehaviour
             isOnladder = true;
             _playerMovement.enabled = false;
             _rb.gravityScale = 0;
+            _player.position = new Vector3(_ladder.climbingPos.position.x, _player.position.y, _player.position.z);
 
             StartCoroutine(ClimbLadder());
         }
@@ -132,6 +135,19 @@ public class LadderClimbing : MonoBehaviour
             {
                 _player.DOMoveY(_player.position.y + nextStepPos, stepDelay);
                 PlayAudio();
+
+                stepCount++;
+
+                if(stepCount%2 == 0)
+                {
+                    _playerAnimator.isLadderStep2 = false;
+                    _playerAnimator.isLadderStep1 = true;
+                }
+                else
+                {
+                    _playerAnimator.isLadderStep1 = false;
+                    _playerAnimator.isLadderStep2 = true;
+                }
             }
 
             yield return new WaitForSeconds(stepDelay);

@@ -19,6 +19,10 @@ public class Item : MonoBehaviour, IInteractible
         public Inventory_System inventorySystem;
     }
 
+    [Header("Player Speech")]
+    public string displayText;
+    public float displayTime;
+
     [Header("Importance Of Item")]
     [Tooltip("Everything can be left empty if the item is not important")]
     public bool isImportant;
@@ -31,12 +35,15 @@ public class Item : MonoBehaviour, IInteractible
     Material _material;
     SpriteRenderer _spriteRenderer;
     Transform _player;
+    PlayerTextDisplay _playerTextDisplay;
     Inventory_System _inventorySystem;
 
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _playerTextDisplay = _player.GetComponent<PlayerTextDisplay>();
+
         _inventorySystem = _player.GetComponent<Inventory_System>();
         _canvasGroup = GetComponentInChildren<CanvasGroup>();
         _material = GetComponent<SpriteRenderer>().material;
@@ -56,6 +63,8 @@ public class Item : MonoBehaviour, IInteractible
         {
             _inventorySystem.AddItem(item_ID, customeSprite ? customeSprite : _spriteRenderer.sprite, _spriteRenderer.color, customeSize);
             PickupItem();
+
+            if(displayText != "") StartCoroutine(_playerTextDisplay.DisplayPlayerText(displayText, displayTime));
         }
         else Debug.Log("No space available in inventory");
     }

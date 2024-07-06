@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
@@ -14,10 +13,16 @@ public class PlayerAnimator : MonoBehaviour
 
     public bool fallOnKnees;
 
+    public bool isLadderStep1;
+    public bool isLadderStep2;
+
     public static readonly int Idle = Animator.StringToHash("Idle");
     public static readonly int Walk = Animator.StringToHash("Walk");
     public static readonly int LedgeClimb = Animator.StringToHash("LedgeClimb");
     public static readonly int FallOnKnee = Animator.StringToHash("FallOnKnee");
+
+    public static readonly int LadderStep1 = Animator.StringToHash("LadderStep1");
+    public static readonly int LadderStep2 = Animator.StringToHash("LadderStep2");
 
     int _currState;
     float _lockedTimer;
@@ -42,6 +47,9 @@ public class PlayerAnimator : MonoBehaviour
     int GetState()
     {
         if(Time.time < _lockedTimer) return _currState;
+
+        if(isLadderStep1) return LadderStep1;
+        if(isLadderStep2) return LadderStep2;
 
         if(fallOnKnees) return FallOnKnee;
         if(climbingLedge)

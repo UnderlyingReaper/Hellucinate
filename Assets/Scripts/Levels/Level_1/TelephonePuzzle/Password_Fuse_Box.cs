@@ -26,14 +26,13 @@ public class Password_Fuse_Box : MonoBehaviour, IInteractible
     public Lvl1_FuseCode puzzleOneController;
     public Lvl1_fusesSwitching puzzleTwoController;
 
-    float _distance;
-    Transform _player;
+    Player_Movement _player;
     CanvasGroup _canvas;
 
 
     void Start()
     {
-        _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Movement>();
         _canvas = GetComponentInChildren<CanvasGroup>();
 
         _canvas.alpha = 0;
@@ -47,6 +46,7 @@ public class Password_Fuse_Box : MonoBehaviour, IInteractible
         if(!isOpen)
         {
             isOpen = true;
+            _player.allow = false;
 
             if(!puzzle1Complete) HandlePuzzleOne();
             HandlePuzzleTwo();
@@ -54,6 +54,7 @@ public class Password_Fuse_Box : MonoBehaviour, IInteractible
         else if(isOpen)
         {
             isOpen = false;
+            _player.allow = true;
 
             StartCoroutine(ExitPuzzle());
             StopCoroutine(FocusOnPuzzle(puzzle1Complete? puzzleTwo.transform : puzzleOne.transform ));

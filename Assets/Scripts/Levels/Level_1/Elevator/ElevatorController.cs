@@ -27,6 +27,7 @@ public class ElevatorController : MonoBehaviour, IInteractible
 
     CanvasGroup _canvas;
     Transform _player;
+    Player_Movement _playerMovement;
     PlayerTextDisplay _playerTextDisplay;
 
     bool _isPowerOn, _isBarricadeRemoved = false;
@@ -39,6 +40,7 @@ public class ElevatorController : MonoBehaviour, IInteractible
         _canvas.alpha = 0;
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _playerTextDisplay = _player.GetComponent<PlayerTextDisplay>();
+        _playerMovement = _player.GetComponent<Player_Movement>();
 
         allowInteraction = false;
 
@@ -77,7 +79,7 @@ public class ElevatorController : MonoBehaviour, IInteractible
     IEnumerator TeleportPlayer()
     {
         fade.DOFade(1, 2);
-        _player.GetComponent<Player_Movement>().allow = false;
+        _playerMovement.allow = false;
 
         yield return new WaitForSeconds(2);
         _player.position = teleportLocation.position;
@@ -86,7 +88,7 @@ public class ElevatorController : MonoBehaviour, IInteractible
         camera_Follow.offset.y = 0.5f;
         yield return new WaitForSeconds(2);
 
-        _player.GetComponent<Player_Movement>().allow = true;
+        _playerMovement.allow = true;
         fade.DOFade(0, 2);
         animController.SetTrigger("Start");
     }

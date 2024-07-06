@@ -25,14 +25,12 @@ public class Player_Movement : MonoBehaviour
     
     void Update()
     {
-        if(anim.climbingLedge) allow = false;
-        else allow = true;
-
         if(!allow)
         {
             anim.isWalking = false;
             return;
         }
+        if(anim.climbingLedge) return;
 
         _movement = _playerInputManager.playerInput.Player.Movement.ReadValue<Vector2>();
 

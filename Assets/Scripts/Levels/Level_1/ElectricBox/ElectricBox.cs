@@ -28,15 +28,18 @@ public class ElectricBox : MonoBehaviour, IInteractible
     public PuzzleOneController puzzleOneController;
 
 
-    Transform _player;
+    Inventory_System _playerInv;
+    Player_Movement _playerMovement;
     CanvasGroup _canvas;
     PlayerTextDisplay _playerTextDisplay;
+    bool _wiresUsed = false;
 
 
     void Start()
     {
-        _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _playerTextDisplay = _player.GetComponent<PlayerTextDisplay>();
+        _playerInv = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory_System>();
+        _playerMovement = _playerInv.GetComponent<Player_Movement>();
+        _playerTextDisplay = _playerInv.GetComponent<PlayerTextDisplay>();
 
         _canvas = GetComponentInChildren<CanvasGroup>();
         _canvas.alpha = 0;
@@ -49,30 +52,28 @@ public class ElectricBox : MonoBehaviour, IInteractible
         if(!isOpen)
         {
             isOpen = true;
-            _player.GetComponent<Player_Movement>().allow = false;
+            _playerMovement.allow = false;
             HandlePuzzleOne();
         }
         else if(isOpen)
         {
             isOpen = false;
-            _player.GetComponent<Player_Movement>().allow = true;
+            _playerMovement.allow = true;
             HandlePuzzleOne();
         }
     }
 
     void HandlePuzzleOne()
     {
-        bool doesPlayerHaveWires = _player.GetComponent<Inventory_System>().CheckForItem("Wires");
+        bool doesPlayerHaveWires = _playerInv.CheckForItem("Wires");
 
         if(doesPlayerHaveWires)
         {
-            _player.GetComponent<Inventory_System>().RemoveItem("Wires");
+            _playerInv.GetComponent<Inventory_System>().RemoveItem("Wires");
             puzzleOneController.enabled = true;
+            _wiresUsed = true;
         }
-        else
-        {
-            StartCoroutine(_playerTextDisplay.DisplayPlayerText(textDisplay, delay));
-        }
+        else if(!_wiresUsed) StartCoroutine(_playerTextDisplay.DisplayPlayerText(textDisplay, delay));
 
         if(isOpen)
         {

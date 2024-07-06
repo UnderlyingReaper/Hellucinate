@@ -394,6 +394,8 @@ MonoBehaviour:
   unlockDoorClip: {fileID: 0}
   doorLockedClip: {fileID: 0}
   openUI: {fileID: 0}
+  playerTxt: 
+  displayDuration: 0
   isOpen: 0
   duration: 1
   doorCloseSize: -0.01
@@ -402,7 +404,7 @@ MonoBehaviour:
   fadeImg: {fileID: 0}
   isLocked: 0
   keyID: Door_Key_ID
-  collider: {fileID: 7814081233622631286}
+  collider1: {fileID: 7814081233622631286}
 --- !u!61 &8755315051898951031
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -975,6 +977,8 @@ MonoBehaviour:
   unlockDoorClip: {fileID: 0}
   doorLockedClip: {fileID: 0}
   openUI: {fileID: 0}
+  playerTxt: 
+  displayDuration: 0
   isOpen: 0
   duration: 1
   doorCloseSize: -0.01
@@ -983,7 +987,7 @@ MonoBehaviour:
   fadeImg: {fileID: 0}
   isLocked: 0
   keyID: Door_Key_ID
-  collider: {fileID: 292629958587588570}
+  collider1: {fileID: 292629958587588570}
 --- !u!61 &1294135510094043023
 BoxCollider2D:
   m_ObjectHideFlags: 0
