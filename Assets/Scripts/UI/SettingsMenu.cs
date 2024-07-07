@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
@@ -14,6 +16,8 @@ public class SettingsMenu : MonoBehaviour
 
     [Header("Visuals")]
     public Volume volume;
+    public TMP_Dropdown displayModeUI;
+    public TMP_Dropdown resolutionUI;
     public TMP_Dropdown bloomUI;
     public TMP_Dropdown filmGrainUI;
 
@@ -27,14 +31,36 @@ public class SettingsMenu : MonoBehaviour
 
     Bloom _bloom;
     FilmGrain _filmGrain;
+    FullScreenMode _fullscreenMode;
+    Resolution[] _resolutions;
 
     void Start()
     {
+        _resolutions = Screen.resolutions;
+        List<String> resOptions = new List<string>();
+        int currResIndex = 0;
+        for(int i = 0; i < _resolutions.Length; i++)
+        {
+            resOptions.Add(_resolutions[i].width + " x " + _resolutions[i].height);
+
+            if(_resolutions[i].width == Screen.currentResolution.width &&
+               _resolutions[i].height == Screen.currentResolution.height) currResIndex = i;
+        }
+
+        resolutionUI.ClearOptions();
+        resolutionUI.AddOptions(resOptions);
+        resolutionUI.value = currResIndex;
+        resolutionUI.RefreshShownValue();
+
+        // ACTUAL START FUNCTION
+
         volume.profile.TryGet(out _bloom);
         volume.profile.TryGet(out _filmGrain);
 
         GetSettings();
 
+        displayModeUI.onValueChanged.AddListener(OnDisplayModeChange);
+        resolutionUI.onValueChanged.AddListener(OnResolutionChange);
         bloomUI.onValueChanged.AddListener(OnBloomChange);
         filmGrainUI.onValueChanged.AddListener(OnFilmGrainChange);
 
@@ -49,6 +75,16 @@ public class SettingsMenu : MonoBehaviour
 
     void GetSettings()
     {   
+        #region Access Displaymode
+        int displayModeVal = PlayerPrefs.GetInt("DisplayMode");
+        if(displayModeVal == 0) _fullscreenMode = FullScreenMode.FullScreenWindow;
+        else if(displayModeVal == 1) _fullscreenMode = FullScreenMode.ExclusiveFullScreen;
+        else if(displayModeVal == 2) _fullscreenMode = FullScreenMode.Windowed;
+        else if(displayModeVal == 3) _fullscreenMode = FullScreenMode.MaximizedWindow;
+        displayModeUI.value = displayModeVal;
+        Screen.fullScreenMode = _fullscreenMode;
+        #endregion
+
         #region Acces bloom
         int bloomStoredVal = PlayerPrefs.GetInt("Bloom");
         if(bloomStoredVal == 0) _bloom.active = true;
@@ -94,6 +130,26 @@ public class SettingsMenu : MonoBehaviour
         isOpen = false;
         previousMenu.SetActive(true);
         gameObject.SetActive(false);
+    }
+
+    private void OnDisplayModeChange(int option)
+    {
+        if(option == 0) _fullscreenMode = FullScreenMode.FullScreenWindow;
+        else if(option == 1) _fullscreenMode = FullScreenMode.ExclusiveFullScreen;
+        else if(option == 2) _fullscreenMode = FullScreenMode.Windowed;
+        else if(option == 3) _fullscreenMode = FullScreenMode.MaximizedWindow;
+
+        Screen.fullScreenMode = _fullscreenMode;
+
+        PlayerPrefs.SetInt("DisplayMode", option);
+    }
+
+    private void OnResolutionChange(int option)
+    {
+        Resolution resolution = _resolutions[option];
+        Screen.SetResolution(resolution.width, resolution.height, _fullscreenMode);
+
+        PlayerPrefs.SetInt("Resolution", option);
     }
 
     // 1 = disabled, 0 = enabled

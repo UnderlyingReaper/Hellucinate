@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4958847926895455401}
   - component: {fileID: 335100302635106933}
+  - component: {fileID: 2549303137400978898}
   m_Layer: 0
   m_Name: Entity0
   m_TagString: Untagged
@@ -45,21 +46,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20055a4b62ad6b040b0ded47b71e2040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDelay: 160
-  minDelay: 80
+  maxDelay: 240
+  minDelay: 120
   allowEntityToSpawn: 0
   player: {fileID: 0}
   playerJumpscare: {fileID: 0}
-  detectLight: {fileID: 4245003215039396320}
+  detectLight: {fileID: 2549303137400978898}
   entitySprite: {fileID: 5130345586475429806}
   range: 6
   screamClip: {fileID: 8300000, guid: 2dd3b5824aaa5874da4862b139c79590, type: 3}
-  sanityLossAmt: 80
+  sanityLossAmt: 50
   activationDelay: 0.2
   followSpeed: 0.5
   entityOffset: {x: -3, y: 0}
   allowCountdown: 0
   maxStareTime: 0.8
+--- !u!114 &2549303137400978898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2326010994621715510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84ca6c3e88d652345968bb12a7e6e9b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInLight: 0
+  lightLayer:
+    serializedVersion: 2
+    m_Bits: 2056
+  detectionRadius: 11
+  isFlashLightOn: 0
 --- !u!1 &7512344220548325505
 GameObject:
   m_ObjectHideFlags: 0
@@ -70,7 +89,6 @@ GameObject:
   m_Component:
   - component: {fileID: 591173790482324663}
   - component: {fileID: 5130345586475429806}
-  - component: {fileID: 4245003215039396320}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -110,6 +128,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -145,21 +165,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4245003215039396320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7512344220548325505}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84ca6c3e88d652345968bb12a7e6e9b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInLight: 0
-  lightLayer:
-    serializedVersion: 2
-    m_Bits: 2056
-  detectionRadius: 11
-  isFlashLightOn: 0

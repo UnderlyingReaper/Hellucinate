@@ -40,7 +40,7 @@ public class Entity0_Controller : MonoBehaviour
         detectLight.LightDetectionResult += LightDetectionResult;
         _delay = UnityEngine.Random.Range(minDelay, maxDelay);
 
-        entitySprite.enabled = false;
+        entitySprite.gameObject.SetActive(false);
     }
 
     void Update()
@@ -88,7 +88,7 @@ public class Entity0_Controller : MonoBehaviour
         else if(_currStareTime > 0)
         {
             allowEntityToSpawn = false;
-            entitySprite.enabled = false;
+            entitySprite.gameObject.SetActive(false);
             _currStareTime = 0;
         }
         Mathf.Clamp(_currStareTime, 0, maxStareTime);
@@ -97,7 +97,7 @@ public class Entity0_Controller : MonoBehaviour
     public void JumpScarePlayer()
     {
         playerJumpscare.PlayJumpScare(screamClip, sanityLossAmt);
-        entitySprite.enabled = false;
+        entitySprite.gameObject.SetActive(false);
     }
 
     public void LightDetectionResult(object sender, DetectLight.LightDetectionResultArgs e)
@@ -108,11 +108,11 @@ public class Entity0_Controller : MonoBehaviour
         if(!e.isInLight) StartCoroutine(EnableSprite());
         else if(e.isInLight && LayerMask.LayerToName(e.lightLayer) == "Light")
         {
-            entitySprite.enabled = false;
+            entitySprite.gameObject.SetActive(false);
             allowCountdown = false;
             StopAllCoroutines();
         }
-        else if(entitySprite.enabled && e.isInLight && LayerMask.LayerToName(e.lightLayer) == "Player_Light")
+        else if(entitySprite.gameObject.activeSelf && e.isInLight && LayerMask.LayerToName(e.lightLayer) == "Player_Light")
         {
             allowCountdown = true;
             StopAllCoroutines();
@@ -123,7 +123,7 @@ public class Entity0_Controller : MonoBehaviour
     {
         yield return new WaitForSeconds(activationDelay);
 
-        entitySprite.enabled = true;
+        entitySprite.gameObject.SetActive(true);
         allowCountdown = false;
     }
 }
