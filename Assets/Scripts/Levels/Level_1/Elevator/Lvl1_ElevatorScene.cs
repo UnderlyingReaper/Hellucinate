@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Lvl1_ElevatorScene : MonoBehaviour
 {
+    public bool isDemo;
     public Animator animController;
     public AudioSource sfxSource;
     public AudioSource ambienceSource;
@@ -52,7 +53,8 @@ public class Lvl1_ElevatorScene : MonoBehaviour
 
     public void PlayCredits()
     {
-        animController.SetTrigger("ShowCredits");
+        if(!isDemo) SceneManager.LoadScene("Level_2");
+        else animController.SetTrigger("ShowCredits");
     }
     public void TeleportToNextLvl()
     {

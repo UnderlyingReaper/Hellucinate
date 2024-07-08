@@ -75,6 +75,12 @@ public class LadderClimbing : MonoBehaviour
             _ladder = null;
             isLadderEndNear = false;
         }
+
+        if(!isOnladder)
+        {
+            _playerAnimator.isLadderStep1 = false;
+            _playerAnimator.isLadderStep2 = false;
+        }
     }
 
     void GetOnOffLadder(InputAction.CallbackContext context)
