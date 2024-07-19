@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class SecurityCheck : MonoBehaviour
@@ -53,21 +54,11 @@ public class SecurityCheck : MonoBehaviour
         consoleText.GetComponent<CanvasGroup>().DOFade(1, 0.5f);
 
         yield return new WaitForSeconds(0.5f);
-        consoleText.text = "%cl'Starting System'";
-        yield return new WaitForSeconds(2f);
-        consoleText.text += "\n%dp 30%";
-        yield return new WaitForSeconds(2f);
-        consoleText.text += "\n%cl 'Starting User Input System'";
-        yield return new WaitForSeconds(2f);
+        consoleText.text = "Starting System...";
+        yield return new WaitForSeconds(5f);
 
-        consoleText.text += "\n%dp 100% \n%cl 'Startup Complete'";
+        consoleText.text += "Startup Complete.";
         inputField.GetComponent<CanvasGroup>().DOFade(1, 0.5f).SetEase(Ease.InOutSine);
-
-        yield return new WaitForSeconds(1.5f);
-        consoleText.text += "\n%sf clrscr";
-        yield return new WaitForSeconds(2f);
-        consoleText.text = "";
-
         yield return new WaitForSeconds(3f);
 
         consoleText.text = "Please place your hand on the biometric scanner.";
@@ -78,14 +69,14 @@ public class SecurityCheck : MonoBehaviour
         yield return new WaitForSeconds(2);
         consoleText.text = "Scanning Hand...";
         yield return new WaitForSeconds(3);
-        consoleText.text = "Welcome Jake Thompson.";
-        consoleText.text += "\nPlease answer the following question";
+        consoleText.text = "Welcome Back Jake Thompson.";
+        consoleText.text += "\nPlease answer the following security question set by you.";
         yield return new WaitForSeconds(2);
         consoleText.text += "\n --- \nWho is your wife?";
     }
     void OnMouseDown()
     {
-        bool doesHaveItem = inv.CheckForItem("Thompsons_Hand"); 
+        bool doesHaveItem = inv.CheckForItem("Thompsons_Hand");
         if(doesHaveItem)
         {
             inv.RemoveItem("Thompsons_Hand");
@@ -104,7 +95,7 @@ public class SecurityCheck : MonoBehaviour
     public void OnUserInputEnter(string text)
     {
         if(text == "") return;
-        if(isbyPassed) StartCoroutine(ShowErrorMessage("%cE 'System down.'", Color.red));
+        if(isbyPassed) StartCoroutine(ShowErrorMessage("System down...", Color.red));
         else if(text.Contains("%") || text.Contains("$")) FindFakeFunction(text);
         else StartCoroutine(ShowErrorMessage("Not valid!", Color.red));
     }
@@ -113,29 +104,29 @@ public class SecurityCheck : MonoBehaviour
     {
         if(isOnFunctionPage[3] && text.Contains("$")) // 3- admin page
         {
-            if(consoleText.text != functionDisplay[3] && text == commandNames[0]) consoleText.text = functionDisplay[3]; // 0- $forceRequest@
-            else if(consoleText.text == functionDisplay[3] && text == commandNames[3]) // 3- $forceSkip@
+            if(consoleText.text != functionDisplay[3] && text == commandNames[0]) consoleText.text = functionDisplay[3]; // 0- $forceRequest
+            else if(consoleText.text == functionDisplay[3] && text == commandNames[3]) // 3- $forceSkip
             {
                 isAdmin = true;
-                consoleText.text = "%cL 'Admin access granted!'";
+                consoleText.text = "Admin access granted.";
             } 
-            else StartCoroutine(ShowErrorMessage("%cE 'Cannot run command", Color.red));
+            else StartCoroutine(ShowErrorMessage("Error: Cannot run command", Color.red));
             return;
         }
         else if(isOnFunctionPage[2] && text.Contains("$")) // 2- verification page
         {
-            if(consoleText.text != functionDisplay[2] && text == commandNames[0]) consoleText.text = functionDisplay[2]; // 0- $forceReq@
+            if(consoleText.text != functionDisplay[2] && text == commandNames[0]) consoleText.text = functionDisplay[2]; // 0- $forceReq
 
-            else if(consoleText.text == functionDisplay[2] && text == commandNames[1]) consoleText.text = "%cL 'Please enter your admin ID.'"; // 1- $yes
-            else if(text == commandNames[2]) consoleText.text = "%cL 'Process cancelled. Please return back or restart.'"; // 1- $no
+            else if(consoleText.text == functionDisplay[2] && text == commandNames[1]) consoleText.text = "Please enter your admin ID."; // 1- $yes
+            else if(text == commandNames[2]) consoleText.text = "Process cancelled. Please return back or restart"; // 1- $no
 
-            else if(consoleText.text == "%cL 'Please enter your admin ID.'" && text == commandNames[3]) // 3- $forceSkip@
+            else if(consoleText.text == "Please enter your admin ID." && text == commandNames[3]) // 3- $forceSkip
             {
-                consoleText.text = "%cL 'Admin has been veiried for 1 hour only for security purpose's.'";
+                consoleText.text = "Admin has been veiried for 1 hour only for security purpose's.";
                 isVerified = true;
             }
 
-            else StartCoroutine(ShowErrorMessage("%cE 'Cannot run command", Color.red));
+            else StartCoroutine(ShowErrorMessage("Error: Cannot run command", Color.red));
 
 
             return;
@@ -143,12 +134,12 @@ public class SecurityCheck : MonoBehaviour
         else if(isOnFunctionPage[1] && text.Contains("$")) // 1- bypass page
         {
             if(consoleText.text != functionDisplay[1] && text == commandNames[1]) consoleText.text = functionDisplay[1]; // 1- $yes
-            else if(text == commandNames[2]) consoleText.text = "%cL 'Process cancelled.'"; // 2- $no
+            else if(text == commandNames[2]) consoleText.text = "Process cancelled"; // 2- $no
 
-            else if(consoleText.text == functionDisplay[1] && text == commandNames[0]) consoleText.text = "%cL 'Force Request Sent.' \n%cL 'Please enter you name for verification.'"; // 0- $forceRequest@
-            else if(consoleText.text == "%cL 'Force Request Sent.' \n%cL 'Please enter you name for verification.'" && text == commandNames[3]) // 3- $forceSkip@
+            else if(consoleText.text == functionDisplay[1] && text == commandNames[0]) consoleText.text = "Force Request Sent. \nPlease enter you name for verification."; // 0- $forceRequest
+            else if(consoleText.text == "Force Request Sent. \nPlease enter you name for verification." && text == commandNames[3]) // 3- $forceSkip
             {
-                consoleText.text = "%cL 'System Bypassed.' \n %cE 'System files corrupted, shutting down.'";
+                consoleText.text = "System Bypassed. \nSystem files corrupted, shutting down.";
                 OnPuzzleComplete?.Invoke(this, EventArgs.Empty);
                 isbyPassed = true;
 
@@ -156,7 +147,7 @@ public class SecurityCheck : MonoBehaviour
                 door.isLocked = true;
             }
             
-            else StartCoroutine(ShowErrorMessage("%cE 'Cannot run command", Color.red));
+            else StartCoroutine(ShowErrorMessage("Error: Cannot run command", Color.red));
             return;
         }
 
@@ -171,12 +162,12 @@ public class SecurityCheck : MonoBehaviour
         {
             if(!isAdmin || !isVerified)
             {
-                StartCoroutine(ShowErrorMessage("%cE 'Not authorised.'", Color.red));
+                StartCoroutine(ShowErrorMessage("Not authorised.", Color.red));
                 return;
             }
             else
             {
-                consoleText.text = "%c: 'Are you sure you would like to bypass the current securit question? This could break the entire database.'";
+                consoleText.text = "Are you sure you would like to bypass the current securit question? This could break the entire database.";
                 i = 1;
             }
         }
@@ -184,17 +175,17 @@ public class SecurityCheck : MonoBehaviour
         {
             if(!isAdmin)
             {
-                StartCoroutine(ShowErrorMessage("%cE 'Not an authorised admin.", Color.red));
+                StartCoroutine(ShowErrorMessage("Not an authorised admin.", Color.red));
                 return;
             }
             else if(isVerified)
             {
-                StartCoroutine(ShowErrorMessage("%cL 'You are verified for 1 hour.", consoleText.color));
+                StartCoroutine(ShowErrorMessage("You are verified for 1 hour.", consoleText.color));
                 return;
             }
             else
             {
-                consoleText.text = "%cL 'Missing authorised Admin, Cannot send normal verification request.'";
+                consoleText.text = "Missing authorised Admin, Cannot send normal verification request.";
                 i = 2;
             }
         }
@@ -202,18 +193,18 @@ public class SecurityCheck : MonoBehaviour
         {
             if(!isAdmin)
             {
-                consoleText.text = "%cL 'Cannot send admin access request normally.'";
+                consoleText.text = "Cannot send admin access request normally.";
                 i = 3;
             }
             else
             {
-                StartCoroutine(ShowErrorMessage("%cL 'Already Admin.", consoleText.color));
+                StartCoroutine(ShowErrorMessage("Error: Your Are Already Admin.", consoleText.color));
                 return;
             }
         }
         else
         {
-            StartCoroutine(ShowErrorMessage("%cE 'Could not run command/function.'", Color.red));
+            StartCoroutine(ShowErrorMessage("Error: Could not run command/function.'", Color.red));
             return;
         }
 

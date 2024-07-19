@@ -11,7 +11,7 @@ public class Door : MonoBehaviour, IInteractible
     public AudioClip openDoorClip;
     public AudioClip closeDoorClip;
     public AudioClip unlockDoorClip, doorLockedClip;
-    public CanvasGroup openUI;
+    public CanvasGroup interactUI, lockedUI;
 
     [Header("Player Text Display")]
     public string playerTxt;
@@ -55,7 +55,11 @@ public class Door : MonoBehaviour, IInteractible
         _audioSource = GetComponentInChildren<AudioSource>();
 
         if(_sprite != null && !isOpen) _sprite.enabled = false;
-        if(openUI != null) openUI.alpha = 0;
+        if(interactUI != null)
+        {
+            interactUI.alpha = 0;
+            lockedUI.alpha = 0;
+        }
         if(_shadowCaster != null) _shadowCaster.enabled = true; 
     }
 
@@ -105,6 +109,10 @@ public class Door : MonoBehaviour, IInteractible
             if(doesHaveKey)
             {
                 isLocked = false;
+
+                lockedUI.DOFade(0, 1);
+                interactUI.DOFade(1, 1);
+
                 invSystem.RemoveItem(keyID);
                 _audioSource.PlayOneShot(unlockDoorClip);
                 Debug.Log("Item Used");
@@ -137,12 +145,20 @@ public class Door : MonoBehaviour, IInteractible
 
     public void HideCanvas()
     {
-        if(openUI != null) openUI.DOFade(0, 1);
+        if(interactUI != null)
+        {
+            interactUI.DOFade(0, 1);
+            lockedUI.DOFade(0, 1);
+        }
     }
 
     public void ShowCanvas()
     {
-        if(openUI != null) openUI.DOFade(1, 1);
+        if(interactUI != null)
+        {
+            if(isLocked) lockedUI.DOFade(1, 1);
+            else interactUI.DOFade(1, 1);
+        }
     }
 
     public void OnInteractKeyUp()

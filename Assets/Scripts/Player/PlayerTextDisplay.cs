@@ -24,12 +24,15 @@ public class PlayerTextDisplay : MonoBehaviour
 
         userInputFade.DOFade(0, 0.5f); 
 
+        Debug.Log("Initialized Text");
         playerText.text = txt;
-
         playerTextFade.DOFade(1, 0.5f);
+
         yield return new WaitForSeconds(0.3f + displayTime);
 
+        Debug.Log("Hiding Text");
         userInputFade.DOFade(1, 0.5f);
         playerTextFade.DOFade(0, 0.5f);
+        
     }
 }

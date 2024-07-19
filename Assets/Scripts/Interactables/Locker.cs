@@ -11,7 +11,7 @@ public class Locker : MonoBehaviour, IInteractible
     public Transform door;
     public AudioClip openDoorClip;
     public AudioClip closeDoorClip;
-    public CanvasGroup openUI;
+    public CanvasGroup interactUI, lockedUI;
 
     [Header("Player Text")]
     public string playerText;
@@ -36,7 +36,8 @@ public class Locker : MonoBehaviour, IInteractible
 
     void Start()
     {
-        openUI.alpha = 0;
+        interactUI.alpha = 0;
+        lockedUI.alpha = 0;
 
         if(!isEnteractable) return;
 
@@ -82,6 +83,10 @@ public class Locker : MonoBehaviour, IInteractible
             if(doesHaveKey)
             {
                 isLocked = false;
+                
+                lockedUI.DOFade(0, 1);
+                interactUI.DOFade(1, 1);
+
                 invSystem.RemoveItem(keyID);
                 Debug.Log("Item Used");
             }
@@ -108,12 +113,14 @@ public class Locker : MonoBehaviour, IInteractible
 
     public void HideCanvas()
     {
-        openUI.DOFade(0, 1);
+        interactUI.DOFade(0, 1);
+        lockedUI.DOFade(0, 1);
     }
 
     public void ShowCanvas()
     {
-        openUI.DOFade(1, 1);
+        if(isLocked) lockedUI.DOFade(1, 1);
+        else interactUI.DOFade(1, 1);
     }
 
     public void OnInteractKeyUp()

@@ -61,10 +61,11 @@ public class Item : MonoBehaviour, IInteractible
         // Check if there is a empty slot available and then add item to the slot
         if(_inventorySystem.CheckForEmptySlot())
         {
+            _playerTextDisplay.StopAllCoroutines();
+            if(displayText != "") StartCoroutine(_playerTextDisplay.DisplayPlayerText(displayText, displayTime));
+
             _inventorySystem.AddItem(item_ID, customeSprite ? customeSprite : _spriteRenderer.sprite, _spriteRenderer.color, customeSize);
             PickupItem();
-
-            if(displayText != "") StartCoroutine(_playerTextDisplay.DisplayPlayerText(displayText, displayTime));
         }
         else Debug.Log("No space available in inventory");
     }
