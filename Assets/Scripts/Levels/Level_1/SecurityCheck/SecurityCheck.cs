@@ -24,6 +24,8 @@ public class SecurityCheck : MonoBehaviour
     [Header("Player Text")]
     public string displayText;
     public float displayTime;
+    public string displayText2;
+    public float displayTime2;
 
     [Header("Puzzle")]
     public bool isAdmin;
@@ -55,11 +57,11 @@ public class SecurityCheck : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
         consoleText.text = "Starting System...";
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
 
         consoleText.text += "Startup Complete.";
         inputField.GetComponent<CanvasGroup>().DOFade(1, 0.5f).SetEase(Ease.InOutSine);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
         consoleText.text = "Please place your hand on the biometric scanner.";
     }
@@ -73,6 +75,8 @@ public class SecurityCheck : MonoBehaviour
         consoleText.text += "\nPlease answer the following security question set by you.";
         yield return new WaitForSeconds(2);
         consoleText.text += "\n --- \nWho is your wife?";
+
+        StartCoroutine(_playerTextDisplay.DisplayPlayerText(displayText2, displayTime2));
     }
     void OnMouseDown()
     {
@@ -83,7 +87,7 @@ public class SecurityCheck : MonoBehaviour
             hand.SetActive(true);
             isHandOn = true;
             StartCoroutine(ScanHand());
-            _usedHand = true;
+            _usedHand = true;            
         }
         else if(!_usedHand)
         {
@@ -96,16 +100,18 @@ public class SecurityCheck : MonoBehaviour
     {
         if(text == "") return;
         if(isbyPassed) StartCoroutine(ShowErrorMessage("System down...", Color.red));
-        else if(text.Contains("%") || text.Contains("$")) FindFakeFunction(text);
+        else if(text.Contains("$")) FindFakeFunction(text);
         else StartCoroutine(ShowErrorMessage("Not valid!", Color.red));
     }
 
     private void FindFakeFunction(string text)
     {
+        text = text.ToLower();
+
         if(isOnFunctionPage[3] && text.Contains("$")) // 3- admin page
         {
-            if(consoleText.text != functionDisplay[3] && text == commandNames[0]) consoleText.text = functionDisplay[3]; // 0- $forceRequest
-            else if(consoleText.text == functionDisplay[3] && text == commandNames[3]) // 3- $forceSkip
+            if(consoleText.text != functionDisplay[3] && text.Contains(commandNames[0])) consoleText.text = functionDisplay[3]; // 0- $forceRequest
+            else if(consoleText.text == functionDisplay[3] && text.Contains(commandNames[3])) // 3- $forceSkip
             {
                 isAdmin = true;
                 consoleText.text = "Admin access granted.";
@@ -115,12 +121,12 @@ public class SecurityCheck : MonoBehaviour
         }
         else if(isOnFunctionPage[2] && text.Contains("$")) // 2- verification page
         {
-            if(consoleText.text != functionDisplay[2] && text == commandNames[0]) consoleText.text = functionDisplay[2]; // 0- $forceReq
+            if(consoleText.text != functionDisplay[2] && text.Contains(commandNames[0])) consoleText.text = functionDisplay[2]; // 0- $forceReq
 
-            else if(consoleText.text == functionDisplay[2] && text == commandNames[1]) consoleText.text = "Please enter your admin ID."; // 1- $yes
-            else if(text == commandNames[2]) consoleText.text = "Process cancelled. Please return back or restart"; // 1- $no
+            else if(consoleText.text == functionDisplay[2] && text.Contains(commandNames[1])) consoleText.text = "Please enter your admin ID."; // 1- $yes
+            else if(text.Contains(commandNames[2])) consoleText.text = "Process cancelled. Please return back or restart"; // 2- $no
 
-            else if(consoleText.text == "Please enter your admin ID." && text == commandNames[3]) // 3- $forceSkip
+            else if(consoleText.text == "Please enter your admin ID." && text.Contains(commandNames[3])) // 3- $forceSkip
             {
                 consoleText.text = "Admin has been veiried for 1 hour only for security purpose's.";
                 isVerified = true;
@@ -133,11 +139,11 @@ public class SecurityCheck : MonoBehaviour
         }
         else if(isOnFunctionPage[1] && text.Contains("$")) // 1- bypass page
         {
-            if(consoleText.text != functionDisplay[1] && text == commandNames[1]) consoleText.text = functionDisplay[1]; // 1- $yes
+            if(consoleText.text != functionDisplay[1] && text.Contains(commandNames[1])) consoleText.text = functionDisplay[1]; // 1- $yes
             else if(text == commandNames[2]) consoleText.text = "Process cancelled"; // 2- $no
 
-            else if(consoleText.text == functionDisplay[1] && text == commandNames[0]) consoleText.text = "Force Request Sent. \nPlease enter you name for verification."; // 0- $forceRequest
-            else if(consoleText.text == "Force Request Sent. \nPlease enter you name for verification." && text == commandNames[3]) // 3- $forceSkip
+            else if(consoleText.text == functionDisplay[1] && text.Contains(commandNames[0])) consoleText.text = "Force Request Sent. \nPlease enter you name for verification."; // 0- $forceRequest
+            else if(consoleText.text == "Force Request Sent. \nPlease enter you name for verification." && text.Contains(commandNames[3])) // 3- $forceSkip
             {
                 consoleText.text = "System Bypassed. \nSystem files corrupted, shutting down.";
                 OnPuzzleComplete?.Invoke(this, EventArgs.Empty);
@@ -153,12 +159,12 @@ public class SecurityCheck : MonoBehaviour
 
         // Functions
         int i = 0;
-        if(text == functionNames[0]) // 1- %showFunc
+        if(text.Contains(functionNames[0])) // 1- $showCommands
         {
             consoleText.text = functionDisplay[0];
             i = 0;
         }
-        else if(text == functionNames[1]) // 2- %byPass
+        else if(text.Contains(functionNames[1])) // 2- $bypass
         {
             if(!isAdmin || !isVerified)
             {
@@ -171,7 +177,7 @@ public class SecurityCheck : MonoBehaviour
                 i = 1;
             }
         }
-        else if(text == functionNames[2]) // 3- %vF
+        else if(text.Contains(functionNames[2])) // 3- $Verify
         {
             if(!isAdmin)
             {
@@ -189,7 +195,7 @@ public class SecurityCheck : MonoBehaviour
                 i = 2;
             }
         }
-        else if(text == functionNames[3]) // 4- %gA
+        else if(text.Contains(functionNames[3])) // 4- $grantAdmin
         {
             if(!isAdmin)
             {

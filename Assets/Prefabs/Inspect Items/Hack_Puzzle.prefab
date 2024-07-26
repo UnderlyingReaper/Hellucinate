@@ -32,10 +32,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7335362455887900221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -66.95749}
-  m_SizeDelta: {x: -600, y: -432.28503}
+  m_SizeDelta: {x: 1320, y: 457.71497}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3538059259565249723
 CanvasRenderer:
@@ -117,15 +117,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -177,7 +179,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -15.6}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -599.6, y: 30.9}
+  m_AnchoredPosition: {x: -599.6, y: -65.39999}
   m_SizeDelta: {x: 5, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7346117933792261719
@@ -297,10 +299,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7335362455887900221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 75, y: -349}
-  m_SizeDelta: {x: -600, y: -432.28503}
+  m_SizeDelta: {x: 1320, y: 457.71497}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2371508823172516866
 CanvasRenderer:
@@ -373,15 +375,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -431,10 +435,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7335362455887900221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 103, y: -349}
-  m_SizeDelta: {x: -600, y: -432.28503}
+  m_SizeDelta: {x: 1320, y: 457.71497}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5779350448700849903
 CanvasRenderer:
@@ -464,13 +468,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'a. %showFunc
+  m_text: 'a. $commands
 
-    b. %gA
+    b. $getAdmin
 
-    c. $forceReq@
+    c. $sendRequest
 
-    d. $forceSkip@'
+    d. $skip'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}
   m_sharedMaterial: {fileID: 7595803437254035408, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}
@@ -513,15 +517,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -571,10 +577,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7335362455887900221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 851, y: -349}
-  m_SizeDelta: {x: -600, y: -432.28503}
+  m_SizeDelta: {x: 1320, y: 457.71497}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1585117463907374096
 CanvasRenderer:
@@ -604,15 +610,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'a. %showFunc
+  m_text: 'a. $commands
 
-    b. %bypass
+    b. $bypass
 
     c. $yes
 
-    d. $forceReq@
+    d. $sendRequest
 
-    3. $forceSkip@'
+    3.
+    $skip'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}
   m_sharedMaterial: {fileID: 7595803437254035408, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}
@@ -655,15 +662,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -713,10 +722,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7335362455887900221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -36.014973}
-  m_SizeDelta: {x: -600, y: -370.40002}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -36.014984}
+  m_SizeDelta: {x: 1320, y: 519.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4978059604006562637
 CanvasRenderer:
@@ -789,15 +798,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -847,10 +858,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7335362455887900221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 491, y: -349}
-  m_SizeDelta: {x: -600, y: -432.28503}
+  m_SizeDelta: {x: 1320, y: 457.71497}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1643704393973042357
 CanvasRenderer:
@@ -880,7 +891,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '1. Verification:'
+  m_text: '2. Verification:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}
   m_sharedMaterial: {fileID: 7595803437254035408, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}
@@ -923,15 +934,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1056,10 +1069,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7335362455887900221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 519, y: -349}
-  m_SizeDelta: {x: -600, y: -432.28503}
+  m_SizeDelta: {x: 1320, y: 457.71497}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8592262140528349325
 CanvasRenderer:
@@ -1089,15 +1102,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'a. %showFunc
+  m_text: 'a. $commands
 
-    b. %vF
+    b. $verify
 
-    c. $forceReq@
+    c. $sendRequest
 
     d. $yes
 
-    e. $forceSkip@'
+    e.
+    $skip'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}
   m_sharedMaterial: {fileID: 7595803437254035408, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}
@@ -1140,15 +1154,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1203,10 +1219,10 @@ RectTransform:
   - {fileID: 3140542273833478600}
   m_Father: {fileID: 7335362455887900221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 44, y: -340}
-  m_SizeDelta: {x: -600, y: -985.68494}
+  m_SizeDelta: {x: 1320, y: -95.68494}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5322135051990504478
 CanvasRenderer:
@@ -1279,15 +1295,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1337,10 +1355,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7335362455887900221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 8}
-  m_SizeDelta: {x: -600, y: -282.37}
+  m_SizeDelta: {x: 1320, y: 607.63}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8278015419728831329
 CanvasRenderer:
@@ -1413,15 +1431,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1473,7 +1493,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -24.492}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -641.4, y: 35.8}
+  m_AnchoredPosition: {x: -641.4, y: -60.5}
   m_SizeDelta: {x: 5, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &551598004319521315
@@ -1548,7 +1568,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -17.6}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -610.85, y: 35.3}
+  m_AnchoredPosition: {x: -610.85, y: -60.99998}
   m_SizeDelta: {x: 5, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6518262589623782561
@@ -1621,10 +1641,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7335362455887900221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 823, y: -349}
-  m_SizeDelta: {x: -600, y: -432.28503}
+  m_SizeDelta: {x: 1320, y: 457.71497}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2083496827011010279
 CanvasRenderer:
@@ -1654,7 +1674,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '1. Bypass:'
+  m_text: '3. Bypass:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}
   m_sharedMaterial: {fileID: 7595803437254035408, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}
@@ -1697,15 +1717,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1757,7 +1779,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -33.88}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -628.8, y: 28.8}
+  m_AnchoredPosition: {x: -628.80005, y: -67.49998}
   m_SizeDelta: {x: 5, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7169794373925261214
@@ -1832,7 +1854,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -14.8}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -588.2, y: 31.4}
+  m_AnchoredPosition: {x: -588.2001, y: -64.89999}
   m_SizeDelta: {x: 5, y: 41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6914920092150319948
@@ -1905,10 +1927,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7335362455887900221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 49, y: -274}
-  m_SizeDelta: {x: -600, y: -432.28503}
+  m_SizeDelta: {x: 1320, y: 457.71497}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &314895171593934168
 CanvasRenderer:
@@ -1981,15 +2003,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
