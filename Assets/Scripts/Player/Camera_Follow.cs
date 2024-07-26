@@ -20,9 +20,9 @@ public class Camera_Follow : MonoBehaviour
     }
     void Update()
     {
-        if(_pm.rb.velocity.x == 0) offset.x = 0;
-        else if(_pm.isFacingRight) offset.x = lookAheadOffset;
-        else if(!_pm.isFacingRight) offset.x = -lookAheadOffset;
+        if(_pm.lockRotation || _pm.rb.velocityX == 0) offset.x = 0;
+        else if(_pm.rb.velocityX > 0) offset.x = lookAheadOffset;
+        else if(_pm.rb.velocityX < 0) offset.x = -lookAheadOffset;
 
         Vector3 targetPos = target.position + offset;
 

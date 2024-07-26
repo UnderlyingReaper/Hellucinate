@@ -5,20 +5,17 @@ using UnityEngine.InputSystem;
 using DG.Tweening;
 using UnityEngine.Rendering.Universal;
 
-public class HiddenLvl_ChoosingOption : MonoBehaviour
+public class HiddenLvl_ChoosingOption : MonoBehaviour, IInteractible
 {
     public bool allowInteract = true;
-    public float range;
     public CanvasGroup canvasGroup;
     public Light2D light1;
 
     public GameObject targetObj;
     public Transform spawn;
     
-    float _distance;
     Transform _player;
     Hellucinate _hellucinate;
-    PlayerInputManager _pInputManager;
 
 
     void Start()
@@ -26,23 +23,9 @@ public class HiddenLvl_ChoosingOption : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _hellucinate = _player.GetComponent<Hellucinate>();
 
-        _pInputManager = _player.GetComponent<PlayerInputManager>();
-        _pInputManager.playerInput.Player.Interact.performed += Interact;
-
         canvasGroup.alpha = 0;
         light1.intensity = 0;
-        targetObj.SetActive(false);
-    }
-
-    void Update()
-    {
-        if(!allowInteract) return;
-
-        _distance = Vector3.Distance(_player.position, transform.position);
-
-        // Check if player is in range
-        if(_distance <= range) StartCoroutine(EnableCanvas());
-        else DisableCanvas();
+        if(targetObj != null) targetObj.SetActive(false);
     }
 
     IEnumerator EnableCanvas()
@@ -61,10 +44,32 @@ public class HiddenLvl_ChoosingOption : MonoBehaviour
     {
         if(!gameObject.activeSelf) return;
         if(!allowInteract) return;
-        if(_distance > range) return;
+
+        allowInteract = false;
 
         DisableCanvas();
-        targetObj.SetActive(true);
+        if(targetObj != null) targetObj.SetActive(true);
         StartCoroutine(_hellucinate.StartHellucinate(3, 2, spawn.position));
+        
+    }
+
+    public void HideCanvas()
+    {
+        if(allowInteract) DisableCanvas();
+    }
+
+    public void ShowCanvas()
+    {
+        if(allowInteract) StartCoroutine(EnableCanvas());
+    }
+
+    public void OnInteractKeyUp()
+    {
+        
+    }
+
+    public void OnInteractKeyDown()
+    {
+        
     }
 }

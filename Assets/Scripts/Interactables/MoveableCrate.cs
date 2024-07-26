@@ -20,22 +20,24 @@ public class MoveableCrate : MonoBehaviour, IInteractible
 
 
     Transform _player;
-    Rigidbody2D _rb, _playerRb;
+    Rigidbody2D _playerRb;
+    Player_Movement _playerMovement;
 
 
-    bool isHeldDown;
+    bool _isHeldDown;
     float _timeHeld;
+    Transform _defaultParent;
 
 
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-
         _playerRb = _player.GetComponent<Rigidbody2D>();
+        _playerMovement = _player.GetComponent<Player_Movement>();
 
+        _defaultParent = transform.parent;
 
-        _rb = GetComponent<Rigidbody2D>();
         audioSource.volume = 0;
         canvas.alpha = 0;
     }
@@ -43,6 +45,8 @@ public class MoveableCrate : MonoBehaviour, IInteractible
     void Update()
     {
         getInputFromPlayer();
+
+        if(!isPlayerNear) return;
 
         DragObject();
 
@@ -52,7 +56,7 @@ public class MoveableCrate : MonoBehaviour, IInteractible
         // Set the slider value to show how long the player has held it
         slider.value = _timeHeld;
 
-        if(isGrabbed && _rb.velocity.magnitude > 0.1f)
+        if(isGrabbed && _playerMovement.rb.velocity.magnitude > 0.1f)
             DOVirtual.Float(audioSource.volume, 1, 0.25f, value => { audioSource.volume = value; });
         else
             DOVirtual.Float(audioSource.volume, 0, 0.25f, value => { audioSource.volume = value; });
@@ -64,13 +68,12 @@ public class MoveableCrate : MonoBehaviour, IInteractible
         if(isPlayerNear)
         {
             // If player is in range, get input from the button to see if he wants to grab or not
-            if(isHeldDown) _timeHeld += Time.deltaTime * increaseSpeed;
+            if(_isHeldDown) _timeHeld += Time.deltaTime * increaseSpeed;
             else _timeHeld -= Time.deltaTime * decreaseSpeed;
             
             // If player has held the button for 1sec, he will start grabbing it, else not
             if(_timeHeld >= 1) isGrabbed = true;
             else isGrabbed = false;
-            
         }
         else
         {
@@ -84,27 +87,16 @@ public class MoveableCrate : MonoBehaviour, IInteractible
         // If player has grabbed the crate then move it in the direction he wants
         if(isGrabbed)
         {
-            // Make the crate moveable
-            _rb.constraints = RigidbodyConstraints2D.None;
-
-            if(_player.position.x > transform.position.x)
-            {
-                if(_player.localScale.x == 1) _playerRb.drag = 50;
-                else _playerRb.drag = 0;
-            }
-            else if(_player.position.x < transform.position.x)
-            {
-                if(_player.localScale.x == -1) _playerRb.drag = 50;
-                else _playerRb.drag = 0;
-            }
-
-            _rb.velocity = _playerRb.velocity;
+            transform.SetParent(_player);
+            _playerMovement.lockRotation = true;
+            _playerRb.drag = 50;
         }
         else
         {
             // Make the crate immovable
-            _rb.constraints = RigidbodyConstraints2D.FreezeAll;
             _playerRb.drag = 0;
+            _playerMovement.lockRotation = false;
+            transform.SetParent(_defaultParent);
         }
     }
 
@@ -127,11 +119,11 @@ public class MoveableCrate : MonoBehaviour, IInteractible
 
     public void OnInteractKeyUp()
     {
-        isHeldDown = false;
+        _isHeldDown = false;
     }
 
     public void OnInteractKeyDown()
     {
-        isHeldDown = true;
+        _isHeldDown = true;
     }
 }

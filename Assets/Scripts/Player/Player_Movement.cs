@@ -3,6 +3,7 @@ using UnityEngine;
 public class Player_Movement : MonoBehaviour
 {
     public bool allow = true;
+    public bool lockRotation;
     public Rigidbody2D rb;
     public PlayerAnimator anim;
     public float speed;
@@ -36,7 +37,7 @@ public class Player_Movement : MonoBehaviour
 
         HandleAnimations();
 
-        Flip();
+        if(!lockRotation) Flip();
     }
     void FixedUpdate()
     {
