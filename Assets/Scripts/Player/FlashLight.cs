@@ -1,14 +1,18 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class FlashLight : MonoBehaviour
 {
     public DetectLight detectLight;
 
     [Header("General")]
+    public Slider slider;
+    public Ease easeType;
     public AudioSource audio_Source;
     public AudioClip press_Clip;
     public Light2D[] lightSources;
@@ -25,6 +29,11 @@ public class FlashLight : MonoBehaviour
     public float flashesDelay;
 
     float _timePassedPerBatter;
+
+    CanvasGroup _sliderCg;
+    Vector3 _orgSliderPos;
+    RectTransform _sliderTransform;
+
     bool _isFlickering;
     PlayerInputManager _playerInputManager;
 
@@ -33,9 +42,20 @@ public class FlashLight : MonoBehaviour
     void Start()
     {
         StartCoroutine(unsatbleLightAnim());
+        _sliderCg = slider.GetComponent<CanvasGroup>();
+        _sliderTransform = slider.GetComponent<RectTransform>();
+        _orgSliderPos = _sliderTransform.anchoredPosition;
 
         _playerInputManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInputManager>();
         _playerInputManager.playerInput.Player.Flashlight.performed += PerformAction;
+
+        _sliderTransform.anchoredPosition = new Vector2(0, 0);
+        _sliderCg.alpha = 0;
+    }
+
+    void Update()
+    {
+        if(isEnabled) ReduceBattery();
     }
 
     public void PerformAction(InputAction.CallbackContext context)
@@ -43,18 +63,24 @@ public class FlashLight : MonoBehaviour
         if(!isEnabled && currBatteries > 0) // Turn on
         {
             ChangeIntensityOfLight(maxIntensity, true);
+            _sliderTransform.DOAnchorPosX(_orgSliderPos.x, 0.3f).SetEase(easeType);
+            _sliderCg.DOFade(1, 0.3f);
             PlayPressSound();
         }
         else if(isEnabled) // Turn off
         {
             ChangeIntensityOfLight(minIntensity, false);
+            _sliderTransform.DOAnchorPosX(0, 0.3f).SetEase(easeType);
+            _sliderCg.DOFade(0, 0.3f);
             PlayPressSound();
         }
 
         if(currBatteries == 0 && isEnabled) // If no more batteries, kill light
+        {
             ChangeIntensityOfLight(minIntensity, false);
-
-        if(isEnabled) ReduceBattery(); // reduce battery if light is on
+            _sliderTransform.DOAnchorPosX(0, 0.3f).SetEase(easeType);
+            _sliderCg.DOFade(0, 0.3f);
+        }
     }
 
 
@@ -67,7 +93,7 @@ public class FlashLight : MonoBehaviour
                 for(int i = 0; i < lightSources.Length; i++)
                 {
                     int index = i;
-                    DOVirtual.Float(lightSources[index].intensity, Random.Range(flickerMinValue, 1), flickeringSpeed, value => { lightSources[index].intensity = value; });
+                    DOVirtual.Float(lightSources[index].intensity, UnityEngine.Random.Range(flickerMinValue, 1), flickeringSpeed, value => { lightSources[index].intensity = value; });
                 }
             }
             yield return new WaitForSeconds(flickeringSpeed);
@@ -90,6 +116,9 @@ public class FlashLight : MonoBehaviour
     public void ReduceBattery()
     {
         _timePassedPerBatter += Time.deltaTime;
+        _timePassedPerBatter = Math.Clamp(_timePassedPerBatter, 0, perbatteryTime);
+
+        slider.value = 15 - _timePassedPerBatter;
 
         if(_timePassedPerBatter >= perbatteryTime)
         {
@@ -132,8 +161,8 @@ public class FlashLight : MonoBehaviour
 
     void PlayPressSound()
     {
-        audio_Source.volume = Random.Range(0.8f, 1.2f);
-        audio_Source.pitch = Random.Range(0.8f, 1.2f);
+        audio_Source.volume = UnityEngine.Random.Range(0.8f, 1.2f);
+        audio_Source.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
 
         audio_Source.PlayOneShot(press_Clip);
     }
