@@ -27,6 +27,7 @@ public class FlashLight : MonoBehaviour
     public float perbatteryTime;
     public float currBatteries;
     public float flashesDelay;
+    public float flickerAmt;
 
     float _timePassedPerBatter;
 
@@ -55,7 +56,7 @@ public class FlashLight : MonoBehaviour
 
     void Update()
     {
-        if(isEnabled) ReduceBattery();
+        if(isEnabled && !_isFlickering) ReduceBattery();
     }
 
     public void PerformAction(InputAction.CallbackContext context)
@@ -96,6 +97,7 @@ public class FlashLight : MonoBehaviour
                     DOVirtual.Float(lightSources[index].intensity, UnityEngine.Random.Range(flickerMinValue, 1), flickeringSpeed, value => { lightSources[index].intensity = value; });
                 }
             }
+
             yield return new WaitForSeconds(flickeringSpeed);
         }
     }
@@ -130,32 +132,21 @@ public class FlashLight : MonoBehaviour
     public IEnumerator FlickerLights(float delay)
     {
         _isFlickering = true;
-        for(int i = 0; i < lightSources.Length; i++)
-        {
-            int index = i;
-            DOVirtual.Float(lightSources[index].intensity, minIntensity, delay, value => {lightSources[index].intensity = value; }); // Low
-        }
-        yield return new WaitForSeconds(delay); // Delay
 
-        for(int i = 0; i < lightSources.Length; i++)
+        for(int i = 0; i < flickerAmt; i++)
         {
-            int index = i;
-            DOVirtual.Float(lightSources[index].intensity, maxIntensity, delay, value => {lightSources[index].intensity = value; }); // High
-        }
-        yield return new WaitForSeconds(delay); // Delay
+            for(int j = 0; j < lightSources.Length; j++)
+            {
+                int index = j;
+                if(i%2 == 0)
+                    DOVirtual.Float(lightSources[index].intensity, minIntensity, delay, value => {lightSources[index].intensity = value; });
+                else
+                    DOVirtual.Float(lightSources[index].intensity, maxIntensity, delay, value => {lightSources[index].intensity = value; });
+            }
 
-        for(int i = 0; i < lightSources.Length; i++)
-        {
-            int index = i;
-            DOVirtual.Float(lightSources[index].intensity, minIntensity, delay, value => {lightSources[index].intensity = value; }); // Low
+            yield return new WaitForSeconds(delay); // Delay  
         }
-        yield return new WaitForSeconds(delay); // Delay
 
-        for(int i = 0; i < lightSources.Length; i++)
-        {
-            int index = i;
-            DOVirtual.Float(lightSources[index].intensity, maxIntensity, delay, value => {lightSources[index].intensity = value; }); // High
-        }
         _isFlickering = false;
     }
 

@@ -9,13 +9,15 @@ public class PlayerTextDisplay : MonoBehaviour
     public CanvasGroup playerTextFade;
     public CanvasGroup userInputFade;
 
+
+    public float initialDelay = 15;
     public string startingTxt;
     public float delay;
 
 
     void Start()
     {
-        StartCoroutine(DisplayPlayerText(startingTxt, delay, 15f));
+        StartCoroutine(DisplayPlayerText(startingTxt, delay, initialDelay));
     }
 
     public IEnumerator DisplayPlayerText(string txt, float displayTime, float initialDelay = 0)

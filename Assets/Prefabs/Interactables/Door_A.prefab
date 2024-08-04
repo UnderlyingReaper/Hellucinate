@@ -108,7 +108,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1.6, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -0.01, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4882534300385832162}
@@ -230,8 +230,8 @@ MonoBehaviour:
   centerOffset: {x: 0, y: 0, z: 0}
   openDoorClip: {fileID: 8300000, guid: f27b4489aa9acb640a8c25503cd86032, type: 3}
   closeDoorClip: {fileID: 8300000, guid: 338e3c10c1f367e4fa9e4150db4f0f9e, type: 3}
-  unlockDoorClip: {fileID: 0}
-  doorLockedClip: {fileID: 0}
+  unlockDoorClip: {fileID: 8300000, guid: 60442f0d2a4b9bd47b328931ec8beb4d, type: 3}
+  doorLockedClip: {fileID: 8300000, guid: dd5f006daa1c53640961f40707a29eb0, type: 3}
   interactUI: {fileID: 0}
   lockedUI: {fileID: 0}
   playerTxt: This door needs a key.

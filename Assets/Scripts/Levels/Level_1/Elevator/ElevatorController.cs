@@ -86,6 +86,8 @@ public class ElevatorController : MonoBehaviour, IInteractible
         _player.SetParent(teleportLocation);
         camera_Follow.smoothTime = 0.08f;
         camera_Follow.offset.y = 0.5f;
+        camera_Follow.lookAheadOffset = 0;
+        camera_Follow.maxHeightOffset = 0;
         yield return new WaitForSeconds(2);
 
         _playerMovement.allow = true;

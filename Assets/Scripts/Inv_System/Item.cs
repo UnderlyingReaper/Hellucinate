@@ -46,7 +46,7 @@ public class Item : MonoBehaviour, IInteractible
 
         _inventorySystem = _player.GetComponent<Inventory_System>();
         _canvasGroup = GetComponentInChildren<CanvasGroup>();
-        _material = GetComponent<SpriteRenderer>().material;
+        _material = GetComponentInChildren<SpriteRenderer>().material;
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _canvasGroup.alpha = 0;
 
