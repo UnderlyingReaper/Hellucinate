@@ -94,7 +94,7 @@ public class FlashLight : MonoBehaviour
                 for(int i = 0; i < lightSources.Length; i++)
                 {
                     int index = i;
-                    DOVirtual.Float(lightSources[index].intensity, UnityEngine.Random.Range(flickerMinValue, 1), flickeringSpeed, value => { lightSources[index].intensity = value; });
+                    DOVirtual.Float(lightSources[index].intensity, UnityEngine.Random.Range(flickerMinValue, maxIntensity), flickeringSpeed, value => { lightSources[index].intensity = value; });
                 }
             }
 
