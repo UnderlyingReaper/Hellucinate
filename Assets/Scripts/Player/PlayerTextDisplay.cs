@@ -35,6 +35,5 @@ public class PlayerTextDisplay : MonoBehaviour
         Debug.Log("Hiding Text");
         userInputFade.DOFade(1, 0.5f);
         playerTextFade.DOFade(0, 0.5f);
-        
     }
 }

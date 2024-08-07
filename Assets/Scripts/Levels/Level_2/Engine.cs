@@ -12,22 +12,31 @@ public class Engine : MonoBehaviour, IInteractible
     public string itemKey;
     public CanvasGroup canvas;
     public Transform cogWheel;
+
     public Light2D lightSource;
+    public PlayerText_Trigger playerTextTrigger;
+
+    public string text;
+    public string text2;
+    public float displayTime;
 
 
     public Action OnStartRunning;
 
 
     Inventory_System _invSystem;
+    PlayerTextDisplay _playerTextDisplay;
 
 
 
     void Start()
     {
         _invSystem = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory_System>();
+        _playerTextDisplay = _invSystem.GetComponent<PlayerTextDisplay>();
+
+        canvas.alpha = 0;
+        if(playerTextTrigger != null) playerTextTrigger.enabled = false;
     }
-
-
 
     public void HideCanvas()
     {
@@ -45,13 +54,24 @@ public class Engine : MonoBehaviour, IInteractible
             isInteractible = false;
             canvas.DOFade(0, 1);
             lightSource.color = Color.green;
+
             OnStartRunning?.Invoke();
+
+            if(playerTextTrigger != null) playerTextTrigger.enabled = true;
+            return;
         }
-        else if(_invSystem.CheckForItem(itemKey))
+
+        bool isInInv = _invSystem.CheckForItem(itemKey);
+        if (isInInv)
         {
             _invSystem.RemoveItem(itemKey);
             cogWheel.gameObject.SetActive(true);
             isAttached = true;
+            StartCoroutine(_playerTextDisplay.DisplayPlayerText(text2, displayTime));
+        }
+        else
+        {
+            StartCoroutine(_playerTextDisplay.DisplayPlayerText(text, displayTime));
         }
     }
 
