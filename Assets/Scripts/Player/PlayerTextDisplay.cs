@@ -24,13 +24,13 @@ public class PlayerTextDisplay : MonoBehaviour
     {
         yield return new WaitForSeconds(initialDelay);
 
-        userInputFade.DOFade(0, 0.5f); 
-
         Debug.Log("Initialized Text");
         playerText.text = txt;
+
+        userInputFade.DOFade(0, 0.5f);
         playerTextFade.DOFade(1, 0.5f);
 
-        yield return new WaitForSeconds(0.3f + displayTime);
+        yield return new WaitForSeconds(displayTime);
 
         Debug.Log("Hiding Text");
         userInputFade.DOFade(1, 0.5f);

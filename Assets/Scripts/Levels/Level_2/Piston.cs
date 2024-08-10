@@ -8,6 +8,7 @@ public class Piston : MonoBehaviour, IInteractible
     public CanvasGroup canvas;
     public ParticleSystem steamVfx, oilLeakVfx;
     public GameObject pumpHolder;
+    public Transform cutScenePos;
 
     public bool isInteractible;
     public bool isAttached;
@@ -36,6 +37,7 @@ public class Piston : MonoBehaviour, IInteractible
 
 
     Inventory_System _invSystem;
+    CutsceneController _cutsceneController;
     PlayerTextDisplay _playerTextDisplay;
     Animator _animator;
 
@@ -43,6 +45,7 @@ public class Piston : MonoBehaviour, IInteractible
     {
         _invSystem = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory_System>();
         _playerTextDisplay = _invSystem.GetComponent<PlayerTextDisplay>();
+        _cutsceneController = _invSystem.GetComponent<CutsceneController>();
 
         _animator = GetComponent<Animator>();
 
@@ -114,6 +117,8 @@ public class Piston : MonoBehaviour, IInteractible
             pipe_Interactible.isInteractible = false;
             isInteractible = false;
             canvas.DOFade(0, 1);
+
+            StartCoroutine(_cutsceneController.PlayCutscene(cutScenePos.position));
 
             OnPistonStart?.Invoke();
             return;
