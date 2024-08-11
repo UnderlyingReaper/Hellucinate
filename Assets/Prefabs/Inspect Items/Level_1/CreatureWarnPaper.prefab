@@ -209,8 +209,8 @@ MonoBehaviour:
     too, avoiding eye contact and whispering when they think I'm not listening. It's
     like everyone's hiding something. Maybe they're playing tricks on me or trying
     to scare me, but it's starting to get under my skin.\r\n\r\nThe only person who
-    seems unaffected is the manager of these crates. Maybe I should go and tell him
-    about these recent happenings. It's worth a shot to see if he knows anything.\n"
+    seems unaffected is the manager. Maybe I should go and tell him about these recent
+    happenings. It's worth a shot to see if he knows anything.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}
   m_sharedMaterial: {fileID: 7595803437254035408, guid: 6f8ed67349c5fe646b82e256ca9f2c11, type: 2}

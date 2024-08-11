@@ -47,6 +47,8 @@ public class Door : MonoBehaviour, IInteractible
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _playerTextDisplay = _player.GetComponent<PlayerTextDisplay>();
 
+        fadeImg = GameObject.FindGameObjectWithTag("TransitionFade").GetComponent<CanvasGroup>();
+
         invSystem = _player.GetComponent<Inventory_System>();
 
         _sprite = GetComponent<SpriteRenderer>();
@@ -161,13 +163,7 @@ public class Door : MonoBehaviour, IInteractible
         }
     }
 
-    public void OnInteractKeyUp()
-    {
-        
-    }
+    public void OnInteractKeyUp() {}
 
-    public void OnInteractKeyDown()
-    {
-
-    }
+    public void OnInteractKeyDown() {}
 }

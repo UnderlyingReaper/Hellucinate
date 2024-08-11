@@ -8,17 +8,27 @@ public class Inspect : MonoBehaviour, IInteractible
     public GameObject objToInspect;
     public CanvasGroup canvas;
 
+    [Header("Journal Settings")]
+    public bool doesAddToJournal = false;
+    public bool isAddedToJournal = false;
+    public bool isDouble = false;
+    public GameObject objPrefab;
+
+
     Transform _player;
     Player_Movement _pm;
+    Journal_Manager _journal;
     RectTransform _inspectHolder;
     RectTransform _spawnedObj;
+
+
 
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _pm = _player.GetComponent<Player_Movement>();
-
         _inspectHolder = GameObject.FindGameObjectWithTag("InspectHolder").GetComponent<RectTransform>();
+        if(doesAddToJournal) _journal = GameObject.FindGameObjectWithTag("JournalManager").GetComponent<Journal_Manager>();
 
         if(canvas != null) canvas.alpha = 0;
     }
@@ -31,9 +41,17 @@ public class Inspect : MonoBehaviour, IInteractible
         {
             isOpen = true;
             _pm.allow = false;
+
+            if(doesAddToJournal && !isAddedToJournal)
+            {
+                _journal.AddPage(objPrefab, isDouble);
+                isAddedToJournal = true;
+            }
+
             _spawnedObj = Instantiate(objToInspect, _inspectHolder).GetComponent<RectTransform>();
             _inspectHolder.GetComponent<CanvasGroup>().DOFade(1, 1).SetUpdate(true);
             _spawnedObj.anchoredPosition = new Vector2(0, 0);
+
             Time.timeScale = 0;
         }
         else if(isOpen)
@@ -56,13 +74,7 @@ public class Inspect : MonoBehaviour, IInteractible
         if(canvas != null) canvas.DOFade(1, 1);
     }
 
-    public void OnInteractKeyUp()
-    {
-        
-    }
+    public void OnInteractKeyUp() {}
 
-    public void OnInteractKeyDown()
-    {
-        
-    }
+    public void OnInteractKeyDown() {}
 }
