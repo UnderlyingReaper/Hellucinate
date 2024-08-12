@@ -13,19 +13,24 @@ public class Journal_Manager : MonoBehaviour
     public float xOffset;
     public int maxPages;
     public int currPage;
+
+    public AudioClip writeClip, flipClip;
+
     public TextMeshProUGUI currPageDisplay;
     public List<Page> pages = new();
 
 
     PlayerInputManager _playerInput;
+    AudioSource _source;
 
 
 
     void Start()
     {
         _playerInput = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInputManager>();
-
         _playerInput.playerInput.Player.Journal.performed += OnButtonPress;
+
+        _source = GetComponent<AudioSource>();
     }
 
     private void OnButtonPress(InputAction.CallbackContext context)
@@ -58,6 +63,8 @@ public class Journal_Manager : MonoBehaviour
         currPage = Math.Clamp(currPage, 0, maxPages);
         currPageDisplay.text = (currPage + 1).ToString();
 
+        if(currPage != 0 || currPage != maxPages) _source.PlayOneShot(flipClip);
+
         ActivatePage();
     }
 
@@ -87,6 +94,8 @@ public class Journal_Manager : MonoBehaviour
 
     public void AddPage(GameObject page, bool isDouble)
     {
+        _source.PlayOneShot(writeClip);
+
         if(isDouble)
         {
             if(pages[pages.Count - 1].rightPageContents != null)

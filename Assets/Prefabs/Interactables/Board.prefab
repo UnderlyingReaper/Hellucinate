@@ -253,6 +253,10 @@ MonoBehaviour:
   isOpen: 0
   objToInspect: {fileID: 3544387367001006633, guid: 401949edf72f5ef419b9530238622343, type: 3}
   canvas: {fileID: 4855408970533449}
+  doesAddToJournal: 0
+  isAddedToJournal: 0
+  isDouble: 1
+  objPrefab: {fileID: 0}
 --- !u!61 &6158991893001447427
 BoxCollider2D:
   m_ObjectHideFlags: 0
