@@ -16,6 +16,13 @@ public class Engine : MonoBehaviour, IInteractible
     public Light2D lightSource;
     public PlayerText_Trigger playerTextTrigger;
 
+    [Header("Audio")]
+    public AudioClip attachClip;
+    public AudioClip runClip;
+    AudioSource _source;
+
+
+    [Header("Player Text Display")]
     public string text;
     public string text2;
     public float displayTime;
@@ -33,6 +40,8 @@ public class Engine : MonoBehaviour, IInteractible
     {
         _invSystem = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory_System>();
         _playerTextDisplay = _invSystem.GetComponent<PlayerTextDisplay>();
+
+        _source = GetComponent<AudioSource>();
 
         canvas.alpha = 0;
         if(playerTextTrigger != null) playerTextTrigger.enabled = false;
@@ -57,6 +66,12 @@ public class Engine : MonoBehaviour, IInteractible
 
             OnStartRunning?.Invoke();
 
+            _source.volume = 0;
+            _source.clip = runClip;
+            _source.Play();
+            _source.loop = true;
+            DOVirtual.Float(_source.volume, 0.5f, 0.5f, value => { _source.volume = value; });
+
             if(playerTextTrigger != null) playerTextTrigger.enabled = true;
             return;
         }
@@ -67,6 +82,7 @@ public class Engine : MonoBehaviour, IInteractible
             _invSystem.RemoveItem(itemKey);
             cogWheel.gameObject.SetActive(true);
             isAttached = true;
+            _source.PlayOneShot(attachClip);
             StartCoroutine(_playerTextDisplay.DisplayPlayerText(text2, displayTime));
         }
         else

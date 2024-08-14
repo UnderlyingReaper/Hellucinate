@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'This letter mentions about a creature.
 
-    The weird part is how did
-    he survive when he was standing still in'
+    The weird part is how the
+    guy survived just by standing still'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57e2340aec1448e4cbc0636c0b3ce9f6, type: 2}
   m_sharedMaterial: {fileID: 1573454451216197516, guid: 57e2340aec1448e4cbc0636c0b3ce9f6, type: 2}

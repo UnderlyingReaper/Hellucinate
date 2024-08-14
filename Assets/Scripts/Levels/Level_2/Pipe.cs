@@ -8,6 +8,7 @@ public class Pipe : MonoBehaviour, IInteractible
     public CanvasGroup canvas;
     public ParticleSystem oilLeakVfx;
     public Engine engine;
+    public AudioClip turnValve;
 
     public bool isInteractible;
     public bool isAttached;
@@ -23,6 +24,7 @@ public class Pipe : MonoBehaviour, IInteractible
     SpriteRenderer _spriteRenderer;
     Inventory_System _invSystem;
     PlayerTextDisplay _playerTextDisplay;
+    AudioSource _source;
 
 
 
@@ -30,7 +32,9 @@ public class Pipe : MonoBehaviour, IInteractible
     {
         _invSystem = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory_System>();
         _playerTextDisplay = _invSystem.GetComponent<PlayerTextDisplay>();
+
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _source = GetComponent<AudioSource>();
 
         canvas.alpha = 0;
         _spriteRenderer.enabled = false;
@@ -39,7 +43,7 @@ public class Pipe : MonoBehaviour, IInteractible
 
     void OnEngineStart()
     {
-        if(!isAttached) oilLeakVfx.gameObject.SetActive(true);
+        if(!isAttached) oilLeakVfx.Play();
     }
 
 
@@ -58,6 +62,7 @@ public class Pipe : MonoBehaviour, IInteractible
             OnValveOpen?.Invoke();
             isInteractible = false;
             canvas.DOFade(0, 1);
+            _source.PlayOneShot(turnValve);
             return;
         }
 
@@ -66,7 +71,7 @@ public class Pipe : MonoBehaviour, IInteractible
         {
             _spriteRenderer.enabled = true;
             isAttached = true;
-            oilLeakVfx.gameObject.SetActive(false);
+            oilLeakVfx.Stop();
             OnValveAttached?.Invoke();
             return;
         }

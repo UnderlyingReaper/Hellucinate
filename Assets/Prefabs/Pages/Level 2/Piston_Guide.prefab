@@ -277,6 +277,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Piston_Guide
       objectReference: {fileID: 0}
+    - target: {fileID: 7992040385666918849, guid: d9e2076692918eb4dbebb57979cda234, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

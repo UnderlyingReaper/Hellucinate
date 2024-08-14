@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: A manual i found in the storage on how to use the flashlight.
+  m_text: A manual on how to use the flashlight by the manufacturers
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57e2340aec1448e4cbc0636c0b3ce9f6, type: 2}
   m_sharedMaterial: {fileID: 1573454451216197516, guid: 57e2340aec1448e4cbc0636c0b3ce9f6, type: 2}

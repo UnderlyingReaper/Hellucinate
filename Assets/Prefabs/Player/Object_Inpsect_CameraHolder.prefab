@@ -139,7 +139,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8059776181351363062}
   - component: {fileID: 3530986164303293772}
-  - component: {fileID: 7054135376774158987}
   - component: {fileID: 558244901414351601}
   m_Layer: 0
   m_Name: Inspect-Camera
@@ -216,14 +215,6 @@ Camera:
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &7054135376774158987
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2055301271368279125}
-  m_Enabled: 1
 --- !u!114 &558244901414351601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,7 +412,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4764863289958651929}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 22, y: 143.05, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

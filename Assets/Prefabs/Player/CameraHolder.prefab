@@ -9836,7 +9836,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2898301701468201992}
   - component: {fileID: 8839545410108881882}
-  - component: {fileID: 2278675699744493798}
   - component: {fileID: 4745806115307088334}
   - component: {fileID: 2261248453571276950}
   m_Layer: 0
@@ -9916,14 +9915,6 @@ Camera:
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &2278675699744493798
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2164105723593661901}
-  m_Enabled: 1
 --- !u!114 &4745806115307088334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10304,7 +10295,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4362252779911599503}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -18.76, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10576,8 +10567,8 @@ AudioReverbZone:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7649267207330872628}
   m_Enabled: 1
-  m_MinDistance: 500
-  m_MaxDistance: 1000
+  m_MinDistance: 1000
+  m_MaxDistance: 5000
   m_ReverbPreset: 13
   m_Room: -1000
   m_RoomHF: -300

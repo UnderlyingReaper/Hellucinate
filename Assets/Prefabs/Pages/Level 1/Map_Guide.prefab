@@ -65,11 +65,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'A map i found in the sotrage area.
+  m_text: 'A map i found in the sotrage sector.
 
 
-    its very simplified so its almost
-    useless'
+    its very simplified so its
+    almost useless'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57e2340aec1448e4cbc0636c0b3ce9f6, type: 2}
   m_sharedMaterial: {fileID: 1573454451216197516, guid: 57e2340aec1448e4cbc0636c0b3ce9f6, type: 2}

@@ -60,10 +60,10 @@ public class Piston : MonoBehaviour, IInteractible
     {
         if(e.isOpen && isEngineRunning && !isAttached)
         {
-            oilLeakVfx.gameObject.SetActive(true);
+            oilLeakVfx.Play();
             return;
         }
-        else oilLeakVfx.gameObject.SetActive(false);
+        else oilLeakVfx.Stop();
 
         isPump2Connected = e.isOpen;
     }
