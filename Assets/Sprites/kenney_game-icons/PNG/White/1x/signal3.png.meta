@@ -191,7 +191,10 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      signal3_0: -5234479924738101802
+      signal3_1: 3902269944884667981
+      signal3_2: -3134059618248572901
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

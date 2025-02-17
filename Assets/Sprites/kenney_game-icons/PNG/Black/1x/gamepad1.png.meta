@@ -167,7 +167,9 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gamepad1_0: 5281710125425312743
+      gamepad1_1: 8471715335126703128
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
